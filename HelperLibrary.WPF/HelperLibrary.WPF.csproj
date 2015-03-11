@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,7 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILocalizedStringLoader.cs" />
+    <Compile Include="ILocalizedStringManager.cs" />
+    <Compile Include="LocalizedStringManager.cs" />
+    <Compile Include="MarkupExtensions\LocalizedExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlLocalizedStringLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

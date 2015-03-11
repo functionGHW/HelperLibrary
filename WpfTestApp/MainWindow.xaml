@@ -1,8 +1,12 @@
 ﻿<Window x:Class="WpfTestApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:HelperLibrary.WPF.MarkupExtensions;assembly=HelperLibrary.WPF"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <StackPanel>
+            <TextBlock Text="{l:Localized Key=test}"/>
+            <TextBlock Text="{l:Localized Key=test, Culture=en-US}"/>
+        </StackPanel>
     </Grid>
 </Window>
