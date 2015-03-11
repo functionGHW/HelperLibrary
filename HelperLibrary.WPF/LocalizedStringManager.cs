@@ -20,7 +20,9 @@ namespace HelperLibrary.WPF
         #region static members
 
         private static Lazy<LocalizedStringManager> lclStrMngrLazy =
-            new Lazy<LocalizedStringManager>(() => new LocalizedStringManager(new XmlLocalizedStringLoader()));
+            new Lazy<LocalizedStringManager>(
+                () => new LocalizedStringManager(new XmlLocalizedStringLoader())
+            );
 
         /// <summary>
         /// a default instance using a XmlLocalizedStringLoader as provider.
@@ -36,9 +38,12 @@ namespace HelperLibrary.WPF
 
         #region Fields
 
-        private Dictionary<string, IDictionary<string, string>> dictCache = new Dictionary<string, IDictionary<string, string>>();
+        private Dictionary<string, IDictionary<string, string>> dictCache =
+            new Dictionary<string, IDictionary<string, string>>();
 
         private ILocalizedStringLoader localizedStringLoader;
+
+        private static readonly object synObjectForLoadingDict = new object();
 
         #endregion
 
@@ -105,10 +110,10 @@ namespace HelperLibrary.WPF
                     return key;
                 }
             }
-            string l = null;
-            if (dict.TryGetValue(key, out l))
+            string localizedString = null;
+            if (dict.TryGetValue(key, out localizedString))
             {
-                return l;
+                return localizedString;
             }
             else
             {
@@ -139,20 +144,28 @@ namespace HelperLibrary.WPF
         {
             Contract.Assert(dictCache != null);
 
-            string dictName = scope + "." + cultureName;
-
             if (localizedStringLoader == null)
                 return false;
 
-            var dict = localizedStringLoader.GetLocalizedDictionary(scope, cultureName);
-            if (dict == null)
+            lock (synObjectForLoadingDict)
             {
-                // loading resource failed.
-                return false;
-            }
-            else
-            {
-                dictCache.Add(dictName, dict);
+                string dictName = scope + "." + cultureName;
+
+                // double checked
+                if (!dictCache.ContainsKey(dictName))
+                {
+                    var dict = localizedStringLoader.GetLocalizedDictionary(scope, cultureName);
+                    if (dict == null)
+                    {
+                        // loading resource failed.
+                        return false;
+                    }
+                    else
+                    {
+                        dictCache.Add(dictName, dict);
+                    }
+                }
+
                 return true;
             }
         }
