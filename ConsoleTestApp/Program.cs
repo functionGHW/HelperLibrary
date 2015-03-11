@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using HelperLibrary.Core;
+using HelperLibrary.Core.ExtensionHelper;
 
 namespace ConsoleTestApp
 {
@@ -19,11 +20,19 @@ namespace ConsoleTestApp
         static void Main(string[] args)
         {
 
-            NumberUtilityTest();
+            //NumberUtilityTest();
+            StringExtensionsTest();
 
             Console.ReadKey();
         }
 
+        private static void StringExtensionsTest()
+        {
+            string str = "abcdefg1235";
+            Console.WriteLine("original string: " + str);
+            Console.WriteLine("reverse string: " + str.ReverseString().FirstCharToUpper());
+            Console.WriteLine("first char to upper:" + str.FirstCharToUpper());
+        }
 
         private static void NumberUtilityTest()
         {

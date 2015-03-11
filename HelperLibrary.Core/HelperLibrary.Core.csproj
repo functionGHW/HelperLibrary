@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtensionHelper\ObjectExtensions.cs" />
+    <Compile Include="ExtensionHelper\StringExtensions.cs" />
     <Compile Include="NumberUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
