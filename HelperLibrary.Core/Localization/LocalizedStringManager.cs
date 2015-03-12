@@ -15,6 +15,9 @@ namespace HelperLibrary.Core.Localization
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// A default implementation of ILocalizedStringManger interface.
+    /// </summary>
     public class LocalizedStringManager : ILocalizedStringManager
     {
         #region static members

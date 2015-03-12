@@ -21,6 +21,8 @@ namespace HelperLibrary.WPF.MarkupExtensions
 
     /// <summary>
     /// xaml extension for getting localized string
+    /// This implementation use HelperLibrary.Core.Localization.LocalizedStringManager
+    /// to implement localization.
     /// </summary>
     public class LocalizedExtension : MarkupExtension
     {
