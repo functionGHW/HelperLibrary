@@ -8,8 +8,10 @@
 
 namespace HelperLibrary.WPF.MarkupExtensions
 {
+    using HelperLibrary.Core.Localization;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Linq;
     using System.Text;
@@ -22,6 +24,8 @@ namespace HelperLibrary.WPF.MarkupExtensions
     /// </summary>
     public class LocalizedExtension : MarkupExtension
     {
+        private static readonly ILocalizedStringManager lclStrMng = LocalizedStringManager.Default;
+
         /// <summary>
         /// the scope
         /// </summary>
@@ -44,6 +48,9 @@ namespace HelperLibrary.WPF.MarkupExtensions
         /// <returns>the localized string if successed, otherwise simply return the key string</returns>
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
+            Contract.Assert(serviceProvider != null);
+            Contract.Assert(lclStrMng != null);
+
             if (string.IsNullOrEmpty(Scope))
             {
                 var rootObjProvider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
@@ -57,8 +64,7 @@ namespace HelperLibrary.WPF.MarkupExtensions
                 Culture = CultureInfo.CurrentUICulture;
             }
 
-            return LocalizedStringManager.Default
-                .GetLocalizedString(Scope, Key, Culture.Name);
+            return lclStrMng.GetLocalizedString(Scope, Key, Culture.Name);
         }
     }
 }
