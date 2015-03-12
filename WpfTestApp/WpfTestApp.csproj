@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,6 +71,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -95,6 +97,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HelperLibrary.Core\HelperLibrary.Core.csproj">
+      <Project>{4898e407-b7aa-4346-8714-e5b0663cdef1}</Project>
+      <Name>HelperLibrary.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HelperLibrary.WPF\HelperLibrary.WPF.csproj">
       <Project>{916b6685-e740-4b2d-8ecb-29ac076f9239}</Project>
       <Name>HelperLibrary.WPF</Name>

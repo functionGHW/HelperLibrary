@@ -7,6 +7,21 @@
         <StackPanel>
             <TextBlock Text="{l:Localized Key=test}"/>
             <TextBlock Text="{l:Localized Key=test, Culture=en-US}"/>
+            <TextBox Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged,
+                ValidatesOnDataErrors=True, NotifyOnValidationError=True}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <Trigger Property="Validation.HasError" Value="True">
+                                <Setter Property="ToolTip" 
+                                        Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+                                    Path=(Validation.Errors).CurrentItem.ErrorContent}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            
         </StackPanel>
     </Grid>
 </Window>

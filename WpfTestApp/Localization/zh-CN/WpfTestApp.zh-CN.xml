@@ -23,4 +23,8 @@
         <Key>test</Key>
         <Value>测试</Value>
     </StringItem>
+    <StringItem>
+        <Key>InputSomething</Key>
+        <Value>输入点东西吧！</Value>
+    </StringItem>
 </LocalizedStrings>

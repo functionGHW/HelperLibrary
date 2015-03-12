@@ -22,4 +22,8 @@
     <StringItem Key="test">
         <Value>Test</Value>
     </StringItem>
+    <StringItem>
+        <Key>InputSomething</Key>
+        <Value>Please input something!</Value>
+    </StringItem>
 </LocalizedStrings>

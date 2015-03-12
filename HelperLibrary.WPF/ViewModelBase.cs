@@ -62,16 +62,22 @@ namespace HelperLibrary.WPF
                     return string.Empty;
                 }
                 object value = prop.GetValue(this, null);
+                ValidationContext context = new ValidationContext(this);
                 var attrs = prop.GetCustomAttributes(typeof(ValidationAttribute), true)
                     as ValidationAttribute[];
-                // validate the value and get errormessage
+
+                /* validate the value and get all validation results that not valid
+                 * Note that instead of getting the ErrorMessage directly, 
+                 * we get the ValidationResult first, because some ValidationAttribute classes
+                 * may implement localization(for example HelperLibrary.Core.Annotation.*). 
+                 */
                 var errors = from attr in attrs
                              where !attr.IsValid(value)
-                             select attr.ErrorMessage;
+                             select attr.GetValidationResult(value, context);
 
                 if (errors.Any())
                 {
-                    return errors.First();
+                    return errors.First().ErrorMessage;
                 }
                 return string.Empty;
             }
