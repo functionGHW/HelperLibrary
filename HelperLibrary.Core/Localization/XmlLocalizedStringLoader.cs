@@ -6,7 +6,7 @@
  * Description:
  * */
 
-namespace HelperLibrary.WPF
+namespace HelperLibrary.Core.Localization
 {
     using System;
     using System.Collections.Generic;
