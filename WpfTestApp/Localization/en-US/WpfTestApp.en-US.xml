@@ -22,8 +22,11 @@
     <StringItem Key="test">
         <Value>Test</Value>
     </StringItem>
+    <StringItem Key="name">
+        <Value>Name</Value>
+    </StringItem>
     <StringItem>
         <Key>InputSomething</Key>
-        <Value>Please input something!</Value>
+        <Value>{0} can not be empty, please input something!</Value>
     </StringItem>
 </LocalizedStrings>

@@ -23,7 +23,8 @@ namespace WpfTestApp
 
         private const string ErrorScope = "WpfTestApp";
 
-        [LocalizedRequired(ErrorScope, "zh-CN", ErrorMessage = "InputSomething")]
+        [LocalizedDisplay(ErrorScope, Name = "name")]
+        [LocalizedRequired(ErrorScope, ErrorMessage = "InputSomething")]
         public string InputText
         {
             get { return this.inputText; }

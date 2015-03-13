@@ -24,7 +24,11 @@
         <Value>测试</Value>
     </StringItem>
     <StringItem>
+        <Key>name</Key>
+        <Value>姓名</Value>
+    </StringItem>
+    <StringItem>
         <Key>InputSomething</Key>
-        <Value>输入点东西吧！</Value>
+        <Value>{0}是必填项，输入点东西吧！</Value>
     </StringItem>
 </LocalizedStrings>
