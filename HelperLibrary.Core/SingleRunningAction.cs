@@ -11,6 +11,7 @@ namespace HelperLibrary.Core
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text;
     using System.Threading;
@@ -58,6 +59,11 @@ namespace HelperLibrary.Core
         /// <returns>true if invoke successfully, false if the action is running.</returns>
         public bool Invoke()
         {
+            Contract.Ensures(syncObj != null);
+
+            /* use a lock to make sure that there is at most 
+             * one thread runs this action at any time.
+             */
             bool isEntered = Monitor.TryEnter(syncObj);
 
             if (!isEntered)
