@@ -62,7 +62,22 @@ namespace HelperLibrary.WPF
                     return string.Empty;
                 }
                 object value = prop.GetValue(this, null);
-                ValidationContext context = new ValidationContext(this);
+
+                /* Here we set the propertyName as the context's MemberName so that 
+                 * we can support to format the error message.
+                 * 
+                 * If the property has a DisplayAttribute, the context's DisplayName property 
+                 * will find the DisplayAttribute by MemberName; otherwise the DisplayName 
+                 * is same as MemberName. If we don't give the MemverName, the name of 
+                 * the instance's type(the ViewModel) will be as the DisplayName.
+                 * 
+                 * For example: [LocalizedRequired(Scope, ErrorMessage="The {0} is required")]
+                 *          the argument "{0}" will be replace by the property's DisplayName
+                 */
+                ValidationContext context = new ValidationContext(this)
+                {
+                    MemberName = propertyName,
+                };
                 var attrs = prop.GetCustomAttributes(typeof(ValidationAttribute), true)
                     as ValidationAttribute[];
 
