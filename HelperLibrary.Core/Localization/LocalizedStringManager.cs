@@ -88,6 +88,9 @@ namespace HelperLibrary.Core.Localization
             if (string.IsNullOrEmpty(scope))
                 throw new ArgumentNullException("scope");
 
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException("key");
+
             if (string.IsNullOrEmpty(cultureName))
             {
                 cultureName = System.Threading.Thread.CurrentThread.CurrentCulture.Name;

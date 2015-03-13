@@ -8,6 +8,7 @@
 
 namespace HelperLibrary.WPF
 {
+    using HelperLibrary.Core.Annotation;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -74,10 +75,22 @@ namespace HelperLibrary.WPF
                  * For example: [LocalizedRequired(Scope, ErrorMessage="The {0} is required")]
                  *          the argument "{0}" will be replace by the property's DisplayName
                  */
+
                 ValidationContext context = new ValidationContext(this)
                 {
                     MemberName = propertyName,
                 };
+
+                /* If has LocalizedDisplayAttribute, get the localized name
+                 * as the context's DisplayName directly;
+                 */
+                var lclDisplayAttributes = prop.GetCustomAttributes(typeof(LocalizedDisplayAttribute), true) as LocalizedDisplayAttribute[];
+
+                if (lclDisplayAttributes.Length > 0)
+                {
+                    context.DisplayName = lclDisplayAttributes[0].GetLocalizedName();
+                }
+
                 var attrs = prop.GetCustomAttributes(typeof(ValidationAttribute), true)
                     as ValidationAttribute[];
 
