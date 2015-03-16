@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindableModelWrapper.cs" />
+    <Compile Include="InternalUtility.cs" />
     <Compile Include="MarkupExtensions\LocalizedExtension.cs" />
     <Compile Include="NotifyPropertyChangedBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
