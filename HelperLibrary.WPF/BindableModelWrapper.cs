@@ -24,7 +24,7 @@ namespace HelperLibrary.WPF
         private TModel model;
 
         /// <summary>
-        /// 
+        /// Initialize the instance by give object.
         /// </summary>
         /// <param name="model"></param>
         public BindableModelWrapper(TModel model)
@@ -33,7 +33,7 @@ namespace HelperLibrary.WPF
         }
 
         /// <summary>
-        /// 
+        /// Returns a string that represents the model object.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -42,7 +42,7 @@ namespace HelperLibrary.WPF
         }
 
         /// <summary>
-        /// 
+        /// implicit cast between BindableModelWrapper<TModel> and TModel
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -52,7 +52,7 @@ namespace HelperLibrary.WPF
         }
 
         /// <summary>
-        /// 
+        /// explicit cast between BindableModelWrapper<TModel> and TModel
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -62,7 +62,7 @@ namespace HelperLibrary.WPF
         }
 
         /// <summary>
-        /// 
+        /// the wrapped model object.
         /// </summary>
         public TModel Model
         {
@@ -73,18 +73,21 @@ namespace HelperLibrary.WPF
         #region IDataErrorInfo Members
 
         /// <summary>
-        /// 
+        /// Gets an error message indicating what is wrong with this object.
         /// </summary>
         public string Error
         {
-            get { return string.Empty; }
+            get
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
-        /// 
+        /// Gets the error message for the property with the given name.
         /// </summary>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
+        /// <param name="propertyName">name of property</param>
+        /// <returns>the error message if has errors, otherwise an empty string.</returns>
         public string this[string propertyName]
         {
             get
@@ -105,7 +108,7 @@ namespace HelperLibrary.WPF
         #region INotifyPropertyChanged Members
 
         /// <summary>
-        /// 
+        /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 

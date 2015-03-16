@@ -29,7 +29,7 @@ namespace HelperLibrary.WPF
         #endregion
 
         /// <summary>
-        /// Notify when a property was changed
+        /// Notify when a property was changed by property's name
         /// </summary>
         /// <param name="propertyName">name of property whose value was changed</param>
         protected virtual void OnPropertyChanged(string propertyName)
@@ -41,10 +41,10 @@ namespace HelperLibrary.WPF
         }
 
         /// <summary>
-        /// 
+        /// Notify when a property was changed by an expression
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="propertyExpression"></param>
+        /// <param name="propertyExpression">an expression that simply return the property's value.</param>
         protected virtual void OnPropertyChanged<T>(Expression<Func<T>> propertyExpression)
         {
             var propMember = propertyExpression.Body as MemberExpression;
@@ -56,6 +56,10 @@ namespace HelperLibrary.WPF
             InternalOnPropertyChanged(propertyName);
         }
 
+        /// <summary>
+        /// Notify when a property was changed
+        /// </summary>
+        /// <param name="propertyName">name of property</param>
         private void InternalOnPropertyChanged(string propertyName)
         {
             Contract.Ensures(propertyName != null && propertyName.Length > 0);

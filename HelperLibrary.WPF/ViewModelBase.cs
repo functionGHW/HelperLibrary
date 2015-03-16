@@ -24,6 +24,7 @@ namespace HelperLibrary.WPF
         /// </summary>
         public ViewModelBase()
         {
+            // this will always get the real type of this object
             thisType = this.GetType();
         }
 
