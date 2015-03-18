@@ -43,6 +43,8 @@
     <Compile Include="Annotation\LocalizedDisplayAttribute.cs" />
     <Compile Include="Annotation\LocalizedRequiredAttribute.cs" />
     <Compile Include="Annotation\LocalizedValidationAttribute.cs" />
+    <Compile Include="Configurations\IConfigurationFile.cs" />
+    <Compile Include="Configurations\XmlConfigurationFile.cs" />
     <Compile Include="ExtensionHelper\ObjectExtensions.cs" />
     <Compile Include="ExtensionHelper\StringExtensions.cs" />
     <Compile Include="Localization\ILocalizedStringLoader.cs" />

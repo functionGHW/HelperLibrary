@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using HelperLibrary.Core;
 using HelperLibrary.Core.ExtensionHelper;
+using HelperLibrary.Core.Configurations;
 
 namespace ConsoleTestApp
 {
@@ -19,11 +20,20 @@ namespace ConsoleTestApp
     {
         static void Main(string[] args)
         {
-
             //NumberUtilityTest();
-            StringExtensionsTest();
+            //StringExtensionsTest();
+            XmlConfigTest();
 
             Console.ReadKey();
+        }
+
+        private static void XmlConfigTest()
+        {
+            string filePath = @"E:\cfg.xml";
+            var cfg = new XmlConfigurationFile(filePath);
+            cfg["time"] = DateTime.Now.ToString();
+
+            Console.WriteLine(cfg["time"]);
         }
 
         private static void StringExtensionsTest()
