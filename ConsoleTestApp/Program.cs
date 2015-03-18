@@ -30,10 +30,14 @@ namespace ConsoleTestApp
         private static void XmlConfigTest()
         {
             string filePath = @"E:\cfg.xml";
-            var cfg = new XmlConfigurationFile(filePath);
+            IConfigurationFile cfg = new XmlConfigurationFile(filePath);
             cfg["time"] = DateTime.Now.ToString();
 
             Console.WriteLine(cfg["time"]);
+            Console.WriteLine(cfg.GetConfiguration("time"));
+
+            //throw exception
+            cfg.UpdateConfiguration("update", "test");
         }
 
         private static void StringExtensionsTest()

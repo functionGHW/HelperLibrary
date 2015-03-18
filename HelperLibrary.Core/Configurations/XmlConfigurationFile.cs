@@ -291,13 +291,13 @@ namespace HelperLibrary.Core.Configurations
                 {
                     case ConfigOpt.Add:
                         if (existsConfig)
-                            return;
+                            throw new InvalidOperationException("configuration already exists");
 
                         AddConfigurationToXml(name, value);
                         break;
                     case ConfigOpt.Update:
                         if (!existsConfig)
-                            return;
+                            throw new InvalidOperationException("configuration not found");
 
                         UpdateConfigurationToXml(name, value);
                         break;
