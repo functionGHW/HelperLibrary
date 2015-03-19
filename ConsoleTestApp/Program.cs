@@ -29,15 +29,19 @@ namespace ConsoleTestApp
 
         private static void XmlConfigTest()
         {
-            string filePath = @"E:\cfg.xml";
-            IConfigurationFile cfg = new XmlConfigurationFile(filePath);
+            string filePath = @"cfg.xml";
+            bool isCreateNew = !System.IO.File.Exists(filePath);
+
+            IConfigurationFile cfg = new XmlConfigurationFile(filePath, isCreateNew);
             cfg["time"] = DateTime.Now.ToString();
 
             Console.WriteLine(cfg["time"]);
             Console.WriteLine(cfg.GetConfiguration("time"));
-
+            
             //throw exception
-            cfg.UpdateConfiguration("update", "test");
+            //cfg.UpdateConfiguration("update", "test");
+            
+            cfg.SaveChange();
         }
 
         private static void StringExtensionsTest()

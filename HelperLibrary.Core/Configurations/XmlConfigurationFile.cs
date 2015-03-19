@@ -239,6 +239,18 @@ namespace HelperLibrary.Core.Configurations
         }
 
         /// <summary>
+        /// Save change to file
+        /// </summary>
+        public void SaveChange()
+        {
+            Contract.Ensures(this.m_doc != null);
+            lock (m_dictSyncObj)
+            {
+                this.m_doc.Save(FullPath);
+            }
+        }
+
+        /// <summary>
         /// Get all configurations as a dictionary
         /// </summary>
         /// <returns>a dictionary contains all configurations if success, 
@@ -325,7 +337,6 @@ namespace HelperLibrary.Core.Configurations
 
             root.Add(configruation);
 
-            this.m_doc.Save(FullPath);
             return true;
         }
 
@@ -343,29 +354,10 @@ namespace HelperLibrary.Core.Configurations
             if (xmlValue != null)
             {
                 xmlValue.Value = value;
-                m_doc.Save(FullPath);
                 return true;
             }
 
             return false;
-        }
-
-        private XAttribute FindConfigurationValueInXml(string name)
-        {
-            foreach (var item in m_doc.Root.Elements(ItemElementName))
-            {
-                var key = item.Attribute(NameAttributeName);
-                var value = item.Attribute(ValueAttributeName);
-                if (key == null || value == null)
-                {
-                    continue;
-                }
-                if (key.Value == name)
-                {
-                    return value;
-                }
-            }
-            return null;
         }
 
         private void InternalRemoveConfiguration(string name)
@@ -383,7 +375,6 @@ namespace HelperLibrary.Core.Configurations
                                          select setting)
                                         .SingleOrDefault();
                     configuration.Remove();
-                    m_doc.Save(FullPath);
 
                     this.m_configurationDictionary.Remove(name);
                 }
