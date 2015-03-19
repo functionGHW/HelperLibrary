@@ -37,10 +37,13 @@ namespace ConsoleTestApp
 
             Console.WriteLine(cfg["time"]);
             Console.WriteLine(cfg.GetConfiguration("time"));
-            
+
+            //this clear all changes
+            cfg.Reload();
+
             //throw exception
             //cfg.UpdateConfiguration("update", "test");
-            
+
             cfg.SaveChange();
         }
 

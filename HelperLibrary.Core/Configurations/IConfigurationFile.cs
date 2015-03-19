@@ -61,14 +61,19 @@ namespace HelperLibrary.Core.Configurations
         void RemoveConfiguration(string name);
 
         /// <summary>
-        /// Save change to file
-        /// </summary>
-        void SaveChange();
-        
-        /// <summary>
         /// Get all configurations as a dictionary
         /// </summary>
         /// <returns>a dictionary contains all configurations if success, otherwise return null.</returns>
         IDictionary<string, string> ToDictionary();
+
+        /// <summary>
+        /// Save change to file
+        /// </summary>
+        void SaveChange();
+
+        /// <summary>
+        /// Reload configurations from file, this will clear all unsaved changes
+        /// </summary>
+        void Reload();
     }
 }

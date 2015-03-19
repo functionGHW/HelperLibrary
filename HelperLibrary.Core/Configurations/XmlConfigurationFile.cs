@@ -52,7 +52,7 @@ namespace HelperLibrary.Core.Configurations
 
         private readonly object m_dictSyncObj;
 
-        private readonly XDocument m_doc;
+        private XDocument m_doc;
 
         #endregion
 
@@ -74,7 +74,7 @@ namespace HelperLibrary.Core.Configurations
             bool fileExists = File.Exists(fullPath);
             if (fileExists && isCreateNew)
                 throw new IOException("file already exists. " + fullPath);
-            
+
             this.m_configurationDictionary = new Dictionary<string, string>();
             this.m_dictSyncObj = new object();
             this.FullPath = fullPath;
@@ -239,18 +239,6 @@ namespace HelperLibrary.Core.Configurations
         }
 
         /// <summary>
-        /// Save change to file
-        /// </summary>
-        public void SaveChange()
-        {
-            Contract.Ensures(this.m_doc != null);
-            lock (m_dictSyncObj)
-            {
-                this.m_doc.Save(FullPath);
-            }
-        }
-
-        /// <summary>
         /// Get all configurations as a dictionary
         /// </summary>
         /// <returns>a dictionary contains all configurations if success, 
@@ -265,6 +253,34 @@ namespace HelperLibrary.Core.Configurations
             }
         }
 
+        /// <summary>
+        /// Save change to file
+        /// </summary>
+        public void SaveChange()
+        {
+            Contract.Ensures(this.m_doc != null);
+            lock (m_dictSyncObj)
+            {
+                this.m_doc.Save(FullPath);
+            }
+        }
+
+        /// <summary>
+        /// Reload configurations from file, this will clear all unsaved changes
+        /// </summary>
+        public void Reload()
+        {
+            Contract.Ensures(this.m_doc != null);
+
+            lock (m_dictSyncObj)
+            {
+                XDocument newDoc = XDocument.Load(FullPath);
+                this.m_configurationDictionary.Clear();
+                this.m_doc = newDoc;
+                LoadAllConfigurations();
+            }
+        }
+
         #endregion
 
         private string InternalGetConfiguration(string name)
@@ -273,13 +289,16 @@ namespace HelperLibrary.Core.Configurations
             Contract.Ensures(m_configurationDictionary != null);
 
             string value = null;
-            if (this.m_configurationDictionary.TryGetValue(name, out value))
+            lock (m_dictSyncObj)
             {
-                return value;
-            }
-            else
-            {
-                return null;
+                if (this.m_configurationDictionary.TryGetValue(name, out value))
+                {
+                    return value;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -330,6 +349,8 @@ namespace HelperLibrary.Core.Configurations
 
         private bool AddConfigurationToXml(string name, string value)
         {
+            Contract.Ensures(this.m_doc != null);
+
             XElement root = this.m_doc.Root;
             XElement configruation = new XElement(ItemElementName,
                 new XAttribute(NameAttributeName, name),
@@ -342,7 +363,9 @@ namespace HelperLibrary.Core.Configurations
 
         private bool UpdateConfigurationToXml(string name, string value)
         {
-            var xmlValue = (from setting in m_doc.Root.Elements(ItemElementName)
+            Contract.Ensures(this.m_doc != null);
+
+            var xmlValue = (from setting in this.m_doc.Root.Elements(ItemElementName)
                             let nameAttr = setting.Attribute(NameAttributeName)
                             let valueAttr = setting.Attribute(ValueAttributeName)
                             where nameAttr != null
@@ -363,12 +386,13 @@ namespace HelperLibrary.Core.Configurations
         private void InternalRemoveConfiguration(string name)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
+            Contract.Ensures(this.m_doc != null);
 
             lock (m_dictSyncObj)
             {
                 if (this.m_configurationDictionary.ContainsKey(name))
                 {
-                    var configuration = (from setting in m_doc.Root.Elements(ItemElementName)
+                    var configuration = (from setting in this.m_doc.Root.Elements(ItemElementName)
                                          let nameAttr = setting.Attribute(NameAttributeName)
                                          where nameAttr != null
                                             && nameAttr.Value == name
