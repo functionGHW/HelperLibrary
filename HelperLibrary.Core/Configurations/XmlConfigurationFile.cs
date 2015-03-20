@@ -2,13 +2,14 @@
  * FileName:    XmlConfigurationFile.cs
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  3/18/2015 10:07:48 AM
- * Version:     v1.0
+ * Version:     v1.1
  * Description:
  * */
 
 namespace HelperLibrary.Core.Configurations
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.IO;
@@ -24,7 +25,7 @@ namespace HelperLibrary.Core.Configurations
     {
         #region Static members
 
-        /* define tag and attribute using in XML file.
+        /* define tags and attributes using in XML file.
          */
         public static readonly string RootElementName = "configurations";
         public static readonly string ItemElementName = "setting";
@@ -48,11 +49,17 @@ namespace HelperLibrary.Core.Configurations
 
         #region Fields
 
-        private readonly IDictionary<string, string> m_configurationDictionary;
+        // dict to store configurations
+        private IDictionary<string, string> m_configurationDictionary;
 
-        private readonly object m_dictSyncObj;
+        // sync object of the xml file
+        private readonly object m_xmlSyncObj = new object();
 
+        // the xml document object
         private XDocument m_doc;
+
+        // indecate if is loading configurations from file.
+        private bool isLoading = false;
 
         #endregion
 
@@ -75,8 +82,6 @@ namespace HelperLibrary.Core.Configurations
             if (fileExists && isCreateNew)
                 throw new IOException("file already exists. " + fullPath);
 
-            this.m_configurationDictionary = new Dictionary<string, string>();
-            this.m_dictSyncObj = new object();
             this.FullPath = fullPath;
 
             if (isCreateNew)
@@ -87,40 +92,53 @@ namespace HelperLibrary.Core.Configurations
             {
                 this.m_doc = XDocument.Load(fullPath);
             }
-
-            LoadAllConfigurations();
+            LoadAllConfigurations(this.m_doc);
         }
 
         /// <summary>
         /// try to load all configurations from file.
         /// </summary>
-        private void LoadAllConfigurations()
+        private void LoadAllConfigurations(XDocument doc)
         {
-            Contract.Ensures(this.m_configurationDictionary != null);
-            Contract.Ensures(this.m_doc != null);
+            Contract.Ensures(doc != null);
 
-            lock (m_dictSyncObj)
+            if (isLoading)
+                return;
+
+            lock (m_xmlSyncObj)
             {
-                var root = this.m_doc.Root;
-                if (root == null
-                    || root.Name != RootElementName)
+                isLoading = true;
+                try
                 {
-                    throw new InvalidDataException("the format of configuration file is not right");
-                }
+                    var root = doc.Root;
+                    if (root == null
+                        || root.Name != RootElementName)
+                    {
+                        throw new InvalidDataException("the format of configuration file is not right");
+                    }
 
-                foreach (var item in root.Elements(ItemElementName))
+                    IDictionary<string, string> newDict = new ConcurrentDictionary<string, string>();
+                    foreach (var item in root.Elements(ItemElementName))
+                    {
+                        var nameAttr = item.Attribute(NameAttributeName);
+                        var valueAttr = item.Attribute(ValueAttributeName);
+                        if (valueAttr == null)
+                        {
+                            continue;
+                        }
+                        if (nameAttr == null || string.IsNullOrEmpty(nameAttr.Value))
+                        {
+                            continue;
+                        }
+                        newDict.Add(nameAttr.Value, valueAttr.Value);
+                    }
+                    this.IsChanged = false;
+                    this.m_doc = doc;
+                    this.m_configurationDictionary = newDict;
+                }
+                finally
                 {
-                    var nameAttr = item.Attribute(NameAttributeName);
-                    var valueAttr = item.Attribute(ValueAttributeName);
-                    if (valueAttr == null)
-                    {
-                        continue;
-                    }
-                    if (nameAttr == null || string.IsNullOrEmpty(nameAttr.Value))
-                    {
-                        continue;
-                    }
-                    this.m_configurationDictionary.Add(nameAttr.Value, valueAttr.Value);
+                    isLoading = false;
                 }
             }
         }
@@ -133,6 +151,11 @@ namespace HelperLibrary.Core.Configurations
         /// Gets full path of the current xml file
         /// </summary>
         public string FullPath { get; private set; }
+
+        /// <summary>
+        /// indicate whether the configurations has been changed.
+        /// </summary>
+        public bool IsChanged { get; private set; }
 
         #endregion
 
@@ -247,10 +270,7 @@ namespace HelperLibrary.Core.Configurations
         {
             Contract.Ensures(this.m_configurationDictionary != null);
 
-            lock (m_dictSyncObj)
-            {
-                return new Dictionary<string, string>(this.m_configurationDictionary);
-            }
+            return new Dictionary<string, string>(this.m_configurationDictionary);
         }
 
         /// <summary>
@@ -259,9 +279,17 @@ namespace HelperLibrary.Core.Configurations
         public void SaveChange()
         {
             Contract.Ensures(this.m_doc != null);
-            lock (m_dictSyncObj)
+
+            if (IsChanged)
             {
-                this.m_doc.Save(FullPath);
+                lock (m_xmlSyncObj)
+                {
+                    if (IsChanged)
+                    {
+                        this.m_doc.Save(FullPath);
+                        IsChanged = false;
+                    }
+                }
             }
         }
 
@@ -270,15 +298,8 @@ namespace HelperLibrary.Core.Configurations
         /// </summary>
         public void Reload()
         {
-            Contract.Ensures(this.m_doc != null);
-
-            lock (m_dictSyncObj)
-            {
-                XDocument newDoc = XDocument.Load(FullPath);
-                this.m_configurationDictionary.Clear();
-                this.m_doc = newDoc;
-                LoadAllConfigurations();
-            }
+            XDocument newDoc = XDocument.Load(FullPath);
+            LoadAllConfigurations(newDoc);
         }
 
         #endregion
@@ -289,24 +310,29 @@ namespace HelperLibrary.Core.Configurations
             Contract.Ensures(m_configurationDictionary != null);
 
             string value = null;
-            lock (m_dictSyncObj)
+
+            if (this.m_configurationDictionary.TryGetValue(name, out value))
             {
-                if (this.m_configurationDictionary.TryGetValue(name, out value))
-                {
-                    return value;
-                }
-                else
-                {
-                    return null;
-                }
+                return value;
+            }
+            else
+            {
+                return null;
             }
         }
 
-        [Flags]
-        internal enum ConfigOpt : byte
+        /// <summary>
+        /// internal enum to determine which operation to do
+        /// </summary>
+        private enum ConfigOpt : byte
         {
+            // Add a new configuration
             Add = 1,
+
+            // Modify an exist configuration
             Update = 2,
+
+            // Add or modify a configuration
             AddOrUpdate = 3,
         }
 
@@ -315,72 +341,73 @@ namespace HelperLibrary.Core.Configurations
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
             Contract.Requires(value != null);
 
-            lock (m_dictSyncObj)
+            bool existsConfig = this.m_configurationDictionary.ContainsKey(name);
+            switch (opt)
             {
-                bool existsConfig = this.m_configurationDictionary.ContainsKey(name);
-                switch (opt)
-                {
-                    case ConfigOpt.Add:
-                        if (existsConfig)
-                            throw new InvalidOperationException("configuration already exists");
+                case ConfigOpt.Add:
+                    if (existsConfig)
+                        throw new InvalidOperationException("configuration already exists");
 
-                        AddConfigurationToXml(name, value);
-                        break;
-                    case ConfigOpt.Update:
-                        if (!existsConfig)
-                            throw new InvalidOperationException("configuration not found");
+                    AddConfigurationToXml(name, value);
+                    break;
+                case ConfigOpt.Update:
+                    if (!existsConfig)
+                        throw new InvalidOperationException("configuration not found");
 
+                    UpdateConfigurationToXml(name, value);
+                    break;
+                case ConfigOpt.AddOrUpdate:
+                    if (existsConfig)
+                    {
                         UpdateConfigurationToXml(name, value);
-                        break;
-                    case ConfigOpt.AddOrUpdate:
-                        if (existsConfig)
-                        {
-                            UpdateConfigurationToXml(name, value);
-                        }
-                        else
-                        {
-                            AddConfigurationToXml(name, value);
-                        }
-                        break;
-                }
-                this.m_configurationDictionary[name] = value;
+                    }
+                    else
+                    {
+                        AddConfigurationToXml(name, value);
+                    }
+                    break;
             }
+            this.m_configurationDictionary[name] = value;
+            this.IsChanged = true;
         }
 
         private bool AddConfigurationToXml(string name, string value)
         {
             Contract.Ensures(this.m_doc != null);
 
-            XElement root = this.m_doc.Root;
-            XElement configruation = new XElement(ItemElementName,
-                new XAttribute(NameAttributeName, name),
-                new XAttribute(ValueAttributeName, value));
+            lock (m_xmlSyncObj)
+            {
+                XElement root = this.m_doc.Root;
+                XElement configruation = new XElement(ItemElementName,
+                    new XAttribute(NameAttributeName, name),
+                    new XAttribute(ValueAttributeName, value));
 
-            root.Add(configruation);
-
-            return true;
+                root.Add(configruation);
+                return true;
+            }
         }
 
         private bool UpdateConfigurationToXml(string name, string value)
         {
             Contract.Ensures(this.m_doc != null);
-
-            var xmlValue = (from setting in this.m_doc.Root.Elements(ItemElementName)
-                            let nameAttr = setting.Attribute(NameAttributeName)
-                            let valueAttr = setting.Attribute(ValueAttributeName)
-                            where nameAttr != null
-                               && valueAttr != null
-                               && nameAttr.Value == name
-                            select valueAttr)
-                            .SingleOrDefault();
-
-            if (xmlValue != null)
+            lock (m_xmlSyncObj)
             {
-                xmlValue.Value = value;
-                return true;
-            }
+                var xmlValue = (from setting in this.m_doc.Root.Elements(ItemElementName)
+                                let nameAttr = setting.Attribute(NameAttributeName)
+                                let valueAttr = setting.Attribute(ValueAttributeName)
+                                where nameAttr != null
+                                   && valueAttr != null
+                                   && nameAttr.Value == name
+                                select valueAttr)
+                                .SingleOrDefault();
 
-            return false;
+                if (xmlValue != null)
+                {
+                    xmlValue.Value = value;
+                    return true;
+                }
+                return false;
+            }
         }
 
         private void InternalRemoveConfiguration(string name)
@@ -388,7 +415,7 @@ namespace HelperLibrary.Core.Configurations
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
             Contract.Ensures(this.m_doc != null);
 
-            lock (m_dictSyncObj)
+            lock (m_xmlSyncObj)
             {
                 if (this.m_configurationDictionary.ContainsKey(name))
                 {
@@ -398,12 +425,12 @@ namespace HelperLibrary.Core.Configurations
                                             && nameAttr.Value == name
                                          select setting)
                                         .SingleOrDefault();
-                    configuration.Remove();
 
+                    configuration.Remove();
                     this.m_configurationDictionary.Remove(name);
+                    this.IsChanged = true;
                 }
             }
-
         }
 
     }
