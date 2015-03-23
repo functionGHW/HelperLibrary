@@ -2,7 +2,7 @@
  * FileName:    LocalizedValidationAttribute.cs
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  3/12/2015 10:36:37 AM
- * Version:     v1.0
+ * Version:     v1.1
  * Description:
  * */
 
@@ -25,7 +25,7 @@ namespace HelperLibrary.Core.Annotation
     /// </summary>
     public abstract class LocalizedValidationAttribute : ValidationAttribute
     {
-        private static readonly ILocalizedStringManager lclStrMng = LocalizedStringManager.Default;
+        //private static readonly ILocalizedStringManager lclStrMng = LocalizedStringManager.Default;
 
         // fields for getting localized string
         private readonly string scope;
@@ -56,16 +56,14 @@ namespace HelperLibrary.Core.Annotation
         /// <returns></returns>
         public override string FormatErrorMessage(string name)
         {
-            Contract.Ensures(lclStrMng != null);
+            //Contract.Ensures(lclStrMng != null);
             Contract.Ensures(this.culture != null);
-
-            /* use the ErrorMessageString as key to get the localized string,
-             * this property usually equals ErrorMessage property 
+            
+            /* the ErrorMessageString usually equals ErrorMessage property 
              * which you can specify when using this Attribute.
              */
-            string localizedMessage = lclStrMng
-                .GetLocalizedString(this.scope, this.ErrorMessageString, this.culture.Name);
-            return String.Format(this.culture, localizedMessage, name);
+
+            return AnnotationHelper.GetLocalizedFormatErrorMessage(this.ErrorMessageString, name, this.scope, this.culture);
         }
     }
 }
