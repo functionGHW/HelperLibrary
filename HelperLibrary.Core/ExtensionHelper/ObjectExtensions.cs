@@ -2,7 +2,7 @@
  * FileName:    ObjectExtensions.cs
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  3/11/2015 11:12:01 AM
- * Version:     v1.0
+ * Version:     v1.1
  * Description:
  * */
 
@@ -102,6 +102,29 @@ namespace HelperLibrary.Core.ExtensionHelper
 
                 startIndex++;
                 endIndex--;
+            }
+        }
+
+        /// <summary>
+        /// add many elements to the collection.
+        /// </summary>
+        /// <typeparam name="TElement">type of elements</typeparam>
+        /// <param name="collection">the collection</param>
+        /// <param name="listToAdd">list of elements to add</param>
+        /// <exception cref="ArgumentNullException">cillection or listToAdd is null.</exception>
+        /// <exception cref="NotSupportedException">the collection is read-only.</exception>
+        public static void AddRange<TElement>(this ICollection<TElement> collection,
+            IEnumerable<TElement> listToAdd)
+        {
+            if (collection == null || listToAdd == null)
+                throw new ArgumentNullException(collection == null ? "collection" : "listToAdd");
+
+            if (collection.IsReadOnly)
+                throw new NotSupportedException("Can not add, collection is read-only.");
+
+            foreach (TElement item in listToAdd)
+            {
+                collection.Add(item);
             }
         }
     }
