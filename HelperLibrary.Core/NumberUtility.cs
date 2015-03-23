@@ -2,7 +2,7 @@
  * FileName:    NumberUtility.cs
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  3/11/2015 10:26:19 AM
- * Version:     v1.0
+ * Version:     v1.1
  * Description:
  * */
 
@@ -26,6 +26,37 @@ namespace HelperLibrary.Core
 
         #region Properties
 
+        /* define some ussful constants for store capacity and file size.
+         */
+        /// <summary>
+        /// 1 Kilo Bytes
+        /// </summary>
+        public const long OneKB = 1024;
+
+        /// <summary>
+        /// one Mega Bytes
+        /// </summary>
+        public const long OneMB = 1024 * OneKB;
+
+        /// <summary>
+        /// one Giga Bytes
+        /// </summary>
+        public const long OneGB = 1024 * OneMB;
+
+        /// <summary>
+        /// one Tera Bytes
+        /// </summary>
+        public const long OneTB = 1024 * OneGB;
+
+        /// <summary>
+        /// one Peta Bytes
+        /// </summary>
+        public const long OnePB = 1024 * OneTB;
+
+        /// <summary>
+        /// one Exa Bytes
+        /// </summary>
+        public const long OneEB = 1024 * OnePB;
 
         #endregion
 
