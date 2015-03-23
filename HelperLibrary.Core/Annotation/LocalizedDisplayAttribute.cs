@@ -3,7 +3,7 @@
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  3/13/2015 10:45:32 AM
  * Version:     v1.0
- * Description:
+ * Description: This class is obsolete
  * */
 
 namespace HelperLibrary.Core.Annotation

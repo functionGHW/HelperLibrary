@@ -2,7 +2,7 @@
  * FileName:    InternalUtility.cs
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  3/16/2015 11:41:33 AM
- * Version:     v1.0
+ * Version:     v1.1
  * Description:
  * */
 
@@ -58,15 +58,6 @@ namespace HelperLibrary.WPF
             {
                 MemberName = propertyName,
             };
-            /* If has LocalizedDisplayAttribute, get the localized name
-             * as the context's DisplayName directly;
-             */
-            var lclDisplayAttributes = prop.GetCustomAttributes(typeof(LocalizedDisplayAttribute), true)
-                as LocalizedDisplayAttribute[];
-            if (lclDisplayAttributes.Length > 0)
-            {
-                context.DisplayName = lclDisplayAttributes[0].GetLocalizedName();
-            }
 
             var attrs = prop.GetCustomAttributes(typeof(ValidationAttribute), true)
                 as ValidationAttribute[];
