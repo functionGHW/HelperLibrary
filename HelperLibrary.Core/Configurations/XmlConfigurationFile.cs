@@ -50,13 +50,13 @@ namespace HelperLibrary.Core.Configurations
         #region Fields
 
         // dict to store configurations
-        private IDictionary<string, string> m_configurationDictionary;
+        private IDictionary<string, string> configurationsDict;
 
         // sync object of the xml file
-        private readonly object m_xmlSyncObj = new object();
+        private readonly object xmlFileSyncObj = new object();
 
         // the xml document object
-        private XDocument m_doc;
+        private XDocument xmlFile;
 
         // indecate if is loading configurations from file.
         private bool isLoading = false;
@@ -86,13 +86,13 @@ namespace HelperLibrary.Core.Configurations
 
             if (isCreateNew)
             {
-                this.m_doc = CreateXmlFile(fullPath);
+                this.xmlFile = CreateXmlFile(fullPath);
             }
             else
             {
-                this.m_doc = XDocument.Load(fullPath);
+                this.xmlFile = XDocument.Load(fullPath);
             }
-            LoadAllConfigurations(this.m_doc);
+            LoadAllConfigurations(this.xmlFile);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace HelperLibrary.Core.Configurations
             if (isLoading)
                 return;
 
-            lock (m_xmlSyncObj)
+            lock (xmlFileSyncObj)
             {
                 isLoading = true;
                 try
@@ -133,8 +133,8 @@ namespace HelperLibrary.Core.Configurations
                         newDict.Add(nameAttr.Value, valueAttr.Value);
                     }
                     this.IsChanged = false;
-                    this.m_doc = doc;
-                    this.m_configurationDictionary = newDict;
+                    this.xmlFile = doc;
+                    this.configurationsDict = newDict;
                 }
                 finally
                 {
@@ -199,9 +199,9 @@ namespace HelperLibrary.Core.Configurations
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
 
-            Contract.Ensures(m_configurationDictionary != null);
+            Contract.Ensures(configurationsDict != null);
 
-            return this.m_configurationDictionary.ContainsKey(name);
+            return this.configurationsDict.ContainsKey(name);
         }
 
         /// <summary>
@@ -268,9 +268,9 @@ namespace HelperLibrary.Core.Configurations
         /// otherwise return null.</returns>
         public IDictionary<string, string> ToDictionary()
         {
-            Contract.Ensures(this.m_configurationDictionary != null);
+            Contract.Ensures(this.configurationsDict != null);
 
-            return new Dictionary<string, string>(this.m_configurationDictionary);
+            return new Dictionary<string, string>(this.configurationsDict);
         }
 
         /// <summary>
@@ -278,15 +278,15 @@ namespace HelperLibrary.Core.Configurations
         /// </summary>
         public void SaveChange()
         {
-            Contract.Ensures(this.m_doc != null);
+            Contract.Ensures(this.xmlFile != null);
 
             if (IsChanged)
             {
-                lock (m_xmlSyncObj)
+                lock (xmlFileSyncObj)
                 {
                     if (IsChanged)
                     {
-                        this.m_doc.Save(FullPath);
+                        this.xmlFile.Save(FullPath);
                         IsChanged = false;
                     }
                 }
@@ -307,11 +307,11 @@ namespace HelperLibrary.Core.Configurations
         private string InternalGetConfiguration(string name)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
-            Contract.Ensures(m_configurationDictionary != null);
+            Contract.Ensures(configurationsDict != null);
 
             string value = null;
 
-            if (this.m_configurationDictionary.TryGetValue(name, out value))
+            if (this.configurationsDict.TryGetValue(name, out value))
             {
                 return value;
             }
@@ -341,7 +341,7 @@ namespace HelperLibrary.Core.Configurations
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
             Contract.Requires(value != null);
 
-            bool existsConfig = this.m_configurationDictionary.ContainsKey(name);
+            bool existsConfig = this.configurationsDict.ContainsKey(name);
             switch (opt)
             {
                 case ConfigOpt.Add:
@@ -367,17 +367,17 @@ namespace HelperLibrary.Core.Configurations
                     }
                     break;
             }
-            this.m_configurationDictionary[name] = value;
+            this.configurationsDict[name] = value;
             this.IsChanged = true;
         }
 
         private bool AddConfigurationToXml(string name, string value)
         {
-            Contract.Ensures(this.m_doc != null);
+            Contract.Ensures(this.xmlFile != null);
 
-            lock (m_xmlSyncObj)
+            lock (xmlFileSyncObj)
             {
-                XElement root = this.m_doc.Root;
+                XElement root = this.xmlFile.Root;
                 XElement configruation = new XElement(ItemElementName,
                     new XAttribute(NameAttributeName, name),
                     new XAttribute(ValueAttributeName, value));
@@ -389,10 +389,10 @@ namespace HelperLibrary.Core.Configurations
 
         private bool UpdateConfigurationToXml(string name, string value)
         {
-            Contract.Ensures(this.m_doc != null);
-            lock (m_xmlSyncObj)
+            Contract.Ensures(this.xmlFile != null);
+            lock (xmlFileSyncObj)
             {
-                var xmlValue = (from setting in this.m_doc.Root.Elements(ItemElementName)
+                var xmlValue = (from setting in this.xmlFile.Root.Elements(ItemElementName)
                                 let nameAttr = setting.Attribute(NameAttributeName)
                                 let valueAttr = setting.Attribute(ValueAttributeName)
                                 where nameAttr != null
@@ -413,13 +413,13 @@ namespace HelperLibrary.Core.Configurations
         private void InternalRemoveConfiguration(string name)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
-            Contract.Ensures(this.m_doc != null);
+            Contract.Ensures(this.xmlFile != null);
 
-            lock (m_xmlSyncObj)
+            lock (xmlFileSyncObj)
             {
-                if (this.m_configurationDictionary.ContainsKey(name))
+                if (this.configurationsDict.ContainsKey(name))
                 {
-                    var configuration = (from setting in this.m_doc.Root.Elements(ItemElementName)
+                    var configuration = (from setting in this.xmlFile.Root.Elements(ItemElementName)
                                          let nameAttr = setting.Attribute(NameAttributeName)
                                          where nameAttr != null
                                             && nameAttr.Value == name
@@ -427,7 +427,7 @@ namespace HelperLibrary.Core.Configurations
                                         .SingleOrDefault();
 
                     configuration.Remove();
-                    this.m_configurationDictionary.Remove(name);
+                    this.configurationsDict.Remove(name);
                     this.IsChanged = true;
                 }
             }
