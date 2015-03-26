@@ -55,6 +55,7 @@
     <Compile Include="NumberUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleRunningAction.cs" />
+    <Compile Include="StringUtility.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
