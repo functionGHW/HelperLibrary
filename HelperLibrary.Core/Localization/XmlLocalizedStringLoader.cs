@@ -103,7 +103,7 @@ namespace HelperLibrary.Core.Localization
             }
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            var children = root.Elements();
+            var children = root.Elements(ItemName);
             foreach (XElement child in children)
             {
                 string key = GetAttributeOrSubnodeValue(child, KeyName);
