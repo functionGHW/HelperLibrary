@@ -13,6 +13,8 @@ using System.Text;
 using HelperLibrary.Core;
 using HelperLibrary.Core.ExtensionHelper;
 using HelperLibrary.Core.Configurations;
+using System.IO;
+using HelperLibrary.Core.Tree;
 
 namespace ConsoleTestApp
 {
@@ -22,9 +24,56 @@ namespace ConsoleTestApp
         {
             //NumberUtilityTest();
             //StringExtensionsTest();
-            XmlConfigTest();
+            //XmlConfigTest();
+            //StringUtilityTest();
+            TreeNodeTest();
 
             Console.ReadKey();
+        }
+
+        private static void TreeNodeTest()
+        {
+            string rootPath = @"E:\E_Books";
+            DirectoryInfo rootDir = new DirectoryInfo(rootPath);
+
+            TreeNode<FileSystemInfo> root = new TreeNode<FileSystemInfo>() { Value = rootDir };
+
+            BuildTree(rootDir, root);
+            root.DepthFirstTraversal(node => Console.WriteLine(node.Value.FullName));
+            Console.WriteLine("=============================================");
+            root.BreadthFirstTraversal(node => Console.WriteLine(node.Value.FullName));
+        }
+
+        private static void BuildTree(DirectoryInfo rootDir, TreeNode<FileSystemInfo> root)
+        {
+            foreach (var item in rootDir.GetFileSystemInfos())
+            {
+                var file = item as FileInfo;
+                if (file != null)
+                {
+                    root.AddChild(new TreeNode<FileSystemInfo>() { Value = file });
+                }
+                else
+                {
+                    var dir = item as DirectoryInfo;
+                    var dirNode = new TreeNode<FileSystemInfo>() { Value = dir };
+                    BuildTree(dir, dirNode);
+                    root.AddChild(dirNode);
+                }
+            }
+        }
+
+        private static void StringUtilityTest()
+        {
+            string str = "上下st";
+            try
+            {
+                Console.WriteLine(StringUtility.GetMD5OfString(str));
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.ToString());
+            }
         }
 
         private static void XmlConfigTest()

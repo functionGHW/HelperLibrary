@@ -77,7 +77,7 @@ namespace HelperLibrary.Core
                 throw new ArgumentNullException("bytes");
             }
             int len = bytes.Length;
-            if (bytes.Length == 0)
+            if (len == 0)
             {
                 return String.Empty;
             }
