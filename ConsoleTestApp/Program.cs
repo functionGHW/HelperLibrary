@@ -36,7 +36,7 @@ namespace ConsoleTestApp
             string rootPath = @"E:\E_Books";
             DirectoryInfo rootDir = new DirectoryInfo(rootPath);
 
-            TreeNode<FileSystemInfo> root = new TreeNode<FileSystemInfo>() { Value = rootDir };
+            TreeNode<FileSystemInfo> root = new TreeNode<FileSystemInfo>(rootDir);
 
             BuildTree(rootDir, root);
             root.DepthFirstTraversal(node => Console.WriteLine(node.Value.FullName));
@@ -46,20 +46,27 @@ namespace ConsoleTestApp
 
         private static void BuildTree(DirectoryInfo rootDir, TreeNode<FileSystemInfo> root)
         {
-            foreach (var item in rootDir.GetFileSystemInfos())
+            try
             {
-                var file = item as FileInfo;
-                if (file != null)
+                foreach (var item in rootDir.GetFileSystemInfos())
                 {
-                    root.AddChild(new TreeNode<FileSystemInfo>() { Value = file });
+                    var file = item as FileInfo;
+                    if (file != null)
+                    {
+                        root.AddChild(new TreeNode<FileSystemInfo>(file));
+                    }
+                    else
+                    {
+                        var dir = item as DirectoryInfo;
+                        var dirNode = new TreeNode<FileSystemInfo>(dir);
+                        BuildTree(dir, dirNode);
+                        root.AddChild(dirNode);
+                    }
                 }
-                else
-                {
-                    var dir = item as DirectoryInfo;
-                    var dirNode = new TreeNode<FileSystemInfo>() { Value = dir };
-                    BuildTree(dir, dirNode);
-                    root.AddChild(dirNode);
-                }
+            }
+            catch(UnauthorizedAccessException ex)
+            {
+                //ex.ToString();
             }
         }
 

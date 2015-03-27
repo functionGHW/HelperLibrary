@@ -101,8 +101,9 @@ namespace HelperLibrary.Core.Tree
         /// <summary>
         /// Initialize instance of TreeNode
         /// </summary>
-        public TreeNode()
+        public TreeNode(T value)
         {
+            this.Value = value;
         }
 
         #endregion
