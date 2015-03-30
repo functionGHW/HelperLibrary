@@ -1,0 +1,144 @@
+﻿/* 
+ * FileName:    BinaryTreeNode.cs
+ * Author:      functionghw<functionghw@hotmail.com>
+ * CreateTime:  3/30/2015 3:52:56 PM
+ * Version:     v1.0
+ * Description:
+ * */
+
+namespace HelperLibrary.Core.Tree
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// a simply data structure of binary tree node.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class BinaryTreeNode<T>
+    {
+        #region Fields
+
+        private BinaryTreeNode<T> left;
+        private BinaryTreeNode<T> right;
+
+        #endregion
+
+        /// <summary>
+        /// Initialize a BinaryTreeNode instance with the value.
+        /// </summary>
+        /// <param name="value">value of the node</param>
+        public BinaryTreeNode(T value)
+        {
+            this.Value = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the left node.
+        /// </summary>
+        public BinaryTreeNode<T> Left
+        {
+            get { return this.left; }
+            set
+            {
+                if (value != null)
+                {
+                    if (this.left != null)
+                    {
+                        this.RemoveChild(true);
+                    }
+                    this.AddChild(value, true);
+                }
+                else
+                {
+                    if (this.left != null)
+                    {
+                        this.RemoveChild(true);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the right node;
+        /// </summary>
+        public BinaryTreeNode<T> Right
+        {
+            get { return this.right; }
+            set
+            {
+                if (value != null)
+                {
+                    if (this.left != null)
+                    {
+                        this.RemoveChild(false);
+                    }
+                    this.AddChild(value, false);
+                }
+                else
+                {
+                    if (this.left != null)
+                    {
+                        this.RemoveChild(false);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the parent node;
+        /// </summary>
+        public BinaryTreeNode<T> Parent { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the value of the node
+        /// </summary>
+        public T Value { get; set; }
+
+        #region Methods
+
+        private void AddChild(BinaryTreeNode<T> node, bool isLeft)
+        {
+            Contract.Ensures(node != null);
+            Contract.Ensures(isLeft ? (this.left == null) : (this.right == null));
+
+            if (isLeft)
+            {
+                this.left = node;
+            }
+            else
+            {
+                this.right = node;
+            }
+            node.Parent = this;
+        }
+
+        private void RemoveChild(bool isLeft)
+        {
+            Contract.Ensures(isLeft ? (this.left != null) : (this.right != null));
+
+            if (isLeft)
+            {
+                this.left.Parent = null;
+                this.left = null;
+            }
+            else
+            {
+                this.right.Parent = null;
+                this.right = null;
+            }
+        }
+
+        public override string ToString()
+        {
+            return this.Value == null ? "" : this.Value.ToString();
+        }
+
+        #endregion
+
+    }
+}
