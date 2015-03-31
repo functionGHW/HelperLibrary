@@ -127,5 +127,23 @@ namespace HelperLibrary.Core.ExtensionHelper
                 collection.Add(item);
             }
         }
+
+        /// <summary>
+        /// traversing a collection with the action.
+        /// </summary>
+        /// <typeparam name="TElement">element type of collection</typeparam>
+        /// <param name="collection">the collection</param>
+        /// <param name="action">the action to invoke</param>
+        public static void Foreach<TElement>(this IEnumerable<TElement> collection, 
+            Action<TElement> action)
+        {
+            if (collection == null || action == null)
+                throw new ArgumentNullException(collection == null ? "collection" : "action");
+
+            foreach(TElement item in collection)
+            {
+                action.Invoke(item);
+            }
+        }
     }
 }
