@@ -2,7 +2,7 @@
  * FileName:    TreeNode.cs
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  3/27/2015 9:44:25 AM
- * Version:     v1.0
+ * Version:     v1.1
  * Description:
  * */
 
@@ -74,12 +74,16 @@ namespace HelperLibrary.Core.Tree
         private static void DepthFirstTraversalInternal(TreeNode<T> root, Action<TreeNode<T>> action)
         {
             Contract.Assert(root != null && action != null);
-
+            
+            /* In this implement, we use preorder traversal, however, 
+             * your program should not depend on the order of which node be visited first.
+             */
+            action.Invoke(root);
             foreach (var node in root.Children)
             {
                 DepthFirstTraversalInternal(node, action);
             }
-            action.Invoke(root);
+
         }
 
 
@@ -224,9 +228,10 @@ namespace HelperLibrary.Core.Tree
         }
 
         /// <summary>
-        /// Depth-First Traversal
+        /// Depth-First Traversal.
         /// </summary>
         /// <param name="action">action to do with each node.</param>
+        /// <remarks>Note that your program should not depend on the order of which node be visit first.</remarks>
         public void DepthFirstTraversal(Action<TreeNode<T>> action)
         {
             if (action == null)
