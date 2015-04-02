@@ -26,9 +26,55 @@ namespace ConsoleTestApp
             //StringExtensionsTest();
             //XmlConfigTest();
             //StringUtilityTest();
-            TreeNodeTest();
+            //TreeNodeTest();
+            BianryTreeTest();
 
             Console.ReadKey();
+        }
+
+        private static void BianryTreeTest()
+        {
+            char[] chars = "qwertyuiopsdfghjklzxcvbnm".ToCharArray();
+
+            BinaryTreeNode<char> tree = new BinaryTreeNode<char>('a');
+            foreach (var ch in chars)
+            {
+                AddCharToBTree(tree, ch);
+            }
+
+            tree.PreorderTraversal(node => Console.Write(node.Value));
+            Console.WriteLine();
+            tree.InorderTraversal(node => Console.Write(node.Value));
+            Console.WriteLine();
+            tree.PostorderTraversal(node => Console.Write(node.Value));
+            Console.WriteLine();
+        }
+
+        private static void AddCharToBTree(BinaryTreeNode<char> root, char ch)
+        {
+            int rand = NumberUtility.GetRandomInt();
+            if ((rand & 1) == 0)
+            {
+                if (root.Left == null)
+                {
+                    root.Left = new BinaryTreeNode<char>(ch);
+                }
+                else
+                {
+                    AddCharToBTree(root.Left, ch);
+                }
+            }
+            else
+            {
+                if (root.Right == null)
+                {
+                    root.Right = new BinaryTreeNode<char>(ch);
+                }
+                else
+                {
+                    AddCharToBTree(root.Right, ch);
+                }
+            }
         }
 
         private static void TreeNodeTest()
@@ -64,7 +110,7 @@ namespace ConsoleTestApp
                     }
                 }
             }
-            catch(UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException ex)
             {
                 //ex.ToString();
             }

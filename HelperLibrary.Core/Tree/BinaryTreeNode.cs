@@ -21,6 +21,52 @@ namespace HelperLibrary.Core.Tree
     /// <typeparam name="T"></typeparam>
     public class BinaryTreeNode<T>
     {
+        #region Static members
+
+        // preorder traversal helper method.
+        private static void PreorderTraversalInternal(BinaryTreeNode<T> root,
+            Action<BinaryTreeNode<T>> action)
+        {
+            Contract.Assert(action != null);
+
+            if (root == null)
+                return;
+
+            action(root);
+            PreorderTraversalInternal(root.Left, action);
+            PreorderTraversalInternal(root.Right, action);
+        }
+
+        // inorder traversal helper method.
+        private static void InorderTraversalInternal(BinaryTreeNode<T> root,
+            Action<BinaryTreeNode<T>> action)
+        {
+            Contract.Assert(action != null);
+
+            if (root == null)
+                return;
+           
+            PreorderTraversalInternal(root.Left, action); 
+            action(root);
+            PreorderTraversalInternal(root.Right, action);
+        }
+
+        // postorder traversal helper method.
+        private static void PostorderTraversalInternal(BinaryTreeNode<T> root,
+            Action<BinaryTreeNode<T>> action)
+        {
+            Contract.Assert(action != null);
+
+            if (root == null)
+                return;
+
+            PreorderTraversalInternal(root.Left, action);
+            PreorderTraversalInternal(root.Right, action);
+            action(root);
+        }
+
+        #endregion
+
         #region Fields
 
         private BinaryTreeNode<T> left;
@@ -73,7 +119,7 @@ namespace HelperLibrary.Core.Tree
             {
                 if (value != null)
                 {
-                    if (this.left != null)
+                    if (this.right != null)
                     {
                         this.RemoveChild(false);
                     }
@@ -81,7 +127,7 @@ namespace HelperLibrary.Core.Tree
                 }
                 else
                 {
-                    if (this.left != null)
+                    if (this.right != null)
                     {
                         this.RemoveChild(false);
                     }
@@ -133,9 +179,49 @@ namespace HelperLibrary.Core.Tree
             }
         }
 
+        /// <summary>
+        /// Simply call Value's ToString method, or return an empty string if Value is null.
+        /// </summary>
+        /// <returns>a string</returns>
         public override string ToString()
         {
             return this.Value == null ? "" : this.Value.ToString();
+        }
+
+        /// <summary>
+        /// Preorder traverse the tree
+        /// </summary>
+        /// <param name="action">action to do with each node</param>
+        public void PreorderTraversal(Action<BinaryTreeNode<T>> action)
+        {
+            if (action == null)
+                throw new ArgumentNullException("action");
+
+            PreorderTraversalInternal(this, action);
+        }
+
+        /// <summary>
+        /// Inorder traverse the tree
+        /// </summary>
+        /// <param name="action">action to do with each node</param>
+        public void InorderTraversal(Action<BinaryTreeNode<T>> action)
+        {
+            if (action == null)
+                throw new ArgumentNullException("action");
+
+            InorderTraversalInternal(this, action);
+        }
+
+        /// <summary>
+        /// Postorder traverse the tree
+        /// </summary>
+        /// <param name="action">action to do with each node</param>
+        public void PostorderTraversal(Action<BinaryTreeNode<T>> action)
+        {
+            if (action == null)
+                throw new ArgumentNullException("action");
+
+            PostorderTraversalInternal(this, action);
         }
 
         #endregion
