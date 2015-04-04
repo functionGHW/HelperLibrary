@@ -59,7 +59,7 @@ namespace HelperLibrary.Core
         /// <returns>true if invoke successfully, false if the action is running.</returns>
         public bool Invoke()
         {
-            Contract.Ensures(syncObj != null);
+            Contract.Assert(syncObj != null);
 
             /* use a lock to make sure that there is at most 
              * one thread runs this action at any time.

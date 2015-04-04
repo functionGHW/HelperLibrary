@@ -55,7 +55,7 @@ namespace HelperLibrary.Core
         // internal compute hash value of a string
         private static byte[] GetMD5OfStringInternal(string theString)
         {
-            Contract.Ensures(theString != null);
+            Contract.Assert(theString != null);
 
             byte[] orgBytes = Encoding.UTF8.GetBytes(theString);
 

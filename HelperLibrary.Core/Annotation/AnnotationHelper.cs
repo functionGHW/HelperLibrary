@@ -33,11 +33,11 @@ namespace HelperLibrary.Core.Annotation
         internal static string GetLocalizedFormatErrorMessage(string errorMessage, string name,
             string scope, CultureInfo culture)
         {
-            Contract.Ensures(lclStrMng != null);
-            Contract.Ensures(scope != null);
-            Contract.Ensures(culture != null);
-            Contract.Ensures(errorMessage != null);
-            Contract.Ensures(name != null);
+            Contract.Assert(lclStrMng != null);
+            Contract.Assert(scope != null);
+            Contract.Assert(culture != null);
+            Contract.Assert(errorMessage != null);
+            Contract.Assert(name != null);
 
             /* Both errorMessage and name will be localized. 
              * The errorMsaage usually use ValidationAttribute.ErrorMessageString property,

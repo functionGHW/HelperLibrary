@@ -110,7 +110,7 @@ namespace HelperLibrary.Core
         /// <exception cref="System.ArgumentOutOfRangeException">the minValue is greater than maxValue</exception>
         public static int GetRandomInt(int minValue = 0, int maxValue = Int32.MaxValue)
         {
-            Contract.Requires(randLazy != null);
+            Contract.Assert(randLazy != null);
             return randLazy.Value.Next(minValue, maxValue);
         }
 

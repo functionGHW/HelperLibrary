@@ -62,7 +62,7 @@ namespace HelperLibrary.WPF
         /// <param name="propertyName">name of property</param>
         private void InternalOnPropertyChanged(string propertyName)
         {
-            Contract.Ensures(propertyName != null && propertyName.Length > 0);
+            Contract.Assert(propertyName != null && propertyName.Length > 0);
 
             var theEvent = this.PropertyChanged;
             if (theEvent != null)

@@ -149,8 +149,8 @@ namespace HelperLibrary.Core.Tree
 
         private void AddChild(BinaryTreeNode<T> node, bool isLeft)
         {
-            Contract.Ensures(node != null);
-            Contract.Ensures(isLeft ? (this.left == null) : (this.right == null));
+            Contract.Assert(node != null);
+            Contract.Assert(isLeft ? (this.left == null) : (this.right == null));
 
             if (isLeft)
             {
@@ -165,7 +165,7 @@ namespace HelperLibrary.Core.Tree
 
         private void RemoveChild(bool isLeft)
         {
-            Contract.Ensures(isLeft ? (this.left != null) : (this.right != null));
+            Contract.Assert(isLeft ? (this.left != null) : (this.right != null));
 
             if (isLeft)
             {

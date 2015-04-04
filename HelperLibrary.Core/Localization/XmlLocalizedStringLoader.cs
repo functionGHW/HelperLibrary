@@ -92,8 +92,8 @@ namespace HelperLibrary.Core.Localization
 
         private IDictionary<string, string> ReadStrings(XDocument doc)
         {
-            Contract.Ensures(doc != null);
-            Contract.Ensures(doc.Root != null);
+            Contract.Assert(doc != null);
+            Contract.Assert(doc.Root != null);
 
             // the root element, its name must be the same as RootName
             XElement root = doc.Root;
@@ -140,8 +140,8 @@ namespace HelperLibrary.Core.Localization
         /// <returns>the value of attribute or child element, or null if neither is not found.</returns>
         private string GetAttributeOrSubnodeValue(XElement element, string name)
         {
-            Contract.Ensures(element != null);
-            Contract.Ensures(name != null && name.Length > 0);
+            Contract.Assert(element != null);
+            Contract.Assert(name != null && name.Length > 0);
 
             // find attribute
             var attr = element.Attribute(name);

@@ -56,8 +56,8 @@ namespace HelperLibrary.Core.Annotation
         /// <returns></returns>
         public override string FormatErrorMessage(string name)
         {
-            //Contract.Ensures(lclStrMng != null);
-            Contract.Ensures(this.culture != null);
+            //Contract.Assert(lclStrMng != null);
+            Contract.Assert(this.culture != null);
             
             /* the ErrorMessageString usually equals ErrorMessage property 
              * which you can specify when using this Attribute.

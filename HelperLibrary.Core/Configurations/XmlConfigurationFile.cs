@@ -100,7 +100,7 @@ namespace HelperLibrary.Core.Configurations
         /// </summary>
         private void LoadAllConfigurations(XDocument doc)
         {
-            Contract.Ensures(doc != null);
+            Contract.Assert(doc != null);
 
             if (isLoading)
                 return;
@@ -199,7 +199,7 @@ namespace HelperLibrary.Core.Configurations
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
 
-            Contract.Ensures(configurationsDict != null);
+            Contract.Assert(configurationsDict != null);
 
             return this.configurationsDict.ContainsKey(name);
         }
@@ -268,7 +268,7 @@ namespace HelperLibrary.Core.Configurations
         /// otherwise return null.</returns>
         public IDictionary<string, string> ToDictionary()
         {
-            Contract.Ensures(this.configurationsDict != null);
+            Contract.Assert(this.configurationsDict != null);
 
             return new Dictionary<string, string>(this.configurationsDict);
         }
@@ -278,7 +278,7 @@ namespace HelperLibrary.Core.Configurations
         /// </summary>
         public void SaveChange()
         {
-            Contract.Ensures(this.xmlFile != null);
+            Contract.Assert(this.xmlFile != null);
 
             if (IsChanged)
             {
@@ -307,7 +307,7 @@ namespace HelperLibrary.Core.Configurations
         private string InternalGetConfiguration(string name)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
-            Contract.Ensures(configurationsDict != null);
+            Contract.Assert(configurationsDict != null);
 
             string value = null;
 
@@ -373,7 +373,7 @@ namespace HelperLibrary.Core.Configurations
 
         private bool AddConfigurationToXml(string name, string value)
         {
-            Contract.Ensures(this.xmlFile != null);
+            Contract.Assert(this.xmlFile != null);
 
             lock (xmlFileSyncObj)
             {
@@ -389,7 +389,7 @@ namespace HelperLibrary.Core.Configurations
 
         private bool UpdateConfigurationToXml(string name, string value)
         {
-            Contract.Ensures(this.xmlFile != null);
+            Contract.Assert(this.xmlFile != null);
             lock (xmlFileSyncObj)
             {
                 var xmlValue = (from setting in this.xmlFile.Root.Elements(ItemElementName)
@@ -413,7 +413,7 @@ namespace HelperLibrary.Core.Configurations
         private void InternalRemoveConfiguration(string name)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
-            Contract.Ensures(this.xmlFile != null);
+            Contract.Assert(this.xmlFile != null);
 
             lock (xmlFileSyncObj)
             {

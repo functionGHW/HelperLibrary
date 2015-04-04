@@ -98,7 +98,7 @@ namespace HelperLibrary.WPF
                     return string.Empty;
                 }
 
-                Contract.Ensures(this.model != null);
+                Contract.Assert(this.model != null);
                 return InternalUtility.ValidateDataHelper(typeof(TModel), propertyName, this.model);
             }
         }
