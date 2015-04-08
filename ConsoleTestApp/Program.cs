@@ -25,9 +25,9 @@ namespace ConsoleTestApp
             //NumberUtilityTest();
             //StringExtensionsTest();
             //XmlConfigTest();
-            //StringUtilityTest();
+            StringUtilityTest();
             //TreeNodeTest();
-            BianryTreeTest();
+            //BianryTreeTest();
 
             Console.ReadKey();
         }
@@ -118,10 +118,11 @@ namespace ConsoleTestApp
 
         private static void StringUtilityTest()
         {
-            string str = "上下st";
+            string str = "abc";
             try
             {
-                Console.WriteLine(StringUtility.GetMD5OfString(str));
+                string md5Str = StringUtility.GetMD5OfString(str);
+                Console.WriteLine(md5Str.Length);
             }
             catch (Exception ex)
             {

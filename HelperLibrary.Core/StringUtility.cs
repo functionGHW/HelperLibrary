@@ -2,7 +2,7 @@
  * FileName:    StringUtility.cs
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  3/26/2015 3:04:31 PM
- * Version:     v1.0
+ * Version:     v1.1
  * Description:
  * */
 
@@ -44,13 +44,13 @@ namespace HelperLibrary.Core
         /// <param name="theString">the string to compute hash</param>
         /// <returns>byte array contains hahs value</returns>
         /// <exception cref="ArgumentNullException">parameter theString is null.</exception>
-        public static byte[] GetMD5OfString(string theString)
-        {
-            if (theString == null)
-                throw new ArgumentNullException("theString");
+        //public static byte[] GetMD5OfString(string theString)
+        //{
+        //    if (theString == null)
+        //        throw new ArgumentNullException("theString");
 
-            return GetMD5OfStringInternal(theString);
-        }
+        //    return GetMD5OfStringInternal(theString);
+        //}
 
         // internal compute hash value of a string
         private static byte[] GetMD5OfStringInternal(string theString)
