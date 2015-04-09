@@ -21,7 +21,7 @@ namespace HelperLibrary.Core.Tree
     /// a simply implement of data structure Tree.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class TreeNode<T>
+    public class TreeNode<T> : ITreeNode<T>
     {
         #region Static Members
 

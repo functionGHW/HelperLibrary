@@ -57,6 +57,7 @@
     <Compile Include="SingleRunningAction.cs" />
     <Compile Include="StringUtility.cs" />
     <Compile Include="Tree\BinaryTreeNode.cs" />
+    <Compile Include="Tree\ITreeNode.cs" />
     <Compile Include="Tree\TreeNode.cs" />
   </ItemGroup>
   <ItemGroup />
