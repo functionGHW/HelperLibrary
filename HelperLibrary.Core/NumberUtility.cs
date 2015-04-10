@@ -2,7 +2,7 @@
  * FileName:    NumberUtility.cs
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  3/11/2015 10:26:19 AM
- * Version:     v1.1
+ * Version:     v1.2
  * Description:
  * */
 
@@ -20,6 +20,15 @@ namespace HelperLibrary.Core
         #region Fields
 
         private static Lazy<Random> randLazy = new Lazy<Random>();
+
+        // use a static char set to make it a bit more fast.
+        private static readonly char[][] hexCharSet = 
+        { 
+            // index 0 is upper case chars
+            new []{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'},
+            // index 1 is lower case chars
+            new []{'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'},
+        };
 
         #endregion
 
@@ -84,7 +93,9 @@ namespace HelperLibrary.Core
 
             Contract.Assert(len > 0);
             char[] charAry = new char[len * 2];
-            int hexCharBase = ((useLowerCase ? 'a' : 'A') - 10);
+
+            // get hex char set to use.
+            char[] charSet = hexCharSet[useLowerCase ? 1 : 0];
             for (int i = 0; i < len; i++)
             {
                 int b = bytes[i];
@@ -92,11 +103,11 @@ namespace HelperLibrary.Core
 
                 // get higher 4 bits of byte
                 int hexValue = (b & 0x000000F0) >> 4;
-                charAry[charPos] = (char)(hexValue + ((hexValue < 10) ? '0' : hexCharBase));
+                charAry[charPos] = charSet[hexValue];
 
                 // get lower 4 bits of byte
                 hexValue = b & 0x0000000F;
-                charAry[charPos + 1] = (char)(hexValue + ((hexValue < 10) ? '0' : hexCharBase));
+                charAry[charPos + 1] = charSet[hexValue];
             }
             return new String(charAry);
         }
