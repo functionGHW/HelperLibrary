@@ -14,6 +14,7 @@ namespace HelperLibrary.WPF
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Runtime.CompilerServices;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -29,10 +30,11 @@ namespace HelperLibrary.WPF
         #endregion
 
         /// <summary>
-        /// Notify when a property was changed by property's name
+        /// Notify when a property was changed by property's name. If you don't give the parameter, 
+        /// the name of caller(property or method) will be passed automaticly.
         /// </summary>
-        /// <param name="propertyName">name of property whose value was changed</param>
-        protected virtual void OnPropertyChanged(string propertyName)
+        /// <param name="propertyName">name of property whose value was changed.</param>
+        protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = null)
         {
             if (string.IsNullOrEmpty(propertyName))
                 throw new ArgumentNullException("propertyName");

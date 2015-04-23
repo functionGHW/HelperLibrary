@@ -34,7 +34,7 @@ namespace WpfTestApp
                 if (this.inputText != value)
                 {
                     this.inputText = value;
-                    this.OnPropertyChanged(() => InputText);
+                    this.OnPropertyChanged();
                 }
             }
         }
