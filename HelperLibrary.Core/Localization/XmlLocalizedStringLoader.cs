@@ -12,11 +12,9 @@ namespace HelperLibrary.Core.Localization
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Xml;
     using System.Xml.Linq;
+    using System.Xml.Serialization;
 
     /// <summary>
     /// a xml version implement of ILocalizedStringLoader
@@ -26,14 +24,6 @@ namespace HelperLibrary.Core.Localization
         // the name of folder that contains the localization resources.
         // this folder should be in the same folder the program was in.
         private readonly string localizationFolderName = "Localization";
-
-
-        // define name of xml elements to use
-        private const string RootName = "LocalizedStrings";
-        private const string ItemName = "StringItem";
-        private const string KeyName = "Key";
-        private const string ValueName = "Value";
-
 
         #region ILocalizedStringReader Members
 
@@ -69,7 +59,7 @@ namespace HelperLibrary.Core.Localization
                 return null;
             }
             // parse xml to dictionary
-            return ReadStrings(doc);
+            return DecodeXml(doc);
         }
 
         #endregion
@@ -90,79 +80,32 @@ namespace HelperLibrary.Core.Localization
             }
         }
 
-        private IDictionary<string, string> ReadStrings(XDocument doc)
+        private IDictionary<string, string> DecodeXml(XDocument doc)
         {
             Contract.Assert(doc != null);
-            Contract.Assert(doc.Root != null);
 
-            // the root element, its name must be the same as RootName
-            XElement root = doc.Root;
-            if (root.Name != RootName)
-            {
-                return null;
-            }
+            IDictionary<string, string> result = new Dictionary<string, string>();
 
-            Dictionary<string, string> dict = new Dictionary<string, string>();
-            var children = root.Elements(ItemName);
-            foreach (XElement child in children)
+            /* use a XmlSerializer to deserialize the xml document.
+             */
+            XmlSerializer serializer = new XmlSerializer(typeof(LocalizationCollection));
+            LocalizationCollection collection = null;
+            using (XmlReader reader = doc.CreateReader())
             {
-                string key = GetAttributeOrSubnodeValue(child, KeyName);
-                // if key is null(means not found) or is empty string, skip this
-                if (string.IsNullOrEmpty(key))
+                if (serializer.CanDeserialize(reader))
                 {
-                    continue;
+                    collection = serializer.Deserialize(reader) as LocalizationCollection;
                 }
-                string value = GetAttributeOrSubnodeValue(child, ValueName);
-                // if value is not found, skip this
-                if (value == null)
+            }
+
+            if (collection != null)
+            {
+                foreach (var item in collection.Items)
                 {
-                    continue;
+                    result.Add(item.MsgId, item.MsgStr);
                 }
-                dict.Add(key, value);
             }
-            // if nothing valid was added, return null instead of an empty dictionary
-            if (dict.Count > 0)
-            {
-                return dict;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// get first attribute or child element by name.
-        /// if both attribute and child element exist, you will get the value of attribute
-        /// </summary>
-        /// <param name="element">the xml elemnt</param>
-        /// <param name="name">name of attribute or element</param>
-        /// <returns>the value of attribute or child element, or null if neither is not found.</returns>
-        private string GetAttributeOrSubnodeValue(XElement element, string name)
-        {
-            Contract.Assert(element != null);
-            Contract.Assert(name != null && name.Length > 0);
-
-            // find attribute
-            var attr = element.Attribute(name);
-            if (attr != null)
-            {
-                return attr.Value;
-            }
-
-            // if no attribute found, find child element
-            var child = element.Element(name);
-            if (child != null)
-            {
-                string value = child.Value;
-                if (value != null)
-                {
-                    value = value.Trim();
-                }
-                return value;
-            }
-            // nothing was found, return null
-            return null;
+            return result;
         }
     }
 }

@@ -4,31 +4,24 @@
     Designer: functionghw<functionghw@hotmail.com>
     
     Example:    
-            Using attributes:
-                <StringItem Key="thekey" Value="the value"/>
-                
-            Using elements (either Key or Value, or both):
-                <StringItem Key="using attribute">
-                    <Value>using element</Value>
-                </StringItem>>
-                
-            For special char like "&", "<", ">", '"' etc:
-                <StringItem>
-                    <Key>the key</Key>
-                    <Value>if (num <![CDATA[<>]]> 0 <![CDATA[&&]]> val == "value")</Value>
-                </StringItem>>
+        <LocalizationCollection CultureName="en-US">
+            <StringItem>
+                <MsgId>TheId</MsgId>
+                <MsgStr>TheMessage</MsgStr>
+            </StringItem>
+        </LocalizationCollection>
 -->
-<LocalizedStrings>
+<LocalizationCollection CultureName="zh-CN">
     <StringItem>
-        <Key>test</Key>
-        <Value>测试</Value>
+        <MsgId>test</MsgId>
+        <MsgStr>测试</MsgStr>
     </StringItem>
     <StringItem>
-        <Key>name</Key>
-        <Value>姓名</Value>
+        <MsgId>name</MsgId>
+        <MsgStr>姓名</MsgStr>
     </StringItem>
     <StringItem>
-        <Key>InputSomething</Key>
-        <Value>{0}是必填项，输入点东西吧！</Value>
+        <MsgId>InputSomething</MsgId>
+        <MsgStr>{0}是必填项，输入点东西吧！</MsgStr>
     </StringItem>
-</LocalizedStrings>
+</LocalizationCollection>
