@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="NumberUtilityTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringUtilityTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
