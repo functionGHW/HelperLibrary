@@ -8,6 +8,7 @@
 
 namespace HelperLibrary.Core.Configurations
 {
+    using HelperLibrary.Core.IOAbstractions;
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
@@ -58,9 +59,15 @@ namespace HelperLibrary.Core.Configurations
         // the xml document object
         private XDocument xmlFile;
 
-        // indecate if is loading configurations from file.
-        private bool isLoading = false;
+        // indecate if has been initialized.
+        private bool isInitialized = false;
 
+        // indecate if to create new file.
+        private bool isCreateNew = false;
+
+        private IFileSystem fileSystem;
+
+        //private Stream fileStream;
         #endregion
 
         #region Constructors
@@ -71,28 +78,43 @@ namespace HelperLibrary.Core.Configurations
         /// <param name="filePath">file path</param>
         /// <param name="isCreateNew">indicate whether to create a new file.
         /// True for creating new file, and false for loading exists file.</param>
-        public XmlConfigurationFile(string filePath, bool isCreateNew = false)
+        public XmlConfigurationFile(string filePath, IFileSystem fileSystem, bool isCreateNew = false)
         {
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentNullException("filePath");
 
+            if (fileSystem == null)
+                throw new ArgumentNullException("fileSystem");
+
+            this.fileSystem = fileSystem;
+            this.isCreateNew = isCreateNew;
             string fullPath = Path.GetFullPath(filePath);
-
-            bool fileExists = File.Exists(fullPath);
-            if (fileExists && isCreateNew)
-                throw new IOException("file already exists. " + fullPath);
-
             this.FullPath = fullPath;
+        }
 
-            if (isCreateNew)
+        private void Initialize()
+        {
+            if (!this.isInitialized)
             {
-                this.xmlFile = CreateXmlFile(fullPath);
+                lock (xmlFileSyncObj)
+                {
+                    if (!this.isInitialized)
+                    {
+                        string fullPath = this.FullPath;
+                        bool fileExists = this.fileSystem.FileExists(fullPath);
+                        if (fileExists && this.isCreateNew)
+                            throw new IOException("file already exists. " + fullPath);
+
+                        FileMode fileMode = this.isCreateNew ? FileMode.Create : FileMode.Open;
+                        using (var fileStream = this.fileSystem.Open(fullPath, fileMode))
+                        {
+                            this.xmlFile = XDocument.Load(fileStream);
+                        }
+                        LoadAllConfigurations(this.xmlFile);
+                        this.isInitialized = true;
+                    }
+                }
             }
-            else
-            {
-                this.xmlFile = XDocument.Load(fullPath);
-            }
-            LoadAllConfigurations(this.xmlFile);
         }
 
         /// <summary>
@@ -102,45 +124,31 @@ namespace HelperLibrary.Core.Configurations
         {
             Contract.Assert(doc != null);
 
-            if (isLoading)
-                return;
-
-            lock (xmlFileSyncObj)
+            var root = doc.Root;
+            if (root == null
+                || root.Name != RootElementName)
             {
-                isLoading = true;
-                try
-                {
-                    var root = doc.Root;
-                    if (root == null
-                        || root.Name != RootElementName)
-                    {
-                        throw new InvalidDataException("the format of configuration file is not right");
-                    }
-
-                    IDictionary<string, string> newDict = new ConcurrentDictionary<string, string>();
-                    foreach (var item in root.Elements(ItemElementName))
-                    {
-                        var nameAttr = item.Attribute(NameAttributeName);
-                        var valueAttr = item.Attribute(ValueAttributeName);
-                        if (valueAttr == null)
-                        {
-                            continue;
-                        }
-                        if (nameAttr == null || string.IsNullOrEmpty(nameAttr.Value))
-                        {
-                            continue;
-                        }
-                        newDict.Add(nameAttr.Value, valueAttr.Value);
-                    }
-                    this.IsChanged = false;
-                    this.xmlFile = doc;
-                    this.configurationsDict = newDict;
-                }
-                finally
-                {
-                    isLoading = false;
-                }
+                throw new InvalidDataException("the format of configuration file is not right");
             }
+
+            IDictionary<string, string> newDict = new ConcurrentDictionary<string, string>();
+            foreach (var item in root.Elements(ItemElementName))
+            {
+                var nameAttr = item.Attribute(NameAttributeName);
+                var valueAttr = item.Attribute(ValueAttributeName);
+                if (valueAttr == null)
+                {
+                    continue;
+                }
+                if (nameAttr == null || string.IsNullOrEmpty(nameAttr.Value))
+                {
+                    continue;
+                }
+                newDict.Add(nameAttr.Value, valueAttr.Value);
+            }
+            this.IsChanged = false;
+            this.xmlFile = doc;
+            this.configurationsDict = newDict;
         }
 
         #endregion
@@ -185,7 +193,7 @@ namespace HelperLibrary.Core.Configurations
                 if (value == null)
                     throw new ArgumentNullException("value");
 
-                InternalAddOrUpdateConfiguration(name, value, ConfigOpt.AddOrUpdate);
+                InternalDoWork(name, value, ConfigOpt.AddOrUpdate);
             }
         }
 
@@ -230,7 +238,7 @@ namespace HelperLibrary.Core.Configurations
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            InternalAddOrUpdateConfiguration(name, value, ConfigOpt.Add);
+            InternalDoWork(name, value, ConfigOpt.Add);
         }
 
         /// <summary>
@@ -246,7 +254,7 @@ namespace HelperLibrary.Core.Configurations
             if (newValue == null)
                 throw new ArgumentNullException("value");
 
-            InternalAddOrUpdateConfiguration(name, newValue, ConfigOpt.Update);
+            InternalDoWork(name, newValue, ConfigOpt.Update);
         }
 
         /// <summary>
@@ -258,7 +266,8 @@ namespace HelperLibrary.Core.Configurations
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
 
-            InternalRemoveConfiguration(name);
+            InternalDoWork(name, null, ConfigOpt.Remove);
+            //InternalRemoveConfiguration(name);
         }
 
         /// <summary>
@@ -286,7 +295,10 @@ namespace HelperLibrary.Core.Configurations
                 {
                     if (IsChanged)
                     {
-                        this.xmlFile.Save(FullPath);
+                        using (var fileStream = this.fileSystem.Open(this.FullPath, FileMode.OpenOrCreate))
+                        {
+                            this.xmlFile.Save(fileStream);
+                        }
                         IsChanged = false;
                     }
                 }
@@ -298,8 +310,19 @@ namespace HelperLibrary.Core.Configurations
         /// </summary>
         public void Reload()
         {
-            XDocument newDoc = XDocument.Load(FullPath);
-            LoadAllConfigurations(newDoc);
+            if (!this.isInitialized)
+            {
+                this.Initialize();
+            }
+            lock (xmlFileSyncObj)
+            {
+                XDocument newDoc = null;
+                using (var fileStream = this.fileSystem.Open(this.FullPath, FileMode.OpenOrCreate))
+                {
+                    newDoc = XDocument.Load(fileStream);
+                }
+                LoadAllConfigurations(newDoc);
+            }
         }
 
         #endregion
@@ -334,44 +357,55 @@ namespace HelperLibrary.Core.Configurations
 
             // Add or modify a configuration
             AddOrUpdate = 3,
+
+            // Remove a configruation
+            Remove = 4,
         }
 
-        private void InternalAddOrUpdateConfiguration(string name, string value, ConfigOpt opt)
+        private void InternalDoWork(string name, string value, ConfigOpt opt)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
             Contract.Requires(value != null);
 
+            if (!isInitialized)
+            {
+                this.Initialize();
+            }
+
             bool existsConfig = this.configurationsDict.ContainsKey(name);
             switch (opt)
             {
+                // Add
                 case ConfigOpt.Add:
                     if (existsConfig)
                         throw new InvalidOperationException("configuration already exists");
 
-                    AddConfigurationToXml(name, value);
+                    InternalAddConfiguration(name, value);
                     break;
+                // update
                 case ConfigOpt.Update:
                     if (!existsConfig)
                         throw new InvalidOperationException("configuration not found");
 
-                    UpdateConfigurationToXml(name, value);
+                    InternalUpdateConfiguration(name, value);
                     break;
+                // add or update
                 case ConfigOpt.AddOrUpdate:
                     if (existsConfig)
-                    {
-                        UpdateConfigurationToXml(name, value);
-                    }
+                        InternalUpdateConfiguration(name, value);
                     else
-                    {
-                        AddConfigurationToXml(name, value);
-                    }
+                        InternalAddConfiguration(name, value);
+                    break;
+                // remove
+                case ConfigOpt.Remove:
+                    InternalRemoveConfiguration(name);
                     break;
             }
             this.configurationsDict[name] = value;
             this.IsChanged = true;
         }
 
-        private bool AddConfigurationToXml(string name, string value)
+        private bool InternalAddConfiguration(string name, string value)
         {
             Contract.Assert(this.xmlFile != null);
 
@@ -387,7 +421,7 @@ namespace HelperLibrary.Core.Configurations
             }
         }
 
-        private bool UpdateConfigurationToXml(string name, string value)
+        private bool InternalUpdateConfiguration(string name, string value)
         {
             Contract.Assert(this.xmlFile != null);
             lock (xmlFileSyncObj)

@@ -32,6 +32,13 @@ namespace HelperLibrary.Core.IOAbstractions
             return File.OpenRead(filePath);
         }
 
+        public Stream Open(string filePath, FileMode mode, 
+            FileAccess access = FileAccess.ReadWrite, 
+            FileShare share = FileShare.None)
+        {
+            return File.Open(filePath, mode, access, share);
+        }
+
         #endregion
     }
 }

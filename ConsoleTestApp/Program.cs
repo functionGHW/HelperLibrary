@@ -15,6 +15,7 @@ using HelperLibrary.Core.ExtensionHelper;
 using HelperLibrary.Core.Configurations;
 using System.IO;
 using HelperLibrary.Core.Tree;
+using HelperLibrary.Core.IOAbstractions;
 
 namespace ConsoleTestApp
 {
@@ -24,8 +25,8 @@ namespace ConsoleTestApp
         {
             //NumberUtilityTest();
             //StringExtensionsTest();
-            //XmlConfigTest();
-            StringUtilityTest();
+            XmlConfigTest();
+            //StringUtilityTest();
             //TreeNodeTest();
             //BianryTreeTest();
 
@@ -135,7 +136,7 @@ namespace ConsoleTestApp
             string filePath = @"cfg.xml";
             bool isCreateNew = !System.IO.File.Exists(filePath);
 
-            IConfigurationFile cfg = new XmlConfigurationFile(filePath, isCreateNew);
+            IConfigurationFile cfg = new XmlConfigurationFile(filePath, new FileSystemWrapper(), isCreateNew);
             cfg["time"] = DateTime.Now.ToString();
 
             Console.WriteLine(cfg["time"]);

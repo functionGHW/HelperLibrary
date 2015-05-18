@@ -28,10 +28,20 @@ namespace HelperLibrary.Core.IOAbstractions
         bool FileExists(string filePath);
 
         /// <summary>
-        /// open a file to read
+        /// open an exist text file to read
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
         Stream OpenRead(string filePath);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="mode"></param>
+        /// <param name="access"></param>
+        /// <param name="share"></param>
+        /// <returns></returns>
+        Stream Open(string path, FileMode mode, FileAccess access = FileAccess.ReadWrite, FileShare share = FileShare.None);
     }
 }
