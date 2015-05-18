@@ -119,7 +119,8 @@ namespace HelperLibrary.Core.Localization.Tests
 
             var stubLoader = new Mock<ILocalizedStringLoader>();
             stubLoader.Setup(l => l.GetLocalizedDictionary(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(new Dictionary<string, string>()).Callback(() => callCount++);
+                .Returns(new Dictionary<string, string>())
+                .Callback(() => callCount++);
 
             ILocalizedStringLoader loader = stubLoader.Object;
             LocalizedStringManager strMgr = new LocalizedStringManager(loader);
