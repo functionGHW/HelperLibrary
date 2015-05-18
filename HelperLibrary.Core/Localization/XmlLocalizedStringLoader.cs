@@ -8,6 +8,7 @@
 
 namespace HelperLibrary.Core.Localization
 {
+    using HelperLibrary.Core.IOAbstractions;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
@@ -24,6 +25,20 @@ namespace HelperLibrary.Core.Localization
         // the name of folder that contains the localization resources.
         // this folder should be in the same folder the program was in.
         private readonly string localizationFolderName = "Localization";
+
+        private IFileSystem fileSystem;
+
+        #region Constructors
+
+        public XmlLocalizedStringLoader(IFileSystem fileSystem)
+        {
+            if (fileSystem == null)
+                throw new ArgumentNullException("fileSystem");
+
+            this.fileSystem = fileSystem;
+        }
+
+        #endregion
 
         #region ILocalizedStringReader Members
 
@@ -66,12 +81,15 @@ namespace HelperLibrary.Core.Localization
 
         private XDocument LoadDocument(string filePath)
         {
-            if (!File.Exists(filePath))
+            if (!fileSystem.FileExists(filePath))
                 return null;
 
             try
             {
-                return XDocument.Load(filePath);
+                using (var fileStream = fileSystem.OpenRead(filePath))
+                {
+                    return XDocument.Load(fileStream);
+                }
             }
             catch (XmlException)
             {
@@ -98,7 +116,7 @@ namespace HelperLibrary.Core.Localization
                 }
             }
 
-            if (collection != null)
+            if (collection != null && collection.Items != null)
             {
                 foreach (var item in collection.Items)
                 {

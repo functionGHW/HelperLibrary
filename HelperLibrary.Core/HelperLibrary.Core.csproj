@@ -94,6 +94,8 @@
     <Compile Include="Configurations\XmlConfigurationFile.cs" />
     <Compile Include="ExtensionHelper\ObjectExtensions.cs" />
     <Compile Include="ExtensionHelper\StringExtensions.cs" />
+    <Compile Include="IOAbstractions\FileSystemWrapper.cs" />
+    <Compile Include="IOAbstractions\IFileSystem.cs" />
     <Compile Include="Localization\ILocalizedStringLoader.cs" />
     <Compile Include="Localization\ILocalizedStringManager.cs" />
     <Compile Include="Localization\LocalizationCollection.cs" />

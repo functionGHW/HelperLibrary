@@ -8,6 +8,7 @@
 
 namespace HelperLibrary.Core.Localization
 {
+    using HelperLibrary.Core.IOAbstractions;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
@@ -24,7 +25,7 @@ namespace HelperLibrary.Core.Localization
 
         private static Lazy<LocalizedStringManager> lclStrMngrLazy =
             new Lazy<LocalizedStringManager>(
-                () => new LocalizedStringManager(new XmlLocalizedStringLoader())
+                () => new LocalizedStringManager(new XmlLocalizedStringLoader(new FileSystemWrapper()))
             );
 
         /// <summary>
