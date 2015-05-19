@@ -53,6 +53,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Configurations\XmlConfigurationFileTests.cs" />
     <Compile Include="Localization\LocalizedStringManagerTests.cs" />
     <Compile Include="Localization\XmlLocalizedStringLoaderTests.cs" />
     <Compile Include="NumberUtilityTests.cs" />
