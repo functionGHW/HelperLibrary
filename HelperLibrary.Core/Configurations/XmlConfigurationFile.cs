@@ -193,7 +193,7 @@ namespace HelperLibrary.Core.Configurations
                 if (value == null)
                     throw new ArgumentNullException("value");
 
-                InternalDoWork(name, value, ConfigOpt.AddOrUpdate);
+                InternalAddOrUpdate(name, value, ConfigOpt.AddOrUpdate);
             }
         }
 
@@ -207,8 +207,12 @@ namespace HelperLibrary.Core.Configurations
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
 
-            Contract.Assert(configurationsDict != null);
+            if (!this.isInitialized)
+            {
+                this.Initialize();
+            }
 
+            Contract.Assert(configurationsDict != null);
             return this.configurationsDict.ContainsKey(name);
         }
 
@@ -238,7 +242,7 @@ namespace HelperLibrary.Core.Configurations
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            InternalDoWork(name, value, ConfigOpt.Add);
+            InternalAddOrUpdate(name, value, ConfigOpt.Add);
         }
 
         /// <summary>
@@ -254,7 +258,7 @@ namespace HelperLibrary.Core.Configurations
             if (newValue == null)
                 throw new ArgumentNullException("value");
 
-            InternalDoWork(name, newValue, ConfigOpt.Update);
+            InternalAddOrUpdate(name, newValue, ConfigOpt.Update);
         }
 
         /// <summary>
@@ -266,8 +270,7 @@ namespace HelperLibrary.Core.Configurations
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
 
-            InternalDoWork(name, null, ConfigOpt.Remove);
-            //InternalRemoveConfiguration(name);
+            InternalRemoveConfiguration(name);
         }
 
         /// <summary>
@@ -277,6 +280,11 @@ namespace HelperLibrary.Core.Configurations
         /// otherwise return null.</returns>
         public IDictionary<string, string> ToDictionary()
         {
+            if (!isInitialized)
+            {
+                this.Initialize();
+            }
+
             Contract.Assert(this.configurationsDict != null);
 
             return new Dictionary<string, string>(this.configurationsDict);
@@ -329,6 +337,11 @@ namespace HelperLibrary.Core.Configurations
 
         private string InternalGetConfiguration(string name)
         {
+            if (!this.isInitialized)
+            {
+                this.Initialize();
+            }
+
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
             Contract.Assert(configurationsDict != null);
 
@@ -358,13 +371,12 @@ namespace HelperLibrary.Core.Configurations
             // Add or modify a configuration
             AddOrUpdate = 3,
 
-            // Remove a configruation
-            Remove = 4,
         }
 
-        private void InternalDoWork(string name, string value, ConfigOpt opt)
+        private void InternalAddOrUpdate(string name, string value, ConfigOpt opt)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
+
             Contract.Requires(value != null);
 
             if (!isInitialized)
@@ -396,10 +408,8 @@ namespace HelperLibrary.Core.Configurations
                     else
                         InternalAddConfiguration(name, value);
                     break;
-                // remove
-                case ConfigOpt.Remove:
-                    InternalRemoveConfiguration(name);
-                    break;
+                default:
+                    return;
             }
             this.configurationsDict[name] = value;
             this.IsChanged = true;
@@ -447,12 +457,16 @@ namespace HelperLibrary.Core.Configurations
         private void InternalRemoveConfiguration(string name)
         {
             Contract.Requires(!string.IsNullOrWhiteSpace(name));
-            Contract.Assert(this.xmlFile != null);
 
+            if (!isInitialized)
+            {
+                this.Initialize();
+            }
             lock (xmlFileSyncObj)
             {
                 if (this.configurationsDict.ContainsKey(name))
                 {
+                    Contract.Assert(this.xmlFile != null);
                     var configuration = (from setting in this.xmlFile.Root.Elements(ItemElementName)
                                          let nameAttr = setting.Attribute(NameAttributeName)
                                          where nameAttr != null
