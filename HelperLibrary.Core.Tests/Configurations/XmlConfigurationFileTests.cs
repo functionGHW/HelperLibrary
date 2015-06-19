@@ -28,28 +28,28 @@ namespace HelperLibrary.Core.Configurations.Tests
             new[] {"date", "2015/5/19"},
         };
 
-        #region Property Tests
+        #region Tests for Property FilePath
 
         [Test]
-        public void FullPathPropertyTest()
+        public void FilePathPropertyTest()
         {
-            /* FullPath property read test
+            /* FilePath property read test
              */
             // arrange
             string filePath = @"test\test.xml";
-            string fullPath = Path.GetFullPath(filePath);
 
             IFileSystem fileSystem = new Mock<IFileSystem>().Object;
             var cfgFile = new XmlConfigurationFile(filePath, fileSystem);
 
             // act
-            string result = cfgFile.FullPath;
+            string result = cfgFile.FilePath;
 
             // assert
-            Assert.AreEqual(fullPath, result);
+            Assert.AreEqual(filePath, result);
         }
         #endregion
 
+        #region Tests For Constructor
         [Test()]
         public void ConstructorNullParameterTest()
         {
@@ -68,6 +68,8 @@ namespace HelperLibrary.Core.Configurations.Tests
             Assert.Catch<ArgumentNullException>(() =>
                 new XmlConfigurationFile(@"test\test.xml", null));
         }
+
+        #endregion
 
         [TestCase("version", true)]
         [TestCase("id", true)]

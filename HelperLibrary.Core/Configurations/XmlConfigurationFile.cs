@@ -88,8 +88,7 @@ namespace HelperLibrary.Core.Configurations
 
             this.fileSystem = fileSystem;
             this.isCreateNew = isCreateNew;
-            string fullPath = Path.GetFullPath(filePath);
-            this.FullPath = fullPath;
+            this.FilePath = filePath;
         }
 
         private void Initialize()
@@ -100,13 +99,13 @@ namespace HelperLibrary.Core.Configurations
                 {
                     if (!this.isInitialized)
                     {
-                        string fullPath = this.FullPath;
-                        bool fileExists = this.fileSystem.FileExists(fullPath);
+                        string filePath = this.FilePath;
+                        bool fileExists = this.fileSystem.FileExists(filePath);
                         if (fileExists && this.isCreateNew)
-                            throw new IOException("file already exists. " + fullPath);
+                            throw new IOException("file already exists. " + filePath);
 
                         FileMode fileMode = this.isCreateNew ? FileMode.Create : FileMode.Open;
-                        using (var fileStream = this.fileSystem.Open(fullPath, fileMode))
+                        using (var fileStream = this.fileSystem.Open(filePath, fileMode))
                         {
                             this.xmlFile = XDocument.Load(fileStream);
                         }
@@ -156,9 +155,9 @@ namespace HelperLibrary.Core.Configurations
         #region Properties
 
         /// <summary>
-        /// Gets full path of the current xml file
+        /// Gets file path of the current xml file
         /// </summary>
-        public string FullPath { get; private set; }
+        public string FilePath { get; private set; }
 
         /// <summary>
         /// indicate whether the configurations has been changed.
@@ -303,7 +302,7 @@ namespace HelperLibrary.Core.Configurations
                 {
                     if (IsChanged)
                     {
-                        using (var fileStream = this.fileSystem.Open(this.FullPath, FileMode.OpenOrCreate))
+                        using (var fileStream = this.fileSystem.Open(this.FilePath, FileMode.OpenOrCreate))
                         {
                             this.xmlFile.Save(fileStream);
                         }
@@ -325,7 +324,7 @@ namespace HelperLibrary.Core.Configurations
             lock (xmlFileSyncObj)
             {
                 XDocument newDoc = null;
-                using (var fileStream = this.fileSystem.Open(this.FullPath, FileMode.OpenOrCreate))
+                using (var fileStream = this.fileSystem.Open(this.FilePath, FileMode.OpenOrCreate))
                 {
                     newDoc = XDocument.Load(fileStream);
                 }
