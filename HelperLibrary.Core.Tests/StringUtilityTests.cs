@@ -35,6 +35,9 @@ namespace HelperLibrary.Core.Tests
 
             // act && assert
             Assert.Catch<ArgumentNullException>(() =>
+                StringUtility.GetMD5OfString(null, true));
+
+            Assert.Catch<ArgumentNullException>(() =>
                 StringUtility.GetMD5OfString(null, false));
         }
 
@@ -48,10 +51,12 @@ namespace HelperLibrary.Core.Tests
             string theString = orgStr;
 
             // act
-            string result = StringUtility.GetMD5OfString(theString, true);
+            string lowerCaseResult = StringUtility.GetMD5OfString(theString, true);
+            string upperCaseResult = StringUtility.GetMD5OfString(theString, false);
 
             // assert
-            Assert.IsTrue(result == md5Str);
+            Assert.IsTrue(lowerCaseResult == md5Str);
+            Assert.IsTrue(upperCaseResult == md5Str.ToUpperInvariant());
         }
     }
 }

@@ -15,8 +15,11 @@ namespace HelperLibrary.Core.Tests
     [TestFixture()]
     public class NumberUtilityTests
     {
-        [Test()]
-        public void BytesToHexStringNullInputTest()
+        #region Tests for BytesToHexString
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void BytesToHexStringNullInputTest(bool useLowerCase)
         {
             /* testing of null argument
              */
@@ -24,15 +27,15 @@ namespace HelperLibrary.Core.Tests
 
             // act && assert
             Assert.Catch<ArgumentNullException>(() =>
-                NumberUtility.BytesToHexString(null, false));
+                NumberUtility.BytesToHexString(null, useLowerCase));
         }
 
-        [Test()]
-        public void BytesToHexStringTest()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void BytesToHexStringZeroLengthInputTest(bool useLowerCase)
         {
             // arrange
             byte[] bytes = new byte[0];
-            bool useLowerCase = false;
 
             // act
             string result = NumberUtility.BytesToHexString(bytes, useLowerCase);
@@ -41,13 +44,40 @@ namespace HelperLibrary.Core.Tests
             Assert.IsTrue(result == string.Empty);
         }
 
+        [TestCase(true)]
+        [TestCase(false)]
+        public void BytesToHexStringTest(bool useLowerCase)
+        {
+            // arrange
+            byte[] bytes = new byte[]
+            {
+                 0x00 ,0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+                 0xFF ,0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xF0,
+            };
+            var sb = new System.Text.StringBuilder(bytes.Length * 2);
+            foreach (byte b in bytes)
+            {
+                sb.Append(b.ToString(useLowerCase ? "x2" : "X2"));
+            }
+
+            // act
+            string result = NumberUtility.BytesToHexString(bytes, useLowerCase);
+
+            // assert
+            Assert.IsTrue(result == sb.ToString());
+        }
+
+        #endregion
+
+        #region Tests for GetRandomInt
+
         [Test()]
         public void GetRandomIntTest()
         {
             /* testing range [x, y) which x < y
              */
             // arrange
-            int minVal = 2;
+            int minVal = -1;
             int maxVal = 5;
 
             int result = NumberUtility.GetRandomInt(minVal, maxVal);
@@ -64,7 +94,7 @@ namespace HelperLibrary.Core.Tests
              * and range [x, x)
              */
             // arrange
-            
+
             // act
             int result = NumberUtility.GetRandomInt(minVal, maxVal);
 
@@ -81,11 +111,11 @@ namespace HelperLibrary.Core.Tests
             int minVal = 123;
             int maxVal = 10;
 
-            // Assert.IsTrue(minVal > maxVal);
-
             // act && assert
             Assert.Catch<ArgumentOutOfRangeException>(() =>
                 NumberUtility.GetRandomInt(minVal, maxVal));
         }
+
+        #endregion
     }
 }
