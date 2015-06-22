@@ -201,6 +201,8 @@ namespace HelperLibrary.Core.Configurations
         /// </summary>
         /// <param name="name">name of configuration.</param>
         /// <returns>true if the configuration exists, otherwise return false.</returns>
+        /// <exception cref="ArgumentNullException">name is null, empty string 
+        /// or white space</exception>
         public bool ContainsConfiguration(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -220,6 +222,8 @@ namespace HelperLibrary.Core.Configurations
         /// </summary>
         /// <param name="name">name of configuration</param>
         /// <returns>value of configuration if success, otherwise null</returns>
+        /// <exception cref="ArgumentNullException">name is null, empty string 
+        /// or white space</exception>
         public string GetConfiguration(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -233,6 +237,9 @@ namespace HelperLibrary.Core.Configurations
         /// </summary>
         /// <param name="name">name of configuration</param>
         /// <param name="value">value of configuration</param>
+        /// <exception cref="ArgumentNullException">name is null, empty string 
+        /// or white space, or value is null</exception>
+        /// <exception cref="InvalidOperationException">configuration already exists</exception>
         public void AddConfiguration(string name, string value)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -249,6 +256,9 @@ namespace HelperLibrary.Core.Configurations
         /// </summary>
         /// <param name="name">name of configuration</param>
         /// <param name="newValue">new value of configuration</param>
+        /// <exception cref="ArgumentNullException">name is null, empty string 
+        /// or white space, or value is null</exception>
+        /// <exception cref="InvalidOperationException">configuration not found</exception>
         public void UpdateConfiguration(string name, string newValue)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -264,6 +274,8 @@ namespace HelperLibrary.Core.Configurations
         /// Remove a configuration by name.
         /// </summary>
         /// <param name="name">name of configuration</param>
+        /// <exception cref="ArgumentNullException">name is null, empty string 
+        /// or white space</exception>
         public void RemoveConfiguration(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
