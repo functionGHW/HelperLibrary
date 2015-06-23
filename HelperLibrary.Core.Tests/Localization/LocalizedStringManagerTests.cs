@@ -17,14 +17,20 @@ namespace HelperLibrary.Core.Localization.Tests
     [TestFixture()]
     public class LocalizedStringManagerTests
     {
+        #region Test Datas
+
         private IDictionary<string, string> englishWordsTestData = new Dictionary<string, string>()
         {
             {"hello", "Hello!"},
             {"RequireInput", "Please input something!"},
         };
 
+        #endregion
+
+        #region Tests For Property Default
+
         [Test()]
-        public void LocalizedStringManagerDefaultPropertyTest()
+        public void DefaultPropertyTest()
         {
             // act
             var result = LocalizedStringManager.Default;
@@ -33,50 +39,40 @@ namespace HelperLibrary.Core.Localization.Tests
             Assert.IsNotNull(result);
         }
 
-        [Test]
-        public void LocalizedStringLoaderPropertyTest()
-        {
-            // arrange
-            ILocalizedStringLoader loader = new Mock<ILocalizedStringLoader>().Object;
-            LocalizedStringManager strMgr = new LocalizedStringManager(loader);
+        #endregion
 
-            // act
-            ILocalizedStringLoader value = new Mock<ILocalizedStringLoader>().Object;
-            strMgr.LocalizedStringLoader = value;
-            ILocalizedStringLoader result = strMgr.LocalizedStringLoader;
-
-            // assert
-            Assert.AreSame(value, result);
-        }
+        #region Tests For Constructor
 
         [Test]
-        public void ConstructorAndPropertyReadTest()
+        public void ConstructorNullInputTest()
         {
             // arrange
-            ILocalizedStringLoader loader = new Mock<ILocalizedStringLoader>().Object;
-            LocalizedStringManager strMgr = new LocalizedStringManager(loader);
+            ILocalizedStringLoader loader = null;
 
-            // assert
-            Assert.AreSame(loader, strMgr.LocalizedStringLoader);
+            // act && assert
+            Assert.Catch<ArgumentNullException>(() => new LocalizedStringManager(loader));
         }
 
+        #endregion
+
+        #region Tests For GetLocalizedString
 
         [TestCase("scope", "")]
         [TestCase("scope", null)]
         [TestCase("", "key")]
         [TestCase(null, "key")]
-        public void GetLocalizedStringNullOrEmptyParameterTest(string scope, string key)
+        public void GetLocalizedStringNullOrEmptyInputTest(string scope, string key)
         {
             /* exception testing of parameter, it should throw exceptions 
              * when scope and/or key is null or empty string.
              */
             // arrange
-            ILocalizedStringLoader loader = new Mock<ILocalizedStringLoader>().Object;
-            LocalizedStringManager strMgr = new LocalizedStringManager(loader);
+            string cultureName = "en-US";
+            LocalizedStringManager strMgr = BuildFakeStrMgr(scope, cultureName);
 
             // act && assert
             Assert.Catch<ArgumentNullException>(() =>
-                strMgr.GetLocalizedString(scope, key, "zh-CN"));
+                strMgr.GetLocalizedString(scope, key, cultureName));
 
         }
 
@@ -101,6 +97,10 @@ namespace HelperLibrary.Core.Localization.Tests
             // assert
             Assert.IsTrue(result == value);
         }
+
+        #endregion
+
+        #region Tests For ReloadLocalizedStrings
 
         [Test()]
         public void ReloadLocalizedStringsTest()
@@ -134,6 +134,10 @@ namespace HelperLibrary.Core.Localization.Tests
             Assert.IsTrue(callCount == 2);
         }
 
+        #endregion
+
+        #region helper methods
+
         private LocalizedStringManager BuildFakeStrMgr(string scope, string cultureName)
         {
             var stubLoader = new Mock<ILocalizedStringLoader>();
@@ -145,5 +149,7 @@ namespace HelperLibrary.Core.Localization.Tests
 
             return strMgr;
         }
+
+        #endregion
     }
 }

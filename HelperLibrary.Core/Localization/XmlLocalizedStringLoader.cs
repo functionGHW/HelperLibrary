@@ -30,6 +30,10 @@ namespace HelperLibrary.Core.Localization
 
         #region Constructors
 
+        public XmlLocalizedStringLoader()
+            : this(new FileSystemWrapper())
+        { }
+
         public XmlLocalizedStringLoader(IFileSystem fileSystem)
         {
             if (fileSystem == null)
@@ -49,6 +53,7 @@ namespace HelperLibrary.Core.Localization
         /// <param name="cultureName">the culture name</param>
         /// <returns>a dictionary contains the localized strings, 
         /// or null if no string was found.</returns>
+        /// <exception cref="ArgumentNullException">scope and/or cultureName are null or empty string</exception>
         public IDictionary<string, string> GetLocalizedDictionary(string scope, string cultureName)
         {
             if (string.IsNullOrEmpty(scope))

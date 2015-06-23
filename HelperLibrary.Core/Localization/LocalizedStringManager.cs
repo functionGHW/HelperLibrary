@@ -51,24 +51,27 @@ namespace HelperLibrary.Core.Localization
 
         #endregion
 
+        #region Constructors
+
+        /// <summary>
+        /// Initialize the LocalizedStringManager using XmlLocalizedStringLoader
+        /// </summary>
+        public LocalizedStringManager()
+            : this(new XmlLocalizedStringLoader())
+        {
+        }
+
         /// <summary>
         /// Initialize the LocalizedStringManager with localizedStringLoader
         /// </summary>
         /// <param name="localizedStringLoader"></param>
+        /// <exception cref="ArgumentNullException">localizedStringLoader is null</exception>
         public LocalizedStringManager(ILocalizedStringLoader localizedStringLoader)
         {
+            if (localizedStringLoader == null)
+                throw new ArgumentNullException("localizedStringLoader");
+
             this.localizedStringLoader = localizedStringLoader;
-        }
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the LocalizedStringLoader
-        /// </summary>
-        public ILocalizedStringLoader LocalizedStringLoader
-        {
-            get { return localizedStringLoader; }
-            set { localizedStringLoader = value; }
         }
 
         #endregion
@@ -135,7 +138,7 @@ namespace HelperLibrary.Core.Localization
         {
             Contract.Assert(dictCache != null);
             // simply clean the cache.
-            // then all dictionnary with load again when they are read.
+            // all dictionnaries will be loaded again when they are reading.
             this.dictCache.Clear();
         }
 
