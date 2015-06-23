@@ -19,6 +19,8 @@ namespace HelperLibrary.Core.Localization.Tests
     [TestFixture()]
     public class XmlLocalizedStringLoaderTests
     {
+        #region Test Datas
+
         private string testXmlData = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" +
                         "<LocalizationCollection CultureName=\"en-US\">" +
                         "    <StringItem>" +
@@ -27,12 +29,9 @@ namespace HelperLibrary.Core.Localization.Tests
                         "    </StringItem>" +
                         "</LocalizationCollection>";
 
-        private Stream GetFakeXmlFileStream()
-        {
-            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(testXmlData);
-            MemoryStream memoryStream = new MemoryStream(bytes);
-            return memoryStream;
-        }
+        #endregion
+
+        #region Tests For Constructor
 
         [Test()]
         public void ConstructorNullParameterTest()
@@ -45,6 +44,10 @@ namespace HelperLibrary.Core.Localization.Tests
             // act && assert
             Assert.Catch<ArgumentNullException>(() => new XmlLocalizedStringLoader(fileSystem));
         }
+
+        #endregion
+
+        #region Tests For GetLocalizedDictionary
 
         [TestCase("scope", "")]
         [TestCase("scope", null)]
@@ -92,5 +95,18 @@ namespace HelperLibrary.Core.Localization.Tests
             Assert.IsNotNull(result);
             Assert.IsTrue(result["test"] == "Test");
         }
+
+        #endregion
+
+        #region Helper methods
+
+        private Stream GetFakeXmlFileStream()
+        {
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(testXmlData);
+            MemoryStream memoryStream = new MemoryStream(bytes);
+            return memoryStream;
+        }
+
+        #endregion
     }
 }

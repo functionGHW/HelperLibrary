@@ -38,20 +38,6 @@ namespace HelperLibrary.Core
             return NumberUtility.BytesToHexString(md5Bytes, useLowerCase);
         }
 
-        /// <summary>
-        /// Get the MD5 hash of a string and return as byte array.
-        /// </summary>
-        /// <param name="theString">the string to compute hash</param>
-        /// <returns>byte array contains hahs value</returns>
-        /// <exception cref="ArgumentNullException">parameter theString is null.</exception>
-        //public static byte[] GetMD5OfString(string theString)
-        //{
-        //    if (theString == null)
-        //        throw new ArgumentNullException("theString");
-
-        //    return GetMD5OfStringInternal(theString);
-        //}
-
         // internal compute hash value of a string
         private static byte[] GetMD5OfStringInternal(string theString)
         {

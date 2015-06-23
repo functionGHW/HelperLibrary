@@ -15,6 +15,8 @@ namespace HelperLibrary.Core.Tests
     [TestFixture()]
     public class StringUtilityTests
     {
+        #region Test Datas
+
         private object[] md5TestData = 
         {
             new string[] { "", "d41d8cd98f00b204e9800998ecf8427e" },
@@ -25,6 +27,10 @@ namespace HelperLibrary.Core.Tests
             new string[] { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", "d174ab98d277d9f5a5611c2c9f419d9f" },
             new string[] { "12345678901234567890123456789012345678901234567890123456789012345678901234567890", "57edf4a22be3c955ac49da2e2107b67a" },
         };
+
+        #endregion
+
+        #region Tests For GetMD5OfString
 
         [Test()]
         public void GetMD5OfStringNullInputTest()
@@ -58,5 +64,7 @@ namespace HelperLibrary.Core.Tests
             Assert.IsTrue(lowerCaseResult == md5Str);
             Assert.IsTrue(upperCaseResult == md5Str.ToUpperInvariant());
         }
+
+        #endregion
     }
 }
