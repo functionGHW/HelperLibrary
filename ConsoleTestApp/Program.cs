@@ -113,7 +113,7 @@ namespace ConsoleTestApp
             }
             catch (UnauthorizedAccessException ex)
             {
-                //ex.ToString();
+                Console.WriteLine(ex.ToString());
             }
         }
 
