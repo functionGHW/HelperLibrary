@@ -107,7 +107,7 @@ namespace HelperLibrary.Core.Localization
         {
             Contract.Assert(doc != null);
 
-            IDictionary<string, string> result = new Dictionary<string, string>();
+            IDictionary<string, string> result = null;
 
             /* use a XmlSerializer to deserialize the xml document.
              */
@@ -115,14 +115,22 @@ namespace HelperLibrary.Core.Localization
             LocalizationCollection collection = null;
             using (XmlReader reader = doc.CreateReader())
             {
+                /* if this file can not be deserialized, let collection be null.
+                 * this may because this xml file has a wrong format.
+                 */
                 if (serializer.CanDeserialize(reader))
                 {
                     collection = serializer.Deserialize(reader) as LocalizationCollection;
+                }
+                else
+                {
+                    collection = null;
                 }
             }
 
             if (collection != null && collection.Items != null)
             {
+                result = new Dictionary<string, string>(collection.Items.Count);
                 foreach (var item in collection.Items)
                 {
                     result.Add(item.MsgId, item.MsgStr);

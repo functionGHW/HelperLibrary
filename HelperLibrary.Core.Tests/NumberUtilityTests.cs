@@ -17,9 +17,8 @@ namespace HelperLibrary.Core.Tests
     {
         #region Tests for BytesToHexString
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void BytesToHexStringNullInputTest(bool useLowerCase)
+        [Test]
+        public void BytesToHexStringNullInputTest()
         {
             /* testing of null argument
              */
@@ -27,7 +26,7 @@ namespace HelperLibrary.Core.Tests
 
             // act && assert
             Assert.Catch<ArgumentNullException>(() =>
-                NumberUtility.BytesToHexString(null, useLowerCase));
+                NumberUtility.BytesToHexString(null, true));
         }
 
         [TestCase(true)]

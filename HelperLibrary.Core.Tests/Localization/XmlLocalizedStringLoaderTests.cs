@@ -29,6 +29,22 @@ namespace HelperLibrary.Core.Localization.Tests
                         "    </StringItem>" +
                         "</LocalizationCollection>";
 
+        private string wrongXmlFormatData = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" +
+                        "<LocalizationCollection CultureName=\"en-US\">" +
+                        "    <StringItemSS>" + // !!! we let this line has a error
+                        "        <MsgId>test</MsgId>" +
+                        "        <MsgStr>Test</MsgStr>" +
+                        "    </StringItem>" +
+                        "</LocalizationCollection>";
+
+        private string notLocalizedFileData = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" +
+                        "<ABC CultureName=\"en-US\">" +
+                        "    <StringItem>" +
+                        "        <MsgId>test</MsgId>" +
+                        "        <MsgStr>Test</MsgStr>" +
+                        "    </StringItem>" +
+                        "</ABC>";
+
         #endregion
 
         #region Tests For Constructor
@@ -68,6 +84,90 @@ namespace HelperLibrary.Core.Localization.Tests
                 loader.GetLocalizedDictionary(scope, cultureName));
         }
 
+        [Test]
+        public void GetLocalizedDictionaryNotALocalizedFileTest()
+        {
+            /* The test xml text is not a localized xml file, 
+             * because it has a root with wrong name.
+             */
+            // arrange
+            string scope = "scope";
+            string cultureName = "en-US";
+
+            string filePath = string.Format(@"Localization\{1}\{0}.{1}.xml", scope, cultureName);
+
+            var stubFileSystem = new Mock<IFileSystem>();
+
+            // any file will not exist.
+            stubFileSystem.Setup(f => f.FileExists(It.IsAny<string>()))
+                .Returns(true);
+            stubFileSystem.Setup(f => f.OpenRead(filePath))
+                .Returns(() => GetFakeXmlFileStream(notLocalizedFileData));
+
+            IFileSystem fileSystem = stubFileSystem.Object;
+            XmlLocalizedStringLoader loader = new XmlLocalizedStringLoader(fileSystem);
+
+            // act
+            IDictionary<string, string> result = loader.GetLocalizedDictionary(scope, cultureName);
+
+            // assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void GetLocalizedDictionaryXmlExceptionTest()
+        {
+            // arrange
+            string scope = "scope";
+            string cultureName = "en-US";
+
+            string filePath = string.Format(@"Localization\{1}\{0}.{1}.xml", scope, cultureName);
+
+            var stubFileSystem = new Mock<IFileSystem>();
+
+            // any file will not exist.
+            stubFileSystem.Setup(f => f.FileExists(It.IsAny<string>()))
+                .Returns(true);
+            stubFileSystem.Setup(f => f.OpenRead(filePath))
+                .Returns(() => GetFakeXmlFileStream(wrongXmlFormatData));
+
+            IFileSystem fileSystem = stubFileSystem.Object;
+            XmlLocalizedStringLoader loader = new XmlLocalizedStringLoader(fileSystem);
+
+            // act
+            IDictionary<string, string> result = loader.GetLocalizedDictionary(scope, cultureName);
+
+            // assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void GetLocalizedDictionaryFileNotExistsTest()
+        {
+            // arrange
+            string scope = "scope";
+            string cultureName = "en-US";
+
+            string filePath = string.Format(@"Localization\{1}\{0}.{1}.xml", scope, cultureName);
+
+            var stubFileSystem = new Mock<IFileSystem>();
+
+            // any file will not exist.
+            stubFileSystem.Setup(f => f.FileExists(It.IsAny<string>()))
+                .Returns(false);
+            stubFileSystem.Setup(f => f.OpenRead(filePath))
+                .Returns(() => GetFakeXmlFileStream(""));
+
+            IFileSystem fileSystem = stubFileSystem.Object;
+            XmlLocalizedStringLoader loader = new XmlLocalizedStringLoader(fileSystem);
+
+            // act
+            IDictionary<string, string> result = loader.GetLocalizedDictionary(scope, cultureName);
+
+            // assert
+            Assert.IsNull(result);
+        }
+
         [Test()]
         public void GetLocalizedDictionaryTest()
         {
@@ -83,7 +183,7 @@ namespace HelperLibrary.Core.Localization.Tests
             stubFileSystem.Setup(f => f.FileExists(It.IsAny<string>()))
                 .Returns(true);
             stubFileSystem.Setup(f => f.OpenRead(filePath))
-                .Returns(() => GetFakeXmlFileStream());
+                .Returns(() => GetFakeXmlFileStream(testXmlData));
 
             IFileSystem fileSystem = stubFileSystem.Object;
             XmlLocalizedStringLoader loader = new XmlLocalizedStringLoader(fileSystem);
@@ -100,9 +200,9 @@ namespace HelperLibrary.Core.Localization.Tests
 
         #region Helper methods
 
-        private Stream GetFakeXmlFileStream()
+        private Stream GetFakeXmlFileStream(string xmlText)
         {
-            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(testXmlData);
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(xmlText);
             MemoryStream memoryStream = new MemoryStream(bytes);
             return memoryStream;
         }
