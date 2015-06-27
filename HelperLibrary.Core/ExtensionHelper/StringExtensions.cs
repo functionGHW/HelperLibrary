@@ -36,7 +36,7 @@ namespace HelperLibrary.Core.ExtensionHelper
             }
             char[] chs = str.ToCharArray();
 
-            ObjectExtensions.InternalReverseArray<char>(chs, 0, chs.Length - 1);
+            ObjectExtensions.InternalReverseArray<char>(chs, 0, chs.Length);
 
             return new String(chs);
         }

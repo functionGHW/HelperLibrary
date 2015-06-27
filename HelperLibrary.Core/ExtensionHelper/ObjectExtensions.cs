@@ -57,7 +57,7 @@ namespace HelperLibrary.Core.ExtensionHelper
             if (ary == null)
                 throw new ArgumentNullException("ary");
 
-            InternalReverseArray<TElement>(ary, 0, ary.Length - 1);
+            InternalReverseArray<TElement>(ary, 0, ary.Length);
         }
 
         /// <summary>
@@ -65,35 +65,33 @@ namespace HelperLibrary.Core.ExtensionHelper
         /// </summary>
         /// <typeparam name="TElement"></typeparam>
         /// <param name="ary"></param>
-        /// <param name="startIndex"></param>
-        /// <param name="endIndex"></param>
+        /// <param name="startIndex">zero-based start index</param>
+        /// <param name="length">length to reverse</param>
         /// <exception cref="ArgumentNullException">array is null</exception>
-        /// <exception cref="IndexOutOfRangeException"> startIndex or endIndex out of range, 
-        /// or startIndex greater than endIndex.</exception>
-        public static void ReverseArray<TElement>(this TElement[] ary, int startIndex, int endIndex)
+        /// <exception cref="IndexOutOfRangeException"> startIndex or length less than zero, 
+        /// or startIndex plus length indicates a position out of range .</exception>
+        public static void ReverseArray<TElement>(this TElement[] ary, int startIndex, int length)
         {
             if (ary == null)
                 throw new ArgumentNullException("ary");
-            if (startIndex < 0 || startIndex >= ary.Length)
-                throw new IndexOutOfRangeException("startIndex out of range");
-            if (endIndex < 0 || endIndex >= ary.Length)
-                throw new IndexOutOfRangeException("endIndex out of range");
-            if (startIndex > endIndex)
-                throw new ArgumentOutOfRangeException("endIndex must greater than startIndex.", (Exception)null);
+            if (startIndex < 0)
+                throw new IndexOutOfRangeException("startIndex less than zero");
+            if (length < 0)
+                throw new IndexOutOfRangeException("length less than zero");
+            if (startIndex + length > ary.Length)
+                throw new IndexOutOfRangeException("position out of range.");
 
-            InternalReverseArray<TElement>(ary, startIndex, endIndex);
+            InternalReverseArray<TElement>(ary, startIndex, length);
         }
 
-        internal static void InternalReverseArray<TElement>(TElement[] ary, int startIndex, int endIndex)
+        internal static void InternalReverseArray<TElement>(TElement[] ary, int startIndex, int length)
         {
             Contract.Requires(ary != null);
-            Contract.Requires(startIndex > 0 && startIndex < ary.Length);
-            Contract.Requires(endIndex > 0 && endIndex < ary.Length);
-            Contract.Requires(startIndex <= endIndex);
+            Contract.Requires(length >= 0);
+            Contract.Requires(startIndex >= 0);
+            Contract.Requires(startIndex + length <= ary.Length);
 
-            if (ary.Length < 2 || endIndex == startIndex)
-                return;
-
+            int endIndex = startIndex + length - 1;
             while (startIndex < endIndex)
             {
                 TElement tmp = ary[startIndex];
@@ -161,13 +159,13 @@ namespace HelperLibrary.Core.ExtensionHelper
         /// <typeparam name="TElement">element type of collection</typeparam>
         /// <param name="collection">the collection</param>
         /// <param name="action">the action to invoke</param>
-        public static void Foreach<TElement>(this IEnumerable<TElement> collection, 
+        public static void Foreach<TElement>(this IEnumerable<TElement> collection,
             Action<TElement> action)
         {
             if (collection == null || action == null)
                 throw new ArgumentNullException(collection == null ? "collection" : "action");
 
-            foreach(TElement item in collection)
+            foreach (TElement item in collection)
             {
                 action.Invoke(item);
             }
