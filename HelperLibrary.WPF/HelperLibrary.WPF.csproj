@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindableModelWrapper.cs" />
+    <Compile Include="Commands\SimpleCommand.cs" />
     <Compile Include="ExtensionInterfaces\IWindowProperty.cs" />
     <Compile Include="InternalUtility.cs" />
     <Compile Include="MarkupExtensions\LocalizedExtension.cs" />
