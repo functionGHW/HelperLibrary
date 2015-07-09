@@ -8,13 +8,10 @@
 
 namespace HelperLibrary.Core.Localization
 {
-    using HelperLibrary.Core.IOAbstractions;
+    using IOAbstractions;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// A default implementation of ILocalizedStringManger interface.
@@ -26,28 +23,26 @@ namespace HelperLibrary.Core.Localization
         private static Lazy<LocalizedStringManager> lclStrMngrLazy =
             new Lazy<LocalizedStringManager>(
                 () => new LocalizedStringManager(new XmlLocalizedStringLoader(new FileSystemWrapper()))
-            );
+                );
 
         /// <summary>
         /// a default instance using a XmlLocalizedStringLoader as provider.
         /// </summary>
         public static LocalizedStringManager Default
         {
-            get
-            {
-                return lclStrMngrLazy.Value;
-            }
+            get { return lclStrMngrLazy.Value; }
         }
+
         #endregion
 
         #region Fields
 
-        private Dictionary<string, IDictionary<string, string>> dictCache =
+        private readonly Dictionary<string, IDictionary<string, string>> dictCache =
             new Dictionary<string, IDictionary<string, string>>();
 
-        private ILocalizedStringLoader localizedStringLoader;
+        private readonly ILocalizedStringLoader localizedStringLoader;
 
-        private static readonly object synObjectForLoadingDict = new object();
+        private static readonly object SyncObjectForLoadingDict = new object();
 
         #endregion
 
@@ -87,7 +82,7 @@ namespace HelperLibrary.Core.Localization
         /// <returns>the localized string if successed, otherwise simply return the key string</returns>
         public string GetLocalizedString(string scope, string key, string cultureName)
         {
-            Contract.Assert(dictCache != null);
+            Contract.Assert(this.dictCache != null);
 
             if (string.IsNullOrEmpty(scope))
                 throw new ArgumentNullException("scope");
@@ -103,24 +98,24 @@ namespace HelperLibrary.Core.Localization
             // key for cache
             string dictName = scope + "." + cultureName;
 
-            IDictionary<string, string> dict = null;
-            if (!dictCache.TryGetValue(dictName, out dict))
+            IDictionary<string, string> dict;
+            if (!this.dictCache.TryGetValue(dictName, out dict))
             {
                 // if not found in the cache, try to load using loader.
-                if (!TryLoadDict(scope, cultureName))
+                if (!this.TryLoadDict(scope, cultureName))
                 {
                     // load dict failed.
                     return key;
                 }
 
                 // get the dictionary after loading.
-                if (!dictCache.TryGetValue(dictName, out dict))
+                if (!this.dictCache.TryGetValue(dictName, out dict))
                 {
                     // this should not happend
                     return key;
                 }
             }
-            string localizedString = null;
+            string localizedString;
             if (dict.TryGetValue(key, out localizedString))
             {
                 return localizedString;
@@ -136,7 +131,7 @@ namespace HelperLibrary.Core.Localization
         /// </summary>
         public void ReloadLocalizedStrings()
         {
-            Contract.Assert(dictCache != null);
+            Contract.Assert(this.dictCache != null);
             // simply clean the cache.
             // all dictionnaries will be loaded again when they are reading.
             this.dictCache.Clear();
@@ -152,19 +147,19 @@ namespace HelperLibrary.Core.Localization
         /// <returns></returns>
         private bool TryLoadDict(string scope, string cultureName)
         {
-            Contract.Assert(dictCache != null);
+            Contract.Assert(this.dictCache != null);
 
-            if (localizedStringLoader == null)
+            if (this.localizedStringLoader == null)
                 return false;
 
-            lock (synObjectForLoadingDict)
+            lock (SyncObjectForLoadingDict)
             {
                 string dictName = scope + "." + cultureName;
 
                 // double checked
-                if (!dictCache.ContainsKey(dictName))
+                if (!this.dictCache.ContainsKey(dictName))
                 {
-                    var dict = localizedStringLoader.GetLocalizedDictionary(scope, cultureName);
+                    var dict = this.localizedStringLoader.GetLocalizedDictionary(scope, cultureName);
                     if (dict == null)
                     {
                         // loading resource failed.
@@ -172,7 +167,7 @@ namespace HelperLibrary.Core.Localization
                     }
                     else
                     {
-                        dictCache.Add(dictName, dict);
+                        this.dictCache.Add(dictName, dict);
                     }
                 }
 

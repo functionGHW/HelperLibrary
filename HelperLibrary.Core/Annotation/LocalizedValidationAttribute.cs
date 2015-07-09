@@ -8,15 +8,10 @@
 
 namespace HelperLibrary.Core.Annotation
 {
-    using HelperLibrary.Core.Localization;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.Contracts;
     using System.Globalization;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Base class for implementing localization validation attribute.
@@ -39,14 +34,15 @@ namespace HelperLibrary.Core.Annotation
         /// If not given, use current UI culture as default</param>
         /// <exception cref="ArgumentNullException">the scope is null or empty string.</exception>
         /// <exception cref="CultureNotFoundException">the cultureName is not right</exception>
-        public LocalizedValidationAttribute(string scope, string cultureName = null)
+        protected LocalizedValidationAttribute(string scope, string cultureName = null)
         {
             if (string.IsNullOrEmpty(scope))
                 throw new ArgumentNullException("scope");
 
             this.scope = scope;
-            this.culture = cultureName != null ?
-                CultureInfo.GetCultureInfo(cultureName) : CultureInfo.CurrentUICulture;
+            this.culture = cultureName != null
+                ? CultureInfo.GetCultureInfo(cultureName)
+                : CultureInfo.CurrentUICulture;
         }
 
         /// <summary>
@@ -58,12 +54,13 @@ namespace HelperLibrary.Core.Annotation
         {
             //Contract.Assert(lclStrMng != null);
             Contract.Assert(this.culture != null);
-            
+
             /* the ErrorMessageString usually equals ErrorMessage property 
              * which you can specify when using this Attribute.
              */
 
-            return AnnotationHelper.GetLocalizedFormatErrorMessage(this.ErrorMessageString, name, this.scope, this.culture);
+            return AnnotationHelper.GetLocalizedFormatErrorMessage(this.ErrorMessageString, name, this.scope,
+                this.culture);
         }
     }
 }

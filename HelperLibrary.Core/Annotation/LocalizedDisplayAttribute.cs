@@ -10,24 +10,19 @@ namespace HelperLibrary.Core.Annotation
 {
     using HelperLibrary.Core.Localization;
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.Contracts;
     using System.Globalization;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// A custom Attribute for localized
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method 
-                    | AttributeTargets.Property 
-                    | AttributeTargets.Field 
+    [AttributeUsage(AttributeTargets.Method
+                    | AttributeTargets.Property
+                    | AttributeTargets.Field
                     | AttributeTargets.Parameter, AllowMultiple = false)]
     public class LocalizedDisplayAttribute : Attribute
     {
-        private static readonly ILocalizedStringManager lclStrMng = LocalizedStringManager.Default;
+        private static readonly ILocalizedStringManager LclStrMng = LocalizedStringManager.Default;
 
         // fields for getting localized string
         private readonly string scope;
@@ -47,8 +42,9 @@ namespace HelperLibrary.Core.Annotation
                 throw new ArgumentNullException("scope");
 
             this.scope = scope;
-            this.culture = cultureName != null ?
-                CultureInfo.GetCultureInfo(cultureName) : CultureInfo.CurrentUICulture;
+            this.culture = cultureName != null
+                ? CultureInfo.GetCultureInfo(cultureName)
+                : CultureInfo.CurrentUICulture;
         }
 
         #region Properties
@@ -61,14 +57,14 @@ namespace HelperLibrary.Core.Annotation
 
         public string GetLocalizedName()
         {
-            Contract.Assert(lclStrMng != null);
+            Contract.Assert(LclStrMng != null);
 
             string key = this.Name;
             if (string.IsNullOrEmpty(key))
             {
                 return string.Empty;
             }
-            return lclStrMng.GetLocalizedString(scope, key, this.culture.Name);
+            return LclStrMng.GetLocalizedString(this.scope, key, this.culture.Name);
         }
 
         #endregion

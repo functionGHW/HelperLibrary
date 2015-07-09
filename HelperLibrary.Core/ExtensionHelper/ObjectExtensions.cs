@@ -11,10 +11,7 @@ namespace HelperLibrary.Core.ExtensionHelper
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Linq;
     using System.Reflection;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public static class ObjectExtensions
     {
@@ -31,7 +28,7 @@ namespace HelperLibrary.Core.ExtensionHelper
             {
                 return null;
             }
-            Type t = typeof(T);
+            Type t = typeof (T);
             T newObj = new T();
             BindingFlags flag = BindingFlags.Public | BindingFlags.Instance;
 
@@ -57,7 +54,7 @@ namespace HelperLibrary.Core.ExtensionHelper
             if (ary == null)
                 throw new ArgumentNullException("ary");
 
-            InternalReverseArray<TElement>(ary, 0, ary.Length);
+            InternalReverseArray(ary, 0, ary.Length);
         }
 
         /// <summary>
@@ -81,7 +78,7 @@ namespace HelperLibrary.Core.ExtensionHelper
             if (startIndex + length > ary.Length)
                 throw new IndexOutOfRangeException("position out of range.");
 
-            InternalReverseArray<TElement>(ary, startIndex, length);
+            InternalReverseArray(ary, startIndex, length);
         }
 
         internal static void InternalReverseArray<TElement>(TElement[] ary, int startIndex, int length)
@@ -130,6 +127,7 @@ namespace HelperLibrary.Core.ExtensionHelper
         /// convert and add many elements to the collection.
         /// </summary>
         /// <typeparam name="TElement">type of elements</typeparam>
+        /// <typeparam name="TInput">type of input elements</typeparam>
         /// <param name="collection">the collection</param>
         /// <param name="converter">method that convert a Tinput object to Telement object.</param>
         /// <param name="listToAdd">list of elements to add</param>
@@ -142,7 +140,7 @@ namespace HelperLibrary.Core.ExtensionHelper
                 throw new ArgumentNullException(collection == null ? "collection" : "listToAdd");
 
             if (converter == null)
-                throw new ArgumentNullException("func");
+                throw new ArgumentNullException("converter");
 
             if (collection.IsReadOnly)
                 throw new NotSupportedException("Can not add, collection is read-only.");

@@ -8,12 +8,7 @@
 
 namespace HelperLibrary.Core.IOAbstractions
 {
-    using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// an interface for isolating file system access.
@@ -42,6 +37,7 @@ namespace HelperLibrary.Core.IOAbstractions
         /// <param name="access"></param>
         /// <param name="share"></param>
         /// <returns></returns>
-        Stream Open(string path, FileMode mode, FileAccess access = FileAccess.ReadWrite, FileShare share = FileShare.None);
+        Stream Open(string path, FileMode mode, FileAccess access = FileAccess.ReadWrite,
+            FileShare share = FileShare.None);
     }
 }

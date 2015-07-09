@@ -8,15 +8,10 @@
 
 namespace HelperLibrary.Core.Annotation
 {
-    using HelperLibrary.Core.Localization;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.Contracts;
     using System.Globalization;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// A required attribute that implements localization.
@@ -46,8 +41,9 @@ namespace HelperLibrary.Core.Annotation
 
             this.scope = scope;
 
-            this.culture = cultureName != null ?
-                CultureInfo.GetCultureInfo(cultureName) : CultureInfo.CurrentUICulture;
+            this.culture = cultureName != null
+                ? CultureInfo.GetCultureInfo(cultureName)
+                : CultureInfo.CurrentUICulture;
         }
 
         /// <summary>
@@ -64,8 +60,8 @@ namespace HelperLibrary.Core.Annotation
              * which you can specify when using this Attribute.
              */
 
-            return AnnotationHelper.GetLocalizedFormatErrorMessage(this.ErrorMessageString, name, this.scope, this.culture);
+            return AnnotationHelper.GetLocalizedFormatErrorMessage(this.ErrorMessageString, name, this.scope,
+                this.culture);
         }
-
     }
 }

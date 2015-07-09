@@ -8,12 +8,6 @@
 
 namespace HelperLibrary.Core.Localization
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     public interface ILocalizedStringManager
     {
         /// <summary>
@@ -24,7 +18,7 @@ namespace HelperLibrary.Core.Localization
         /// <param name="cultureName">culture name.</param>
         /// <returns>the localized string if successed, otherwise simply return the key string</returns>
         string GetLocalizedString(string scope, string key, string cultureName);
-        
+
         /// <summary>
         /// Update the manager to reload resources
         /// </summary>

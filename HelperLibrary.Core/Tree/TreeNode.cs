@@ -11,11 +11,7 @@ namespace HelperLibrary.Core.Tree
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using HelperLibrary.Core.ExtensionHelper;
     using System.Diagnostics.Contracts;
-    using System.Collections.Concurrent;
 
     /// <summary>
     /// a simply implement of data structure Tree.
@@ -53,8 +49,10 @@ namespace HelperLibrary.Core.Tree
             if (root == null)
                 throw new ArgumentNullException("root");
 
-            List<TreeNode<T>> nodeList = new List<TreeNode<T>>();
-            nodeList.Add(root);
+            var nodeList = new List<TreeNode<T>>
+            {
+                root
+            };
             for (int i = 0; i < nodeList.Count; i++)
             {
                 TreeNode<T> node = nodeList[i];
@@ -74,7 +72,7 @@ namespace HelperLibrary.Core.Tree
         private static void DepthFirstTraversalInternal(TreeNode<T> root, Action<TreeNode<T>> action)
         {
             Contract.Assert(root != null && action != null);
-            
+
             /* In this implement, we use preorder traversal, however, 
              * your program should not depend on the order of which node be visited first.
              */
@@ -83,20 +81,18 @@ namespace HelperLibrary.Core.Tree
             {
                 DepthFirstTraversalInternal(node, action);
             }
-
         }
-
 
         #endregion
 
         #region Fields
 
-        private IList<TreeNode<T>> children = new List<TreeNode<T>>();
+        private readonly IList<TreeNode<T>> children = new List<TreeNode<T>>();
 
         // sync object for children list.
         private readonly object childrenSyncObj = new object();
 
-        private TreeNode<T> parent = null;
+        private TreeNode<T> parent;
 
         #endregion
 
@@ -141,11 +137,7 @@ namespace HelperLibrary.Core.Tree
         /// <summary>
         /// Gets or sets value of this node
         /// </summary>
-        public T Value
-        {
-            get;
-            set;
-        }
+        public T Value { get; set; }
 
         #endregion
 
@@ -187,19 +179,16 @@ namespace HelperLibrary.Core.Tree
             if (child == null)
                 throw new ArgumentNullException("child");
 
-            if (!this.children.Contains(child))
+            lock (this.childrenSyncObj)
             {
-                lock (childrenSyncObj)
-                {
-                    if (!this.children.Contains(child))
-                    {
-                        if (child.parent != null)
-                            throw new InvalidOperationException("one node cannot be added to two trees.");
+                if (this.children.Contains(child))
+                    return;
 
-                        this.children.Add(child);
-                        child.parent = this;
-                    }
-                }
+                if (child.parent != null)
+                    throw new InvalidOperationException("one node cannot be added to two trees.");
+
+                this.children.Add(child);
+                child.parent = this;
             }
         }
 
@@ -213,17 +202,13 @@ namespace HelperLibrary.Core.Tree
             if (child == null)
                 throw new ArgumentNullException("child");
 
-            if (this.children.Contains(child))
+            lock (this.childrenSyncObj)
             {
-                lock (this.childrenSyncObj)
-                {
-                    if (this.children.Contains(child))
-                    {
-                        child.parent = null;
-                        this.children.Remove(child);
+                if (!this.children.Contains(child))
+                    return;
 
-                    }
-                }
+                child.parent = null;
+                this.children.Remove(child);
             }
         }
 
@@ -269,7 +254,7 @@ namespace HelperLibrary.Core.Tree
         /// <returns>a string, if the Value is null, return an empty string.</returns>
         public override string ToString()
         {
-            return Value == null ? "" : Value.ToString();
+            return this.Value == null ? "" : this.Value.ToString();
         }
     }
 }

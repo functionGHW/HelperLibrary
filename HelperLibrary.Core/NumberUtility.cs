@@ -9,11 +9,7 @@
 namespace HelperLibrary.Core
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public static class NumberUtility
     {
@@ -22,21 +18,21 @@ namespace HelperLibrary.Core
         private static Lazy<Random> randLazy = new Lazy<Random>();
 
         // use a static char set to make it a bit more fast.
-        private static readonly char[][] hexCharSet = 
-        { 
+        private static readonly char[][] HexCharSet =
+        {
             // index 0 is upper case chars
-            new []{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'},
+            new[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'},
             // index 1 is lower case chars
-            new []{'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'},
+            new[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'},
         };
 
         #endregion
-
 
         #region Properties
 
         /* define some ussful constants for store capacity and file size.
          */
+
         /// <summary>
         /// 1 Kilo Bytes
         /// </summary>
@@ -95,7 +91,7 @@ namespace HelperLibrary.Core
             char[] charAry = new char[len * 2];
 
             // get hex char set to use.
-            char[] charSet = hexCharSet[useLowerCase ? 1 : 0];
+            char[] charSet = HexCharSet[useLowerCase ? 1 : 0];
             for (int i = 0; i < len; i++)
             {
                 int b = bytes[i];
@@ -124,7 +120,6 @@ namespace HelperLibrary.Core
             Contract.Assert(randLazy != null);
             return randLazy.Value.Next(minValue, maxValue);
         }
-
 
         #endregion
     }

@@ -10,10 +10,7 @@
 namespace HelperLibrary.Core
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -22,7 +19,6 @@ namespace HelperLibrary.Core
     /// </summary>
     public class SingleRunningAction
     {
-
         #region Fields
 
         private readonly object syncObj = new object();
@@ -59,12 +55,12 @@ namespace HelperLibrary.Core
         /// <returns>true if invoke successfully, false if the action is running.</returns>
         public bool Invoke()
         {
-            Contract.Assert(syncObj != null);
+            Contract.Assert(this.syncObj != null);
 
             /* use a lock to make sure that there is at most 
              * one thread runs this action at any time.
              */
-            bool isEntered = Monitor.TryEnter(syncObj);
+            bool isEntered = Monitor.TryEnter(this.syncObj);
 
             if (!isEntered)
             {
@@ -74,20 +70,20 @@ namespace HelperLibrary.Core
 
             try
             {
-                IsRunning = true;
-                if (WrappedAction != null)
+                this.IsRunning = true;
+                if (this.WrappedAction != null)
                 {
-                    WrappedAction.Invoke();
+                    this.WrappedAction.Invoke();
                 }
                 return true;
             }
             finally
             {
-                if (Monitor.IsEntered(syncObj))
+                if (Monitor.IsEntered(this.syncObj))
                 {
-                    Monitor.Exit(syncObj);
+                    Monitor.Exit(this.syncObj);
                 }
-                IsRunning = false;
+                this.IsRunning = false;
             }
         }
 
@@ -97,7 +93,7 @@ namespace HelperLibrary.Core
         /// <returns>true if invoke successfully, false if the action is running.</returns>
         public Task<bool> InvokeAsync()
         {
-            return Task.Run(() => Invoke());
+            return Task.Run(() => this.Invoke());
         }
     }
 }

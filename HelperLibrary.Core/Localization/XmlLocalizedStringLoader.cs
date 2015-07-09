@@ -8,7 +8,7 @@
 
 namespace HelperLibrary.Core.Localization
 {
-    using HelperLibrary.Core.IOAbstractions;
+    using IOAbstractions;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
@@ -26,13 +26,14 @@ namespace HelperLibrary.Core.Localization
         // this folder should be in the same folder the program was in.
         private readonly string localizationFolderName = "Localization";
 
-        private IFileSystem fileSystem;
+        private readonly IFileSystem fileSystem;
 
         #region Constructors
 
         public XmlLocalizedStringLoader()
             : this(new FileSystemWrapper())
-        { }
+        {
+        }
 
         public XmlLocalizedStringLoader(IFileSystem fileSystem)
         {
@@ -69,29 +70,29 @@ namespace HelperLibrary.Core.Localization
              *  "Localization\en-US\FunctionGHW.en-US.xml"
             */
             string fileName = scope + "." + cultureName + ".xml";
-            string filePath = Path.Combine(localizationFolderName, cultureName, fileName);
+            string filePath = Path.Combine(this.localizationFolderName, cultureName, fileName);
 
             // parse xml document object
-            XDocument doc = LoadDocument(filePath);
+            XDocument doc = this.LoadDocument(filePath);
 
             if (doc == null)
             {
                 return null;
             }
             // parse xml to dictionary
-            return DecodeXml(doc);
+            return this.DecodeXml(doc);
         }
 
         #endregion
 
         private XDocument LoadDocument(string filePath)
         {
-            if (!fileSystem.FileExists(filePath))
+            if (!this.fileSystem.FileExists(filePath))
                 return null;
 
             try
             {
-                using (var fileStream = fileSystem.OpenRead(filePath))
+                using (var fileStream = this.fileSystem.OpenRead(filePath))
                 {
                     return XDocument.Load(fileStream);
                 }
@@ -107,12 +108,12 @@ namespace HelperLibrary.Core.Localization
         {
             Contract.Assert(doc != null);
 
-            IDictionary<string, string> result = null;
+            IDictionary<string, string> result;
 
             /* use a XmlSerializer to deserialize the xml document.
              */
-            XmlSerializer serializer = new XmlSerializer(typeof(LocalizationCollection));
-            LocalizationCollection collection = null;
+            var serializer = new XmlSerializer(typeof(LocalizationCollection));
+            LocalizationCollection collection;
             using (XmlReader reader = doc.CreateReader())
             {
                 /* if this file can not be deserialized, let collection be null.
@@ -128,6 +129,7 @@ namespace HelperLibrary.Core.Localization
                 }
             }
 
+            // null means fail to deserialize.
             if (collection != null && collection.Items != null)
             {
                 result = new Dictionary<string, string>(collection.Items.Count);
@@ -135,6 +137,10 @@ namespace HelperLibrary.Core.Localization
                 {
                     result.Add(item.MsgId, item.MsgStr);
                 }
+            }
+            else
+            {
+                result = null;
             }
             return result;
         }

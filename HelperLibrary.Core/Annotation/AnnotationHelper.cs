@@ -10,16 +10,12 @@ namespace HelperLibrary.Core.Annotation
 {
     using HelperLibrary.Core.Localization;
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Globalization;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     internal class AnnotationHelper
     {
-        private static readonly ILocalizedStringManager lclStrMng = LocalizedStringManager.Default;
+        private static readonly ILocalizedStringManager LclStrMng = LocalizedStringManager.Default;
 
         /// <summary>
         /// a helper method for localizing error message and formating it when override
@@ -33,7 +29,7 @@ namespace HelperLibrary.Core.Annotation
         internal static string GetLocalizedFormatErrorMessage(string errorMessage, string name,
             string scope, CultureInfo culture)
         {
-            Contract.Assert(lclStrMng != null);
+            Contract.Assert(LclStrMng != null);
             Contract.Assert(scope != null);
             Contract.Assert(culture != null);
             Contract.Assert(errorMessage != null);
@@ -45,10 +41,10 @@ namespace HelperLibrary.Core.Annotation
              * which you can specify when using this Attribute. The parameter name usually 
              * come from DisplayAttribute or the name of property to be validated by default.
              */
-            string localizedMessage = lclStrMng.GetLocalizedString(scope, errorMessage, culture.Name);
-            string localizedName = lclStrMng.GetLocalizedString(scope, name, culture.Name);
+            string localizedMessage = LclStrMng.GetLocalizedString(scope, errorMessage, culture.Name);
+            string localizedName = LclStrMng.GetLocalizedString(scope, name, culture.Name);
 
-            return String.Format(culture, localizedMessage, localizedName);
+            return string.Format(culture, localizedMessage, localizedName);
         }
     }
 }

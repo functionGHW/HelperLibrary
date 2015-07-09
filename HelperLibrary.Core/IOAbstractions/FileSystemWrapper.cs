@@ -8,12 +8,7 @@
 
 namespace HelperLibrary.Core.IOAbstractions
 {
-    using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// a class wrapper file system operations
@@ -32,8 +27,8 @@ namespace HelperLibrary.Core.IOAbstractions
             return File.OpenRead(filePath);
         }
 
-        public Stream Open(string filePath, FileMode mode, 
-            FileAccess access = FileAccess.ReadWrite, 
+        public Stream Open(string filePath, FileMode mode,
+            FileAccess access = FileAccess.ReadWrite,
             FileShare share = FileShare.None)
         {
             return File.Open(filePath, mode, access, share);

@@ -8,7 +8,6 @@
 
 namespace HelperLibrary.Core.Tree
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>

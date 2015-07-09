@@ -9,11 +9,7 @@
 namespace HelperLibrary.Core.ExtensionHelper
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public static class StringExtensions
     {
@@ -36,7 +32,7 @@ namespace HelperLibrary.Core.ExtensionHelper
             }
             char[] chs = str.ToCharArray();
 
-            ObjectExtensions.InternalReverseArray<char>(chs, 0, chs.Length);
+            ObjectExtensions.InternalReverseArray(chs, 0, chs.Length);
 
             return new String(chs);
         }
@@ -99,7 +95,8 @@ namespace HelperLibrary.Core.ExtensionHelper
             }
             if (indexOfChar < 0 || indexOfChar >= str.Length)
             {
-                throw new ArgumentOutOfRangeException("indexOfChar", "indexOfChar less than 0 or greater than length of string");
+                throw new ArgumentOutOfRangeException("indexOfChar",
+                    "indexOfChar less than 0 or greater than length of string");
             }
             return ChangeCaseOfCharInternal(str, indexOfChar, true);
         }
@@ -120,7 +117,8 @@ namespace HelperLibrary.Core.ExtensionHelper
             }
             if (indexOfChar < 0 || indexOfChar >= str.Length)
             {
-                throw new ArgumentOutOfRangeException("indexOfChar", "indexOfChar less than 0 or greater than length of string");
+                throw new ArgumentOutOfRangeException("indexOfChar",
+                    "indexOfChar less than 0 or greater than length of string");
             }
             return ChangeCaseOfCharInternal(str, indexOfChar, false);
         }
