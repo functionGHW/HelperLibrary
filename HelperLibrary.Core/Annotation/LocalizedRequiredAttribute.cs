@@ -10,21 +10,14 @@ namespace HelperLibrary.Core.Annotation
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.Contracts;
     using System.Globalization;
+    using Localization;
 
     /// <summary>
     /// A required attribute that implements localization.
-    /// This implementation use HelperLibrary.Core.Localization.LocalizedStringManager
-    /// to implement localization.
     /// </summary>
-    public class LocalizedRequiredAttribute : RequiredAttribute
+    public class LocalizedRequiredAttribute : LocalizedValidationAttribute
     {
-        //private static readonly ILocalizedStringManager lclStrMng = LocalizedStringManager.Default;
-
-        // fields for getting localized string
-        private readonly string scope;
-        private readonly CultureInfo culture;
 
         /// <summary>
         /// Initialize LocalizedRequiredAttribute
@@ -35,33 +28,43 @@ namespace HelperLibrary.Core.Annotation
         /// <exception cref="ArgumentNullException">the scope is null or empty string.</exception>
         /// <exception cref="CultureNotFoundException">the cultureName is not right</exception>
         public LocalizedRequiredAttribute(string scope, string cultureName = null)
+            : base(scope, cultureName)
         {
-            if (string.IsNullOrEmpty(scope))
-                throw new ArgumentNullException("scope");
-
-            this.scope = scope;
-
-            this.culture = cultureName != null
-                ? CultureInfo.GetCultureInfo(cultureName)
-                : CultureInfo.CurrentUICulture;
         }
 
         /// <summary>
-        /// get the localized format message string.
+        /// Initialize LocalizedRequiredAttribute
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public override string FormatErrorMessage(string name)
+        /// <param name="scope">the scope.Usaully a assembly name</param>
+        /// <param name="lclStrMng">the localized string manager</param>
+        /// <param name="cultureName">a culture for localization, for example "en-US".
+        /// If not given, use current UI culture as default</param>
+        /// <exception cref="ArgumentNullException">the scope is null or empty string.</exception>
+        /// <exception cref="CultureNotFoundException">the cultureName is not right</exception>
+        public LocalizedRequiredAttribute(string scope, ILocalizedStringManager lclStrMng, string cultureName = null)
+            : base(scope, lclStrMng, cultureName)
         {
-            //Contract.Assert(lclStrMng != null);
-            Contract.Assert(this.culture != null);
+        }
 
-            /* the ErrorMessageString usually equals ErrorMessage property 
-             * which you can specify when using this Attribute.
-             */
+        public bool AllowEmptyStrings { get; set; }
 
-            return AnnotationHelper.GetLocalizedFormatErrorMessage(this.ErrorMessageString, name, this.scope,
-                this.culture);
+        /// <summary>
+        /// Checks that the value of the required data field is not empty.
+        /// </summary>
+        /// <param name="value">The data field value to validate.</param>
+        /// <returns>true if validation is successful; otherwise, false.</returns>
+        /// <exception cref="ValidationException">The data field value was null.</exception>
+        public override bool IsValid(object value)
+        {
+            if (value == null)
+                return false;
+
+            var stringValue = value as string;
+            if (stringValue != null && !this.AllowEmptyStrings)
+            {
+                return stringValue.Trim().Length != 0;
+            }
+            return true;
         }
     }
 }

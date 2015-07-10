@@ -86,7 +86,6 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Annotation\AnnotationHelper.cs" />
     <Compile Include="Annotation\LocalizedDisplayAttribute.cs" />
     <Compile Include="Annotation\LocalizedRequiredAttribute.cs" />
     <Compile Include="Annotation\LocalizedValidationAttribute.cs" />
