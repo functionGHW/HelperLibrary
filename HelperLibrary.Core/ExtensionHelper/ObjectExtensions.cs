@@ -28,7 +28,7 @@ namespace HelperLibrary.Core.ExtensionHelper
             {
                 return null;
             }
-            Type t = typeof (T);
+            Type t = typeof(T);
             T newObj = new T();
             BindingFlags flag = BindingFlags.Public | BindingFlags.Instance;
 

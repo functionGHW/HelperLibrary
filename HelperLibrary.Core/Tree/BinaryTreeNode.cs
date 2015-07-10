@@ -41,8 +41,8 @@ namespace HelperLibrary.Core.Tree
 
             if (root == null)
                 return;
-           
-            PreorderTraversalInternal(root.Left, action); 
+
+            PreorderTraversalInternal(root.Left, action);
             action(root);
             PreorderTraversalInternal(root.Right, action);
         }
@@ -221,6 +221,5 @@ namespace HelperLibrary.Core.Tree
         }
 
         #endregion
-
     }
 }
