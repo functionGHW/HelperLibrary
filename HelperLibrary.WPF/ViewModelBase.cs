@@ -8,24 +8,18 @@
 
 namespace HelperLibrary.WPF
 {
-    using HelperLibrary.Core.Annotation;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public abstract class ViewModelBase : NotifyPropertyChangedBase, IDataErrorInfo
     {
         /// <summary>
         /// Initialize ViewModelBase
         /// </summary>
-        public ViewModelBase()
+        protected ViewModelBase()
         {
             // this will always get the real type of this object
-            thisType = this.GetType();
+            this.thisType = this.GetType();
         }
 
         #region IDataErrorInfo Members
@@ -41,7 +35,7 @@ namespace HelperLibrary.WPF
             get { return string.Empty; }
         }
 
-        private Type thisType;
+        private readonly Type thisType;
 
         /// <summary>
         /// Gets the error message for the property with the given name.
@@ -56,7 +50,7 @@ namespace HelperLibrary.WPF
                 {
                     return string.Empty;
                 }
-                return InternalUtility.ValidateDataHelper(thisType, propertyName, this);
+                return InternalUtility.ValidateDataHelper(this.thisType, propertyName, this);
             }
         }
 

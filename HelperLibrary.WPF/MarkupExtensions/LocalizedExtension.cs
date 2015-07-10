@@ -8,16 +8,12 @@
 
 namespace HelperLibrary.WPF.MarkupExtensions
 {
-    using HelperLibrary.Core.Localization;
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Globalization;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Windows.Markup;
     using System.Xaml;
+    using Core.Localization;
 
     /// <summary>
     /// xaml extension for getting localized string
@@ -26,7 +22,7 @@ namespace HelperLibrary.WPF.MarkupExtensions
     /// </summary>
     public class LocalizedExtension : MarkupExtension
     {
-        private static readonly ILocalizedStringManager lclStrMng = LocalizedStringManager.Default;
+        private static readonly ILocalizedStringManager LclStrMng = LocalizedStringManager.Default;
 
         /// <summary>
         /// the scope
@@ -51,22 +47,22 @@ namespace HelperLibrary.WPF.MarkupExtensions
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             Contract.Assert(serviceProvider != null);
-            Contract.Assert(lclStrMng != null);
+            Contract.Assert(LclStrMng != null);
 
-            if (string.IsNullOrEmpty(Scope))
+            if (string.IsNullOrEmpty(this.Scope))
             {
                 var rootObjProvider = serviceProvider.GetService(typeof(IRootObjectProvider)) as IRootObjectProvider;
                 if (rootObjProvider != null)
                 {
-                    Scope = rootObjProvider.RootObject.GetType().Assembly.GetName().Name;
+                    this.Scope = rootObjProvider.RootObject.GetType().Assembly.GetName().Name;
                 }
             }
-            if (Culture == null)
+            if (this.Culture == null)
             {
-                Culture = CultureInfo.CurrentUICulture;
+                this.Culture = CultureInfo.CurrentUICulture;
             }
 
-            return lclStrMng.GetLocalizedString(Scope, Key, Culture.Name);
+            return LclStrMng.GetLocalizedString(this.Scope, this.Key, this.Culture.Name);
         }
     }
 }

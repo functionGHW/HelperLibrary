@@ -8,15 +8,9 @@
 
 namespace HelperLibrary.WPF
 {
-    using HelperLibrary.Core.Annotation;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.Contracts;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class BindableModelWrapper<TModel> : IDataErrorInfo, INotifyPropertyChanged
         where TModel : class
@@ -38,11 +32,11 @@ namespace HelperLibrary.WPF
         /// <returns></returns>
         public override string ToString()
         {
-            return model == null ? string.Empty : model.ToString();
+            return this.model == null ? string.Empty : this.model.ToString();
         }
 
         /// <summary>
-        /// implicit cast between BindableModelWrapper<TModel> and TModel
+        /// implicit cast between BindableModelWrapper&lt;TModel&gt; and TModel
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -52,7 +46,7 @@ namespace HelperLibrary.WPF
         }
 
         /// <summary>
-        /// explicit cast between BindableModelWrapper<TModel> and TModel
+        /// explicit cast between BindableModelWrapper&lt;TModel&gt; and TModel
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -66,8 +60,12 @@ namespace HelperLibrary.WPF
         /// </summary>
         public TModel Model
         {
-            get { return model; }
-            set { this.model = value; }
+            get { return this.model; }
+            set
+            {
+                this.model = value;
+                this.OnPropertyChanged("Model");
+            }
         }
 
         #region IDataErrorInfo Members
@@ -77,10 +75,7 @@ namespace HelperLibrary.WPF
         /// </summary>
         public string Error
         {
-            get
-            {
-                return string.Empty;
-            }
+            get { return string.Empty; }
         }
 
         /// <summary>
@@ -123,9 +118,9 @@ namespace HelperLibrary.WPF
             if (string.IsNullOrEmpty(propertyName))
                 throw new ArgumentNullException("propertyName");
 
-            if (PropertyChanged != null)
+            if (this.PropertyChanged != null)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

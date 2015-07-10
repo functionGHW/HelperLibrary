@@ -9,14 +9,10 @@
 namespace HelperLibrary.WPF
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
-    using System.Linq;
     using System.Linq.Expressions;
     using System.Runtime.CompilerServices;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public abstract class NotifyPropertyChangedBase : INotifyPropertyChanged
     {
@@ -34,12 +30,12 @@ namespace HelperLibrary.WPF
         /// the name of caller(property or method) will be passed automaticly.
         /// </summary>
         /// <param name="propertyName">name of property whose value was changed.</param>
-        protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             if (string.IsNullOrEmpty(propertyName))
                 throw new ArgumentNullException("propertyName");
 
-            InternalOnPropertyChanged(propertyName);
+            this.InternalOnPropertyChanged(propertyName);
         }
 
         /// <summary>
@@ -55,7 +51,7 @@ namespace HelperLibrary.WPF
                 throw new ArgumentException();
             }
             string propertyName = propMember.Member.Name;
-            InternalOnPropertyChanged(propertyName);
+            this.InternalOnPropertyChanged(propertyName);
         }
 
         /// <summary>
@@ -64,9 +60,9 @@ namespace HelperLibrary.WPF
         /// <param name="propertyName">name of property</param>
         private void InternalOnPropertyChanged(string propertyName)
         {
-            Contract.Assert(propertyName != null && propertyName.Length > 0);
+            Contract.Assert(!string.IsNullOrEmpty(propertyName));
 
-            var theEvent = this.PropertyChanged;
+            PropertyChangedEventHandler theEvent = this.PropertyChanged;
             if (theEvent != null)
             {
                 theEvent(this, new PropertyChangedEventArgs(propertyName));

@@ -9,10 +9,6 @@
 namespace HelperLibrary.WPF.Commands
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Windows.Input;
 
     /// <summary>
@@ -22,8 +18,8 @@ namespace HelperLibrary.WPF.Commands
     {
         #region private fields
 
-        private Action action;
-        private Func<bool> canCmdExecute;
+        private readonly Action action;
+        private readonly Func<bool> canCmdExecute;
 
         #endregion
 
@@ -39,7 +35,7 @@ namespace HelperLibrary.WPF.Commands
         {
         }
 
-        // <summary>
+        /// <summary>
         /// Initialize instance of SimpleCommand
         /// </summary>
         /// <param name="action">the action to execute when Command was called</param>
@@ -55,7 +51,6 @@ namespace HelperLibrary.WPF.Commands
         }
 
         #endregion
-
 
         #region ICommand Members
 
@@ -82,9 +77,10 @@ namespace HelperLibrary.WPF.Commands
 
         public void OnCanExecuteChanged()
         {
-            CanExecuteChanged(this, EventArgs.Empty);
+            EventHandler onCanExecuteChanged = this.CanExecuteChanged;
+            if (onCanExecuteChanged != null)
+                onCanExecuteChanged(this, EventArgs.Empty);
         }
-
     }
 
     /// <summary>
@@ -94,8 +90,8 @@ namespace HelperLibrary.WPF.Commands
     {
         #region private fields
 
-        private Action<T> action;
-        private Func<T, bool> canCmdExecute;
+        private readonly Action<T> action;
+        private readonly Func<T, bool> canCmdExecute;
 
         #endregion
 
@@ -111,7 +107,7 @@ namespace HelperLibrary.WPF.Commands
         {
         }
 
-        // <summary>
+        /// <summary>
         /// Initialize instance of SimpleCommand
         /// </summary>
         /// <param name="action">the action to execute when Command was called</param>
@@ -144,7 +140,6 @@ namespace HelperLibrary.WPF.Commands
             {
                 return false;
             }
-            
         }
 
         public event EventHandler CanExecuteChanged;
@@ -153,11 +148,11 @@ namespace HelperLibrary.WPF.Commands
         {
             if (parameter is T)
             {
-                action((T)parameter);
+                this.action((T)parameter);
             }
             else
             {
-                action(default(T));
+                this.action(default(T));
             }
         }
 
@@ -165,7 +160,9 @@ namespace HelperLibrary.WPF.Commands
 
         public void OnCanExecuteChanged()
         {
-            CanExecuteChanged(this, EventArgs.Empty);
+            EventHandler onCanExecuteChanged = this.CanExecuteChanged;
+            if (onCanExecuteChanged != null)
+                onCanExecuteChanged(this, EventArgs.Empty);
         }
     }
 }

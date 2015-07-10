@@ -8,14 +8,10 @@
 
 namespace HelperLibrary.WPF
 {
-    using HelperLibrary.Core.Annotation;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// a hepler class for internal
@@ -67,9 +63,9 @@ namespace HelperLibrary.WPF
              * we get the ValidationResult first, because some ValidationAttribute classes
              * may implement localization(for example HelperLibrary.Core.Annotation.*). 
              */
-            var errors = from attr in attrs
-                         where !attr.IsValid(value)
-                         select attr.GetValidationResult(value, context);
+            var errors = (from attr in attrs
+                          where !attr.IsValid(value)
+                          select attr.GetValidationResult(value, context)).ToArray();
 
             if (errors.Any())
             {
