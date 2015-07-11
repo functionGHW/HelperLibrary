@@ -26,6 +26,26 @@ namespace HelperLibrary.WPF
         #endregion
 
         /// <summary>
+        /// Set value of property and raise PropertyChanged event when value is changed.
+        /// </summary>
+        /// <typeparam name="T">type of property</typeparam>
+        /// <param name="field">usually a private field use for property</param>
+        /// <param name="value">the value to set</param>
+        /// <param name="propertyName">name of property</param>
+        /// <exception cref="ArgumentNullException">propertyName is null or empty.</exception>
+        protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (string.IsNullOrEmpty(propertyName))
+                throw new ArgumentNullException("propertyName");
+
+            if (object.Equals(field, value))
+                return;
+
+            field = value;
+            this.InternalOnPropertyChanged(propertyName);
+        }
+
+        /// <summary>
         /// Notify when a property was changed by property's name. If you don't give the parameter, 
         /// the name of caller(property or method) will be passed automaticly.
         /// </summary>
