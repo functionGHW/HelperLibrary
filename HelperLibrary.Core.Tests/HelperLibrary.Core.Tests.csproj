@@ -54,6 +54,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Configurations\XmlConfigurationFileTests.cs" />
+    <Compile Include="ExtensionHelper\DateTimeExtensionsTests.cs" />
     <Compile Include="ExtensionHelper\ObjectExtensionsTests.cs" />
     <Compile Include="ExtensionHelper\StringExtensionsTests.cs" />
     <Compile Include="Localization\LocalizedStringManagerTests.cs" />
