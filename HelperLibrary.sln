@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.WPF", "Helper
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.Core.Tests", "HelperLibrary.Core.Tests\HelperLibrary.Core.Tests.csproj", "{606EEFF4-A1B9-4FFF-8109-07F74922B07C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.WCF", "HelperLibrary.WCF\HelperLibrary.WCF.csproj", "{B16C4A48-B4B1-4926-95E1-5B1102864040}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{606EEFF4-A1B9-4FFF-8109-07F74922B07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{606EEFF4-A1B9-4FFF-8109-07F74922B07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{606EEFF4-A1B9-4FFF-8109-07F74922B07C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B16C4A48-B4B1-4926-95E1-5B1102864040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B16C4A48-B4B1-4926-95E1-5B1102864040}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B16C4A48-B4B1-4926-95E1-5B1102864040}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B16C4A48-B4B1-4926-95E1-5B1102864040}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
