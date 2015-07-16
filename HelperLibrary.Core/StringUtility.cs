@@ -16,7 +16,7 @@ namespace HelperLibrary.Core
     /// <summary>
     /// Helper methods for string.
     /// </summary>
-    public class StringUtility
+    public static class StringUtility
     {
         /// <summary>
         /// Get the MD5 hash of a string and return as hex string.
