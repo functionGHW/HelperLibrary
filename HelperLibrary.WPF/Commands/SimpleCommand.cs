@@ -29,19 +29,9 @@ namespace HelperLibrary.WPF.Commands
         /// Initialize instance of SimpleCommand
         /// </summary>
         /// <param name="action">the action to execute when Command was called</param>
-        /// <exception cref="ArgumentNullException">action is null</exception>
-        public SimpleCommand(Action action)
-            : this(action, null)
-        {
-        }
-
-        /// <summary>
-        /// Initialize instance of SimpleCommand
-        /// </summary>
-        /// <param name="action">the action to execute when Command was called</param>
         /// <param name="canCmdExecute">a function to check if the Command can execute</param>
         /// <exception cref="ArgumentNullException">action is null</exception>
-        public SimpleCommand(Action action, Func<bool> canCmdExecute)
+        public SimpleCommand(Action action, Func<bool> canCmdExecute = null)
         {
             if (action == null)
                 throw new ArgumentNullException("action");
@@ -56,14 +46,10 @@ namespace HelperLibrary.WPF.Commands
 
         public bool CanExecute(object parameter)
         {
-            if (this.canCmdExecute == null)
-            {
-                return true;
-            }
-            else
-            {
+            if (this.canCmdExecute != null)
                 return this.canCmdExecute();
-            }
+
+            return true;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -75,7 +61,7 @@ namespace HelperLibrary.WPF.Commands
 
         #endregion
 
-        public void OnCanExecuteChanged()
+        public void NofityCanExecuteChanged()
         {
             EventHandler onCanExecuteChanged = this.CanExecuteChanged;
             if (onCanExecuteChanged != null)
@@ -101,19 +87,9 @@ namespace HelperLibrary.WPF.Commands
         /// Initialize instance of SimpleCommand
         /// </summary>
         /// <param name="action">the action to execute when Command was called</param>
-        /// <exception cref="ArgumentNullException">action is null</exception>
-        public SimpleCommand(Action<T> action)
-            : this(action, null)
-        {
-        }
-
-        /// <summary>
-        /// Initialize instance of SimpleCommand
-        /// </summary>
-        /// <param name="action">the action to execute when Command was called</param>
         /// <param name="canCmdExecute">a function to check if the Command can execute</param>
         /// <exception cref="ArgumentNullException">action is null</exception>
-        public SimpleCommand(Action<T> action, Func<T, bool> canCmdExecute)
+        public SimpleCommand(Action<T> action, Func<T, bool> canCmdExecute = null)
         {
             if (action == null)
                 throw new ArgumentNullException("action");
@@ -136,10 +112,7 @@ namespace HelperLibrary.WPF.Commands
             {
                 return this.canCmdExecute((T)parameter);
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -158,7 +131,7 @@ namespace HelperLibrary.WPF.Commands
 
         #endregion
 
-        public void OnCanExecuteChanged()
+        public void NotifyCanExecuteChanged()
         {
             EventHandler onCanExecuteChanged = this.CanExecuteChanged;
             if (onCanExecuteChanged != null)

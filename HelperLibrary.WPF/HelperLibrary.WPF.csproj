@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\SimpleCommand.cs" />
+    <Compile Include="Commands\SingleRunningCommand.cs" />
     <Compile Include="ExtensionInterfaces\IWindowProperty.cs" />
     <Compile Include="InternalUtility.cs" />
     <Compile Include="MarkupExtensions\LocalizedExtension.cs" />
