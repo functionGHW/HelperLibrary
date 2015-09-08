@@ -92,6 +92,7 @@
     <Compile Include="Configurations\IConfigurationFile.cs" />
     <Compile Include="Configurations\XmlConfigurationFile.cs" />
     <Compile Include="EnumUtility.cs" />
+    <Compile Include="ExtensionHelper\CollectionTypeExtensions.cs" />
     <Compile Include="ExtensionHelper\DateTimeExtensions.cs" />
     <Compile Include="ExtensionHelper\ObjectExtensions.cs" />
     <Compile Include="ExtensionHelper\StringExtensions.cs" />

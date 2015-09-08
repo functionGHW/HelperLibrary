@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Configurations\XmlConfigurationFileTests.cs" />
     <Compile Include="EnumUtilityTests.cs" />
+    <Compile Include="ExtensionHelper\CollectionTypeExtensionsTests.cs" />
     <Compile Include="ExtensionHelper\DateTimeExtensionsTests.cs" />
     <Compile Include="ExtensionHelper\ObjectExtensionsTests.cs" />
     <Compile Include="ExtensionHelper\StringExtensionsTests.cs" />

@@ -101,57 +101,6 @@ namespace HelperLibrary.Core.ExtensionHelper
         }
 
         /// <summary>
-        /// add many elements to the collection.
-        /// </summary>
-        /// <typeparam name="TElement">type of elements</typeparam>
-        /// <param name="collection">the collection</param>
-        /// <param name="listToAdd">list of elements to add</param>
-        /// <exception cref="ArgumentNullException">cillection or listToAdd is null.</exception>
-        /// <exception cref="NotSupportedException">the collection is read-only.</exception>
-        public static void AddRange<TElement>(this ICollection<TElement> collection,
-            IEnumerable<TElement> listToAdd)
-        {
-            if (collection == null || listToAdd == null)
-                throw new ArgumentNullException(collection == null ? "collection" : "listToAdd");
-
-            if (collection.IsReadOnly)
-                throw new NotSupportedException("Can not add, collection is read-only.");
-
-            foreach (TElement item in listToAdd)
-            {
-                collection.Add(item);
-            }
-        }
-
-        /// <summary>
-        /// convert and add many elements to the collection.
-        /// </summary>
-        /// <typeparam name="TElement">type of elements</typeparam>
-        /// <typeparam name="TInput">type of input elements</typeparam>
-        /// <param name="collection">the collection</param>
-        /// <param name="converter">method that convert a Tinput object to Telement object.</param>
-        /// <param name="listToAdd">list of elements to add</param>
-        /// <exception cref="ArgumentNullException">cillection, listToAdd or converter is null.</exception>
-        /// <exception cref="NotSupportedException">the collection is read-only.</exception>
-        public static void AddRange<TElement, TInput>(this ICollection<TElement> collection,
-            IEnumerable<TInput> listToAdd, Func<TInput, TElement> converter)
-        {
-            if (collection == null || listToAdd == null)
-                throw new ArgumentNullException(collection == null ? "collection" : "listToAdd");
-
-            if (converter == null)
-                throw new ArgumentNullException("converter");
-
-            if (collection.IsReadOnly)
-                throw new NotSupportedException("Can not add, collection is read-only.");
-
-            foreach (TInput item in listToAdd)
-            {
-                collection.Add(converter(item));
-            }
-        }
-
-        /// <summary>
         /// traversing a collection with the action.
         /// </summary>
         /// <typeparam name="TElement">element type of collection</typeparam>
