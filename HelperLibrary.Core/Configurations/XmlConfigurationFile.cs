@@ -68,10 +68,10 @@ namespace HelperLibrary.Core.Configurations
         public XmlConfigurationFile(string filePath, IFileSystem fileSystem, bool isCreateNew = false)
         {
             if (string.IsNullOrWhiteSpace(filePath))
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
 
             if (fileSystem == null)
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
 
             this.fileSystem = fileSystem;
             this.isCreateNew = isCreateNew;
@@ -126,7 +126,7 @@ namespace HelperLibrary.Core.Configurations
                 {
                     continue;
                 }
-                if (nameAttr == null || string.IsNullOrEmpty(nameAttr.Value))
+                if (string.IsNullOrEmpty(nameAttr?.Value))
                 {
                     continue;
                 }
@@ -167,17 +167,17 @@ namespace HelperLibrary.Core.Configurations
             get
             {
                 if (string.IsNullOrWhiteSpace(name))
-                    throw new ArgumentNullException("name");
+                    throw new ArgumentNullException(nameof(name));
 
                 return this.InternalGetConfiguration(name);
             }
             set
             {
                 if (string.IsNullOrWhiteSpace(name))
-                    throw new ArgumentNullException("name");
+                    throw new ArgumentNullException(nameof(name));
 
                 if (value == null)
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
 
                 this.InternalAddOrUpdate(name, value, ConfigOpt.AddOrUpdate);
             }
@@ -193,7 +193,7 @@ namespace HelperLibrary.Core.Configurations
         public bool ContainsConfiguration(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
             if (!this.isInitialized)
             {
@@ -214,7 +214,7 @@ namespace HelperLibrary.Core.Configurations
         public string GetConfiguration(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
             return this.InternalGetConfiguration(name);
         }
@@ -230,10 +230,10 @@ namespace HelperLibrary.Core.Configurations
         public void AddConfiguration(string name, string value)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
             if (value == null)
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
 
             this.InternalAddOrUpdate(name, value, ConfigOpt.Add);
         }
@@ -249,10 +249,10 @@ namespace HelperLibrary.Core.Configurations
         public void UpdateConfiguration(string name, string newValue)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
             if (newValue == null)
-                throw new ArgumentNullException("newValue");
+                throw new ArgumentNullException(nameof(newValue));
 
             this.InternalAddOrUpdate(name, newValue, ConfigOpt.Update);
         }
@@ -266,7 +266,7 @@ namespace HelperLibrary.Core.Configurations
         public void RemoveConfiguration(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
             this.InternalRemoveConfiguration(name);
         }
@@ -471,8 +471,7 @@ namespace HelperLibrary.Core.Configurations
                                          select setting)
                         .SingleOrDefault();
 
-                    if (configuration != null)
-                        configuration.Remove();
+                    configuration?.Remove();
 
                     this.configurationsDict.Remove(name);
                     this.IsChanged = true;

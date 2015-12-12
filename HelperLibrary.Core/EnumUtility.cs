@@ -66,7 +66,7 @@ namespace HelperLibrary.Core
             EnsureIsEnumType();
 
             if (string.IsNullOrEmpty(enumName))
-                throw new ArgumentNullException("enumName");
+                throw new ArgumentNullException(nameof(enumName));
 
             string enumNameToUppper = enumName.ToUpperInvariant();
             TEnum value;

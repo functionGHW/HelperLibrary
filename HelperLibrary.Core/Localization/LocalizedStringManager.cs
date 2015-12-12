@@ -64,7 +64,7 @@ namespace HelperLibrary.Core.Localization
         public LocalizedStringManager(ILocalizedStringLoader localizedStringLoader)
         {
             if (localizedStringLoader == null)
-                throw new ArgumentNullException("localizedStringLoader");
+                throw new ArgumentNullException(nameof(localizedStringLoader));
 
             this.localizedStringLoader = localizedStringLoader;
         }
@@ -85,10 +85,10 @@ namespace HelperLibrary.Core.Localization
             Contract.Assert(this.dictCache != null);
 
             if (string.IsNullOrEmpty(scope))
-                throw new ArgumentNullException("scope");
+                throw new ArgumentNullException(nameof(scope));
 
             if (string.IsNullOrEmpty(key))
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
 
             if (string.IsNullOrEmpty(cultureName))
             {

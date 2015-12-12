@@ -122,7 +122,7 @@ namespace ConsoleTestApp
             string str = "abc";
             try
             {
-                string md5Str = StringUtility.GetMD5OfString(str);
+                string md5Str = StringUtility.GetMd5OfString(str);
                 Console.WriteLine(md5Str.Length);
             }
             catch (Exception ex)

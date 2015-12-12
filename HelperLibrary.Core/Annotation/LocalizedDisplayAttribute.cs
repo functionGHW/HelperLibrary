@@ -54,10 +54,10 @@ namespace HelperLibrary.Core.Annotation
         public LocalizedDisplayAttribute(string scope, ILocalizedStringManager lclStrMng, string cultureName = null)
         {
             if (string.IsNullOrEmpty(scope))
-                throw new ArgumentNullException("scope");
+                throw new ArgumentNullException(nameof(scope));
 
             if (lclStrMng == null)
-                throw new ArgumentNullException("lclStrMng");
+                throw new ArgumentNullException(nameof(lclStrMng));
 
             this.lclStrMng = lclStrMng;
             this.scope = scope;

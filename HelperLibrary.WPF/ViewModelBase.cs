@@ -30,10 +30,7 @@ namespace HelperLibrary.WPF
         /// <remarks>
         /// default value is an empty string ("").
         /// </remarks>
-        public virtual string Error
-        {
-            get { return string.Empty; }
-        }
+        public virtual string Error => string.Empty;
 
         private readonly Type thisType;
 

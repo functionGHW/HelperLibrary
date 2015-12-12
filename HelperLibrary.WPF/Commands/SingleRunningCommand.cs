@@ -25,7 +25,7 @@ namespace HelperLibrary.WPF.Commands
 
         private readonly object actionSyncObj = new object();
 
-        private bool isExecuting = false;
+        private bool isExecuting;
 
         #endregion
 
@@ -39,7 +39,7 @@ namespace HelperLibrary.WPF.Commands
         public SingleRunningCommand(Action action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             this.action = new SingleRunningAction(action);
         }

@@ -141,7 +141,7 @@ namespace HelperLibrary.Core.Configurations.Tests
                 () => cfgFile.GetConfiguration(name));
         }
 
-        [TestCaseSource("testCfgData")]
+        [TestCaseSource(nameof(testCfgData))]
         [TestCase("notsuchname", null)]
         public void GetConfigurationTest(string name, string value)
         {

@@ -62,7 +62,7 @@ namespace HelperLibrary.Core.ExtensionHelper.Tests
 
         #region Tests For EqualsWithTimeZone
 
-        [TestCaseSource("testData")]
+        [TestCaseSource(nameof(testData))]
         public void EqualsWithTimeZoneTest(DateTime theDateTime, DateTime anotherDatetime, bool expected)
         {
             // arrange

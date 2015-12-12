@@ -29,7 +29,7 @@ namespace HelperLibrary.Core.Tree
         public static TreeNode<T> FindRootNode(TreeNode<T> node)
         {
             if (node == null)
-                throw new ArgumentNullException("node");
+                throw new ArgumentNullException(nameof(node));
 
             //var root = node;
             while (node.Parent != null)
@@ -47,7 +47,7 @@ namespace HelperLibrary.Core.Tree
         public static bool CheckTree(TreeNode<T> root)
         {
             if (root == null)
-                throw new ArgumentNullException("root");
+                throw new ArgumentNullException(nameof(root));
 
             var nodeList = new List<TreeNode<T>>
             {
@@ -161,7 +161,7 @@ namespace HelperLibrary.Core.Tree
         public bool ContainsChild(TreeNode<T> child)
         {
             if (child == null)
-                throw new ArgumentNullException("child");
+                throw new ArgumentNullException(nameof(child));
 
             Contract.Assert(this.children != null);
 
@@ -177,7 +177,7 @@ namespace HelperLibrary.Core.Tree
         {
             Contract.Assert(this.children != null);
             if (child == null)
-                throw new ArgumentNullException("child");
+                throw new ArgumentNullException(nameof(child));
 
             lock (this.childrenSyncObj)
             {
@@ -200,7 +200,7 @@ namespace HelperLibrary.Core.Tree
         {
             Contract.Assert(this.children != null);
             if (child == null)
-                throw new ArgumentNullException("child");
+                throw new ArgumentNullException(nameof(child));
 
             lock (this.childrenSyncObj)
             {
@@ -220,7 +220,7 @@ namespace HelperLibrary.Core.Tree
         public void DepthFirstTraversal(Action<TreeNode<T>> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             DepthFirstTraversalInternal(this, action);
         }
@@ -232,7 +232,7 @@ namespace HelperLibrary.Core.Tree
         public void BreadthFirstTraversal(Action<TreeNode<T>> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             var list = new List<TreeNode<T>>() { this };
 

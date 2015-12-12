@@ -24,7 +24,7 @@ namespace HelperLibrary.Core.ExtensionHelper
         {
             if (str == null)
             {
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             }
             if (str.Length < 2)
             {
@@ -49,11 +49,11 @@ namespace HelperLibrary.Core.ExtensionHelper
         {
             if (str == null)
             {
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             }
             if (str.Length < 1)
             {
-                throw new ArgumentOutOfRangeException("str", "Length of str must greater than 0.");
+                throw new ArgumentOutOfRangeException(nameof(str), "Length of str must greater than 0.");
             }
             return ChangeCaseOfCharInternal(str, 0, true);
         }
@@ -70,11 +70,11 @@ namespace HelperLibrary.Core.ExtensionHelper
         {
             if (str == null)
             {
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             }
             if (str.Length < 1)
             {
-                throw new ArgumentOutOfRangeException("str", "Length of str must greater than 0.");
+                throw new ArgumentOutOfRangeException(nameof(str), "Length of str must greater than 0.");
             }
             return ChangeCaseOfCharInternal(str, 0, false);
         }
@@ -91,11 +91,11 @@ namespace HelperLibrary.Core.ExtensionHelper
         {
             if (str == null)
             {
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             }
             if (indexOfChar < 0 || indexOfChar >= str.Length)
             {
-                throw new ArgumentOutOfRangeException("indexOfChar",
+                throw new ArgumentOutOfRangeException(nameof(indexOfChar),
                     "indexOfChar less than 0 or greater than length of string");
             }
             return ChangeCaseOfCharInternal(str, indexOfChar, true);
@@ -113,11 +113,11 @@ namespace HelperLibrary.Core.ExtensionHelper
         {
             if (str == null)
             {
-                throw new ArgumentNullException("str");
+                throw new ArgumentNullException(nameof(str));
             }
             if (indexOfChar < 0 || indexOfChar >= str.Length)
             {
-                throw new ArgumentOutOfRangeException("indexOfChar",
+                throw new ArgumentOutOfRangeException(nameof(indexOfChar),
                     "indexOfChar less than 0 or greater than length of string");
             }
             return ChangeCaseOfCharInternal(str, indexOfChar, false);

@@ -49,10 +49,10 @@ namespace HelperLibrary.Core.Tests
 
             // act && assert
             Assert.Catch<ArgumentNullException>(() =>
-                StringUtility.GetMD5OfString(null, true));
+                StringUtility.GetMd5OfString(null, true));
         }
 
-        [TestCaseSource("md5TestData")]
+        [TestCaseSource(nameof(md5TestData))]
         public void GetMD5OfStringTest(string orgStr, bool userLowerCase, string md5Str)
         {
             /* testing GetMD5OfString,
@@ -62,7 +62,7 @@ namespace HelperLibrary.Core.Tests
             string theString = orgStr;
 
             // act
-            string lowerCaseResult = StringUtility.GetMD5OfString(theString, userLowerCase);
+            string lowerCaseResult = StringUtility.GetMd5OfString(theString, userLowerCase);
 
             // assert
             Assert.IsTrue(lowerCaseResult == md5Str);

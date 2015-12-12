@@ -38,7 +38,7 @@ namespace HelperLibrary.Core.Localization
         public XmlLocalizedStringLoader(IFileSystem fileSystem)
         {
             if (fileSystem == null)
-                throw new ArgumentNullException("fileSystem");
+                throw new ArgumentNullException(nameof(fileSystem));
 
             this.fileSystem = fileSystem;
         }
@@ -58,10 +58,10 @@ namespace HelperLibrary.Core.Localization
         public IDictionary<string, string> GetLocalizedDictionary(string scope, string cultureName)
         {
             if (string.IsNullOrEmpty(scope))
-                throw new ArgumentNullException("scope");
+                throw new ArgumentNullException(nameof(scope));
 
             if (string.IsNullOrEmpty(cultureName))
-                throw new ArgumentNullException("cultureName");
+                throw new ArgumentNullException(nameof(cultureName));
 
             /* the format of resources file name is "{scope}.{cultureName}.xml"
              * for example: FunctionGHW.en-US.xml

@@ -52,7 +52,7 @@ namespace HelperLibrary.Core.ExtensionHelper
         public static void ReverseArray<TElement>(this TElement[] ary)
         {
             if (ary == null)
-                throw new ArgumentNullException("ary");
+                throw new ArgumentNullException(nameof(ary));
 
             InternalReverseArray(ary, 0, ary.Length);
         }
@@ -70,7 +70,7 @@ namespace HelperLibrary.Core.ExtensionHelper
         public static void ReverseArray<TElement>(this TElement[] ary, int startIndex, int length)
         {
             if (ary == null)
-                throw new ArgumentNullException("ary");
+                throw new ArgumentNullException(nameof(ary));
             if (startIndex < 0)
                 throw new IndexOutOfRangeException("startIndex less than zero");
             if (length < 0)

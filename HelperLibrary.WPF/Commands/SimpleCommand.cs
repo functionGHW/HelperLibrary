@@ -34,7 +34,7 @@ namespace HelperLibrary.WPF.Commands
         public SimpleCommand(Action action, Func<bool> canCmdExecute = null)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             this.action = action;
             this.canCmdExecute = canCmdExecute;
@@ -64,8 +64,7 @@ namespace HelperLibrary.WPF.Commands
         public void NofityCanExecuteChanged()
         {
             EventHandler onCanExecuteChanged = this.CanExecuteChanged;
-            if (onCanExecuteChanged != null)
-                onCanExecuteChanged(this, EventArgs.Empty);
+            onCanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -92,7 +91,7 @@ namespace HelperLibrary.WPF.Commands
         public SimpleCommand(Action<T> action, Func<T, bool> canCmdExecute = null)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             this.action = action;
             this.canCmdExecute = canCmdExecute;
@@ -134,8 +133,7 @@ namespace HelperLibrary.WPF.Commands
         public void NotifyCanExecuteChanged()
         {
             EventHandler onCanExecuteChanged = this.CanExecuteChanged;
-            if (onCanExecuteChanged != null)
-                onCanExecuteChanged(this, EventArgs.Empty);
+            onCanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

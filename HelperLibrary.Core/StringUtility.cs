@@ -25,17 +25,17 @@ namespace HelperLibrary.Core
         /// <param name="useLowerCase">whether to return result as lowercase string</param>
         /// <returns>hash value string</returns>
         /// <exception cref="ArgumentNullException">parameter theString is null.</exception>
-        public static string GetMD5OfString(string theString, bool useLowerCase = false)
+        public static string GetMd5OfString(string theString, bool useLowerCase = false)
         {
             if (theString == null)
-                throw new ArgumentNullException("theString");
+                throw new ArgumentNullException(nameof(theString));
 
-            byte[] md5Bytes = GetMD5OfStringInternal(theString);
+            byte[] md5Bytes = GetMd5OfStringInternal(theString);
             return NumberUtility.BytesToHexString(md5Bytes, useLowerCase);
         }
 
         // internal compute hash value of a string
-        private static byte[] GetMD5OfStringInternal(string theString)
+        private static byte[] GetMd5OfStringInternal(string theString)
         {
             Contract.Assert(theString != null);
 

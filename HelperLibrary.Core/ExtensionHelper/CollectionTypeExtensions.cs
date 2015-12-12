@@ -38,10 +38,10 @@ namespace HelperLibrary.Core.ExtensionHelper
         public static void AddRange<TElement>(this ICollection<TElement> source, IEnumerable<TElement> collection)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             if (collection == null)
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
 
             foreach (var item in collection)
             {
@@ -63,13 +63,13 @@ namespace HelperLibrary.Core.ExtensionHelper
             IEnumerable<TAnother> collection, Func<TAnother, TSource> transform)
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             if (collection == null)
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
 
             if (transform == null)
-                throw new ArgumentNullException("transform");
+                throw new ArgumentNullException(nameof(transform));
 
             foreach (var item in collection)
             {

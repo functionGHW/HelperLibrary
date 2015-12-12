@@ -79,7 +79,7 @@ namespace HelperLibrary.Core
         {
             if (bytes == null)
             {
-                throw new ArgumentNullException("bytes");
+                throw new ArgumentNullException(nameof(bytes));
             }
             int len = bytes.Length;
             if (len == 0)

@@ -191,7 +191,7 @@ namespace HelperLibrary.Core.Tree
         public void PreorderTraversal(Action<BinaryTreeNode<T>> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             PreorderTraversalInternal(this, action);
         }
@@ -203,7 +203,7 @@ namespace HelperLibrary.Core.Tree
         public void InorderTraversal(Action<BinaryTreeNode<T>> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             InorderTraversalInternal(this, action);
         }
@@ -215,7 +215,7 @@ namespace HelperLibrary.Core.Tree
         public void PostorderTraversal(Action<BinaryTreeNode<T>> action)
         {
             if (action == null)
-                throw new ArgumentNullException("action");
+                throw new ArgumentNullException(nameof(action));
 
             PostorderTraversalInternal(this, action);
         }

@@ -36,9 +36,9 @@ namespace HelperLibrary.WPF
         protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if (string.IsNullOrEmpty(propertyName))
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
 
-            if (object.Equals(field, value))
+            if (Equals(field, value))
                 return;
 
             field = value;
@@ -53,7 +53,7 @@ namespace HelperLibrary.WPF
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             if (string.IsNullOrEmpty(propertyName))
-                throw new ArgumentNullException("propertyName");
+                throw new ArgumentNullException(nameof(propertyName));
 
             this.InternalOnPropertyChanged(propertyName);
         }
@@ -83,10 +83,7 @@ namespace HelperLibrary.WPF
             Contract.Assert(!string.IsNullOrEmpty(propertyName));
 
             PropertyChangedEventHandler theEvent = this.PropertyChanged;
-            if (theEvent != null)
-            {
-                theEvent(this, new PropertyChangedEventArgs(propertyName));
-            }
+            theEvent?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
