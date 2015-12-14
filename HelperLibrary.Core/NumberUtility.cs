@@ -84,7 +84,7 @@ namespace HelperLibrary.Core
             int len = bytes.Length;
             if (len == 0)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             Contract.Assert(len > 0);
@@ -105,7 +105,7 @@ namespace HelperLibrary.Core
                 hexValue = b & 0x0000000F;
                 charAry[charPos + 1] = charSet[hexValue];
             }
-            return new String(charAry);
+            return new string(charAry);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace HelperLibrary.Core
         /// <param name="maxValue">max value, default value is Int32.MaxValue</param>
         /// <returns>a random Int32 value</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">the minValue is greater than maxValue</exception>
-        public static int GetRandomInt(int minValue = 0, int maxValue = Int32.MaxValue)
+        public static int GetRandomInt(int minValue = 0, int maxValue = int.MaxValue)
         {
             Contract.Assert(randLazy != null);
             return randLazy.Value.Next(minValue, maxValue);

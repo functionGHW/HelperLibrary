@@ -12,14 +12,24 @@ using HelperLibrary.WCF.Proxy;
 
 namespace HelperLibrary.WCF
 {
+    /// <summary>
+    /// an simply implementation of IServiceCaller
+    /// </summary>
     public class ServiceCaller : IServiceCaller
     {
         private readonly IProxyBuilder proxyBuilder;
 
+        /// <summary>
+        /// Initialize an instance of ServiceCaller.
+        /// </summary>
         public ServiceCaller()
             : this(new ProxyBuilder())
         { }
 
+        /// <summary>
+        /// Initialize an instance of ServiceCaller with a special instance of IProxyBuilder.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">proxyBuilder is null</exception>
         public ServiceCaller(IProxyBuilder proxyBuilder)
         {
             if (proxyBuilder == null)
@@ -28,12 +38,14 @@ namespace HelperLibrary.WCF
             this.proxyBuilder = proxyBuilder;
         }
 
-        public void CallService<TService>(Action<TService> action) where TService : class
-        {
-            this.CallService(action, null);
-        }
-
-        public void CallService<TService>(Action<TService> action, Action callBack) where TService : class
+        /// <summary>
+        /// Call a wcf service without return value.
+        /// </summary>
+        /// <typeparam name="TService">The type of contract interface</typeparam>
+        /// <param name="action">action to do with the service</param>
+        /// <param name="callback">callback method</param>
+        /// <exception cref="ArgumentNullException">the argument action is null</exception>
+        public void CallService<TService>(Action<TService> action, Action callback = null) where TService : class
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -42,16 +54,20 @@ namespace HelperLibrary.WCF
             using (proxy as IDisposable)
             {
                 action(proxy);
-                callBack?.Invoke();
+                callback?.Invoke();
             }
         }
 
-        public TReturn CallService<TService, TReturn>(Func<TService, TReturn> action) where TService : class
-        {
-            return this.CallService(action, null);
-        }
 
-        public TReturn CallService<TService, TReturn>(Func<TService, TReturn> action, Action<TReturn> callBack) where TService : class
+        /// <summary>
+        /// Call a wcf service that has return value.
+        /// </summary>
+        /// <typeparam name="TService">The type of contract interface</typeparam>
+        /// <typeparam name="TReturn">The tyoe of return value</typeparam>
+        /// <param name="action">action to do with the service</param>
+        /// <param name="callback">callback method</param>
+        /// <exception cref="ArgumentNullException">the argument action is null</exception>
+        public TReturn CallService<TService, TReturn>(Func<TService, TReturn> action, Action<TReturn> callback = null) where TService : class
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
@@ -60,7 +76,7 @@ namespace HelperLibrary.WCF
             using (proxy as IDisposable)
             {
                 var result = action(proxy);
-                callBack?.Invoke(result);
+                callback?.Invoke(result);
                 return result;
             }
         }

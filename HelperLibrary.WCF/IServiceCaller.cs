@@ -14,14 +14,26 @@ using System.Threading.Tasks;
 
 namespace HelperLibrary.WCF
 {
+    /// <summary>
+    /// an interface for calling wcf services easily
+    /// </summary>
     public interface IServiceCaller
     {
-        void CallService<TService>(Action<TService> action) where TService : class;
-
-        void CallService<TService>(Action<TService> action, Action callBack) where TService : class;
-
-        TReturn CallService<TService, TReturn>(Func<TService, TReturn> action) where TService : class;
-
-        TReturn CallService<TService, TReturn>(Func<TService, TReturn> action, Action<TReturn> callBack) where TService : class;
+        /// <summary>
+        /// Call a wcf service without return value.
+        /// </summary>
+        /// <typeparam name="TService">The type of contract interface</typeparam>
+        /// <param name="action">action to do with the service</param>
+        /// <param name="callback">callback method</param>
+        void CallService<TService>(Action<TService> action, Action callback = null) where TService : class;
+        
+        /// <summary>
+        /// Call a wcf service that has return value.
+        /// </summary>
+        /// <typeparam name="TService">The type of contract interface</typeparam>
+        /// <typeparam name="TReturn">The tyoe of return value</typeparam>
+        /// <param name="action">action to do with the service</param>
+        /// <param name="callback">callback method</param>
+        TReturn CallService<TService, TReturn>(Func<TService, TReturn> action, Action<TReturn> callback = null) where TService : class;
     }
 }
