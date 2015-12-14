@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestApp", "ConsoleTestApp\ConsoleTestApp.csproj", "{8558B655-3504-49FB-AE80-C3B285D5BED4}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.Core.Tests", "HelperLibrary.Core.Tests\HelperLibrary.Core.Tests.csproj", "{606EEFF4-A1B9-4FFF-8109-07F74922B07C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.WCF", "HelperLibrary.WCF\HelperLibrary.WCF.csproj", "{B16C4A48-B4B1-4926-95E1-5B1102864040}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.WCF.Tests", "HelperLibrary.WCF.Tests\HelperLibrary.WCF.Tests.csproj", "{182D5CC5-EBDF-43E4-B978-33F61CD56282}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{B16C4A48-B4B1-4926-95E1-5B1102864040}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B16C4A48-B4B1-4926-95E1-5B1102864040}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B16C4A48-B4B1-4926-95E1-5B1102864040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{182D5CC5-EBDF-43E4-B978-33F61CD56282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{182D5CC5-EBDF-43E4-B978-33F61CD56282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{182D5CC5-EBDF-43E4-B978-33F61CD56282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{182D5CC5-EBDF-43E4-B978-33F61CD56282}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +61,6 @@ Global
 		{8558B655-3504-49FB-AE80-C3B285D5BED4} = {A6E9619F-A747-478D-9CD7-B6992815D1D2}
 		{273196DE-654D-4000-9C31-60F2F6525D8C} = {A6E9619F-A747-478D-9CD7-B6992815D1D2}
 		{606EEFF4-A1B9-4FFF-8109-07F74922B07C} = {A6E9619F-A747-478D-9CD7-B6992815D1D2}
+		{182D5CC5-EBDF-43E4-B978-33F61CD56282} = {A6E9619F-A747-478D-9CD7-B6992815D1D2}
 	EndGlobalSection
 EndGlobal
