@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.WCF", "Helper
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.WCF.Tests", "HelperLibrary.WCF.Tests\HelperLibrary.WCF.Tests.csproj", "{182D5CC5-EBDF-43E4-B978-33F61CD56282}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.WebApi", "HelperLibrary.WebApi\HelperLibrary.WebApi.csproj", "{C3E9B148-AD7C-492C-BB6F-DC397E1FFA02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.Core.Logging.Log4Net", "HelperLibrary.Core.Logging.Log4Net\HelperLibrary.Core.Logging.Log4Net.csproj", "{18502BFF-BC08-48E6-BDD3-E52CFB682C3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,14 @@ Global
 		{182D5CC5-EBDF-43E4-B978-33F61CD56282}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{182D5CC5-EBDF-43E4-B978-33F61CD56282}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{182D5CC5-EBDF-43E4-B978-33F61CD56282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3E9B148-AD7C-492C-BB6F-DC397E1FFA02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3E9B148-AD7C-492C-BB6F-DC397E1FFA02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3E9B148-AD7C-492C-BB6F-DC397E1FFA02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3E9B148-AD7C-492C-BB6F-DC397E1FFA02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18502BFF-BC08-48E6-BDD3-E52CFB682C3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18502BFF-BC08-48E6-BDD3-E52CFB682C3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18502BFF-BC08-48E6-BDD3-E52CFB682C3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18502BFF-BC08-48E6-BDD3-E52CFB682C3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
