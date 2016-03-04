@@ -91,6 +91,8 @@
     <Compile Include="Annotation\LocalizedValidationAttribute.cs" />
     <Compile Include="Configurations\IConfigurationFile.cs" />
     <Compile Include="Configurations\XmlConfigurationFile.cs" />
+    <Compile Include="Db\IDbContext.cs" />
+    <Compile Include="Db\IDbContextFactory.cs" />
     <Compile Include="EnumUtility.cs" />
     <Compile Include="ExtensionHelper\CollectionTypeExtensions.cs" />
     <Compile Include="ExtensionHelper\DateTimeExtensions.cs" />
@@ -104,8 +106,11 @@
     <Compile Include="Localization\LocalizedStringManager.cs" />
     <Compile Include="Localization\StringItem.cs" />
     <Compile Include="Localization\XmlLocalizedStringLoader.cs" />
+    <Compile Include="Logging\ILogger.cs" />
     <Compile Include="NumberUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\IRepositoryFactory.cs" />
+    <Compile Include="Repository\IUnitOfWork.cs" />
     <Compile Include="SingleRunningAction.cs" />
     <Compile Include="StringUtility.cs" />
     <Compile Include="Tree\BinaryTreeNode.cs" />
