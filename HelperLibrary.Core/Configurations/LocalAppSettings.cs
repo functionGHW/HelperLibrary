@@ -21,22 +21,22 @@ namespace HelperLibrary.Core.Configurations
     {
         public string this[string name] => Get(name);
 
-        public string Get(string name)
+        public virtual string Get(string name)
         {
             return ConfigurationManager.AppSettings.Get(name);
         }
 
-        public void Add(string name, string value)
+        public virtual void Add(string name, string value)
         {
             ConfigurationManager.AppSettings.Add(name, value);
         }
 
-        public void Set(string name, string newValue)
+        public virtual void Set(string name, string newValue)
         {
             ConfigurationManager.AppSettings.Set(name, newValue);
         }
 
-        public void Remove(string name)
+        public virtual void Remove(string name)
         {
             ConfigurationManager.AppSettings.Remove(name);
         }
