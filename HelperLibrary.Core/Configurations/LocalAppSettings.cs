@@ -19,26 +19,42 @@ namespace HelperLibrary.Core.Configurations
     /// </summary>
     public class LocalAppSettings : IAppSettings
     {
+        private readonly Configuration cfgFile;
+
+        public LocalAppSettings()
+        {
+            this.cfgFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        }
+
         public string this[string name] => Get(name);
 
         public virtual string Get(string name)
         {
-            return ConfigurationManager.AppSettings.Get(name);
+            var cfgItem = cfgFile.AppSettings.Settings[name];
+            return cfgItem?.Value;
         }
 
         public virtual void Add(string name, string value)
         {
-            ConfigurationManager.AppSettings.Add(name, value);
+            cfgFile.AppSettings.Settings.Add(name, value);
+            cfgFile.Save(ConfigurationSaveMode.Minimal);
         }
 
         public virtual void Set(string name, string newValue)
         {
-            ConfigurationManager.AppSettings.Set(name, newValue);
+            var cfgItem = cfgFile.AppSettings.Settings[name];
+            if (cfgItem == null)
+                throw new ConfigurationErrorsException(
+                    $"update configuration failed: no configuration named {name} found");
+
+            cfgItem.Value = newValue;
+            cfgFile.Save(ConfigurationSaveMode.Minimal);
         }
 
         public virtual void Remove(string name)
         {
-            ConfigurationManager.AppSettings.Remove(name);
+            cfgFile.AppSettings.Settings.Remove(name);
+            cfgFile.Save(ConfigurationSaveMode.Minimal);
         }
     }
 }
