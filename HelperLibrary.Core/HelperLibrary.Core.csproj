@@ -97,6 +97,11 @@
     <Compile Include="Db\IDbContext.cs" />
     <Compile Include="Db\IDbContextFactory.cs" />
     <Compile Include="EnumUtility.cs" />
+    <Compile Include="EventAggregator\ISubscriptionObject.cs" />
+    <Compile Include="EventAggregator\ITopicEvent.cs" />
+    <Compile Include="EventAggregator\ITopicEventAggregator.cs" />
+    <Compile Include="EventAggregator\TopicEvent.cs" />
+    <Compile Include="EventAggregator\TopicEventAggregator.cs" />
     <Compile Include="ExtensionHelper\CollectionTypeExtensions.cs" />
     <Compile Include="ExtensionHelper\DateTimeExtensions.cs" />
     <Compile Include="ExtensionHelper\ObjectExtensions.cs" />
