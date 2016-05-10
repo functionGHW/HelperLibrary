@@ -114,6 +114,7 @@
     <Compile Include="Localization\LocalizedStringManager.cs" />
     <Compile Include="Localization\StringItem.cs" />
     <Compile Include="Localization\XmlLocalizedStringLoader.cs" />
+    <Compile Include="Logging\EmptyLogger.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\LoggerExtensions.cs" />
     <Compile Include="NumberUtility.cs" />
