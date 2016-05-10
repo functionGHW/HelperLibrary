@@ -115,6 +115,7 @@
     <Compile Include="Localization\StringItem.cs" />
     <Compile Include="Localization\XmlLocalizedStringLoader.cs" />
     <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\LoggerExtensions.cs" />
     <Compile Include="NumberUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\IRepositoryFactory.cs" />
