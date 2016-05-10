@@ -52,7 +52,11 @@ namespace HelperLibrary.WPF.Commands
             return true;
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
         public void Execute(object parameter)
         {
@@ -60,12 +64,6 @@ namespace HelperLibrary.WPF.Commands
         }
 
         #endregion
-
-        public void NofityCanExecuteChanged()
-        {
-            EventHandler onCanExecuteChanged = this.CanExecuteChanged;
-            onCanExecuteChanged?.Invoke(this, EventArgs.Empty);
-        }
     }
 
     /// <summary>
@@ -114,7 +112,11 @@ namespace HelperLibrary.WPF.Commands
             return false;
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
         public void Execute(object parameter)
         {
@@ -129,11 +131,5 @@ namespace HelperLibrary.WPF.Commands
         }
 
         #endregion
-
-        public void NotifyCanExecuteChanged()
-        {
-            EventHandler onCanExecuteChanged = this.CanExecuteChanged;
-            onCanExecuteChanged?.Invoke(this, EventArgs.Empty);
-        }
     }
 }
