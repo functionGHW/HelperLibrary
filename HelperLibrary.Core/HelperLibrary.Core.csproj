@@ -94,6 +94,9 @@
     <Compile Include="Configurations\IConfigurationFile.cs" />
     <Compile Include="Configurations\LocalAppSettings.cs" />
     <Compile Include="Configurations\XmlConfigurationFile.cs" />
+    <Compile Include="Db\DbOperationHelper.cs" />
+    <Compile Include="Db\ExtensionMethods.cs" />
+    <Compile Include="Db\IDbConnectionFactory.cs" />
     <Compile Include="Db\IDbContext.cs" />
     <Compile Include="Db\IDbContextFactory.cs" />
     <Compile Include="EnumUtility.cs" />
