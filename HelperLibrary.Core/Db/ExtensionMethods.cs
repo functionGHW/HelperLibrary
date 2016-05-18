@@ -27,7 +27,7 @@ namespace HelperLibrary.Core.Db
             param.Value = value;
             command.Parameters.Add(param);
         }
-        
+
         public static void UpdateParameters(this IDbCommand command,
             IDictionary<string, object> parameters)
         {
@@ -59,6 +59,20 @@ namespace HelperLibrary.Core.Db
             adapter.SelectCommand = command;
             adapter.Fill(dataSet);
             return dataSet;
+        }
+
+        public static IDbCommand CreateCommand(this IDbConnection connection, string sql, CommandType cmdType = CommandType.Text,
+            IDictionary<string, object> parameters = null)
+        {
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = sql;
+            cmd.CommandType = cmdType;
+
+            if (parameters != null)
+            {
+                cmd.AddParameters((parameters));
+            }
+            return cmd;
         }
     }
 }

@@ -6,19 +6,13 @@ namespace HelperLibrary.Core.Db.MySql
 {
     public class MySqlDbConnectionFactory : IDbConnectionFactory
     {
-        private readonly string connStr;
-
-        public MySqlDbConnectionFactory(string connStr)
+        public MySqlDbConnectionFactory()
         {
-            if (connStr == null)
-                throw new ArgumentNullException(nameof(connStr));
-
-            this.connStr = connStr;
         }
 
-        public IDbConnection CreateConnection(object param)
+        public IDbConnection CreateConnection(string connString)
         {
-            return new MySqlConnection(connStr);
+            return new MySqlConnection(connString);
         }
 
         public IDbDataAdapter CreateDataAdapter()

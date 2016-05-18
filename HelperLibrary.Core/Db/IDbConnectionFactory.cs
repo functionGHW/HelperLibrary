@@ -4,7 +4,7 @@ namespace HelperLibrary.Core.Db
 {
     public interface IDbConnectionFactory
     {
-        IDbConnection CreateConnection(object param);
+        IDbConnection CreateConnection(string connString);
 
         IDbDataAdapter CreateDataAdapter();
     }

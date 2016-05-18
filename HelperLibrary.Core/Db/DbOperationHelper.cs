@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Transactions;
 
 namespace HelperLibrary.Core.Db
 {
@@ -32,23 +33,65 @@ namespace HelperLibrary.Core.Db
             connectionFactory = factory;
         }
 
-        public DataSet ExecuteDataSet(string sql, IDictionary<string, object> parameters = null)
+        public DataSet ExecuteQuery(string connString, string sql, CommandType cmdType = CommandType.Text,
+            IDictionary<string, object> parameters = null)
         {
+            if (connString == null)
+                throw new ArgumentNullException(nameof(connString));
             if (sql == null)
                 throw new ArgumentNullException(nameof(sql));
 
-            using (var conn = connectionFactory.CreateConnection(null))
+            using (var conn = connectionFactory.CreateConnection(connString))
             {
-                var command = conn.CreateCommand();
-                command.CommandText = sql;
-                if (parameters != null)
-                {
-                    command.AddParameters(parameters);
-                }
-                
-                DataSet result = command.ExecuteDataSet(connectionFactory.CreateDataAdapter());
+                var command = conn.CreateCommand(sql, cmdType, parameters);
+                var adapter = connectionFactory.CreateDataAdapter();
+                conn.Open();
+                DataSet result = command.ExecuteDataSet(adapter);
                 return result;
             }
+        }
+
+        public T ExecuteScalar<T>(string connString, string sql, CommandType cmdType = CommandType.Text,
+            IDictionary<string, object> parameters = null)
+        {
+            if (connString == null)
+                throw new ArgumentNullException(nameof(connString));
+            if (sql == null)
+                throw new ArgumentNullException(nameof(sql));
+
+            using (var conn = connectionFactory.CreateConnection(connString))
+            {
+                var command = conn.CreateCommand(sql, cmdType, parameters);
+                conn.Open();
+                T result = (T)command.ExecuteScalar();
+                return result;
+            }
+        }
+
+        public int ExecuteNonQuery(string connString, string sql, CommandType cmdType = CommandType.Text,
+            IDictionary<string, object> parameters = null, bool useTransaction = true)
+        {
+            if (connString == null)
+                throw new ArgumentNullException(nameof(connString));
+            if (sql == null)
+                throw new ArgumentNullException(nameof(sql));
+
+            TransactionScope ts = null;
+            if (useTransaction)
+                ts = new TransactionScope();
+
+            int result;
+            using (ts)
+            {
+                using (var conn = connectionFactory.CreateConnection(connString))
+                {
+                    var command = conn.CreateCommand(sql, cmdType, parameters);
+                    conn.Open();
+                    result = command.ExecuteNonQuery();
+                }
+                ts?.Complete();
+            }
+            return result;
         }
     }
 }
