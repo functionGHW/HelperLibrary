@@ -31,7 +31,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,12 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IServiceCaller.cs" />
+    <Compile Include="Client\ChannelFactoryMananger.cs" />
+    <Compile Include="Client\WcfClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Proxy\IProxyBuilder.cs" />
-    <Compile Include="Proxy\ProxyBuilder.cs" />
-    <Compile Include="ServiceCaller.cs" />
+    <Compile Include="Client\IProxyBuilder.cs" />
+    <Compile Include="Client\ProxyBuilder.cs" />
+    <Compile Include="Server\IService.cs" />
+    <Compile Include="Server\IServiceManager.cs" />
+    <Compile Include="Server\IServiceTypeResolver.cs" />
+    <Compile Include="Server\Service.cs" />
+    <Compile Include="Server\ServiceEventArgs.cs" />
+    <Compile Include="Server\ServiceManager.cs" />
+    <Compile Include="Server\ServiceTypeResolver.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

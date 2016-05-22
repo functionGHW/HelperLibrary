@@ -6,7 +6,7 @@
  * Description:
  * */
 
-namespace HelperLibrary.WCF.Proxy
+namespace HelperLibrary.WCF.Client
 {
     /// <summary>
     /// an interface to abstract the creation of service proxy.
