@@ -31,7 +31,7 @@ namespace HelperLibrary.Core.EventAggregator
             }
         }
 
-        public void Publish(object arg)
+        public void Publish(object arg, bool multithread = false)
         {
             Action<object>[] ary;
             lock (subscribers)
@@ -41,14 +41,24 @@ namespace HelperLibrary.Core.EventAggregator
 
                 ary = subscribers.ToArray();
             }
-            foreach (var item in ary)
+            if (multithread)
             {
-                item.BeginInvoke(arg, null, null);
+                foreach (var item in ary)
+                {
+                    item.BeginInvoke(arg, null, null);
+                }
+            }
+            else
+            {
+                foreach (var item in ary)
+                {
+                    item.Invoke(arg);
+                }
             }
         }
 
 
-        private class SubscriptionObject : ISubscriptionObject
+        private sealed class SubscriptionObject : ISubscriptionObject
         {
             private readonly Action<object> action;
             private readonly TopicEvent topicEvent;

@@ -6,6 +6,8 @@
  * Description:
  * */
 
+using System.Reflection;
+
 namespace HelperLibrary.WPF
 {
     using System;
@@ -66,9 +68,9 @@ namespace HelperLibrary.WPF
         protected virtual void OnPropertyChanged<T>(Expression<Func<T>> propertyExpression)
         {
             var propMember = propertyExpression.Body as MemberExpression;
-            if (propMember == null)
+            if (propMember == null || propMember.Member.MemberType != MemberTypes.Property)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Expression not supported or expression is not a property");
             }
             string propertyName = propMember.Member.Name;
             this.InternalOnPropertyChanged(propertyName);

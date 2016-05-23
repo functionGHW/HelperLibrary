@@ -37,7 +37,7 @@ namespace HelperLibrary.Core.ExtensionHelper
             {
                 if (p.CanRead && p.CanWrite)
                 {
-                    p.SetValue(newObj, p.GetValue(obj, null), null);
+                    p.SetValue(newObj, p.GetValue(obj, null));
                 }
             }
             return newObj;
