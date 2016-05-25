@@ -117,5 +117,15 @@ namespace HelperLibrary.Core.ExtensionHelper
                 action.Invoke(item);
             }
         }
+
+        /// <summary>
+        /// call IDisposable.Dispose method if the object implement IDisposable.
+        /// </summary>
+        /// <param name="obj"></param>
+        public static void TryDispose(this object obj)
+        {
+            var disposable = obj as IDisposable;
+            disposable?.Dispose();
+        }
     }
 }
