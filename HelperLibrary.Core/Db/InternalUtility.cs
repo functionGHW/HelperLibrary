@@ -23,6 +23,7 @@ namespace HelperLibrary.Core.Db
 {
     internal static class InternalUtility
     {
+        // 用于缓存一个类型类型和它的所有属性的setter委托字典映射器，避免反复重建setter委托字典映射器。
         private static Dictionary<Type, Dictionary<string, Action<object, object>>> mapperCaches =
             new Dictionary<Type, Dictionary<string, Action<object, object>>>();
 
@@ -49,8 +50,8 @@ namespace HelperLibrary.Core.Db
 
         /* 创建所有的公共属性和数据列名的映射集合。
          * 1.仅支持public属性。
-         * 2.如果使用了NotMappedAttribute标签标记属性，则跳过。
-         * 3.如果是使用了ColumnAttribute标签指定了Name，则使用此Name作为列名。
+         * 2.如果属性使用了NotMappedAttribute标签标记属性，则跳过。
+         * 3.如果属性使用了ColumnAttribute标签指定了Name，则使用此Name作为列名。
          * 4.其他的属性默认使用属性名作为映射的数据列名。
          */
         private static Dictionary<string, Action<object, object>> CreateEntityMapper(Type entityType)
@@ -74,7 +75,7 @@ namespace HelperLibrary.Core.Db
         }
 
         // 构造 属性Setter方法的委托，该委托用于动态的调用以设置对象属性值。
-        // 目前利用Expression预编译实现比直接反射更快的速度。
+        // 利用Expression预编译 实现比直接反射更快的速度。
         private static Action<object, object> CreateSetterAction(PropertyInfo prop)
         {
             var setter = prop.SetMethod;
@@ -108,18 +109,20 @@ namespace HelperLibrary.Core.Db
             return (instance, value) => { execute(instance, new[] { value }); };
         }
 
-
+        // 动态创建实体对象对应的update语句
         internal static string GetUpdateStatement(Type entityType, string[] columns)
         {
             string tableName = GetTableName(entityType);
             string updateSegment = CreateUpdateSegment(columns);
             string[] keyNames = GetKeyNames(entityType);
+            // 创建过滤条件字句部分
             string conditionSegment = string.Join(" AND ", keyNames.Select(key => key + "=" + "@key_" + key));
             string updateStatement = string.Format("UPDATE {0} SET {1} WHERE {2}", tableName, updateSegment, conditionSegment);
 
             return updateStatement;
         }
 
+        // 创建update语句使用的参数字典
         internal static Dictionary<string, object> CreateUpdateParameters(object entity, string[] columnsToUpdate, string[] keyNames)
         {
             var dict = new Dictionary<string, object>();
@@ -137,11 +140,13 @@ namespace HelperLibrary.Core.Db
                 var prop = GetPropertyByColumn(props, key);
                 object value = prop.GetValue(entity);
 
+                // 对主键列查询参数名采用@key_前缀而不是@，以示区别
                 dict.Add("@key_" + key, value);
             }
             return dict;
         }
 
+        // 获取类型对应数据表的主键名
         internal static string[] GetKeyNames(Type entityType)
         {
             return entityType.GetProperties()
@@ -150,14 +155,16 @@ namespace HelperLibrary.Core.Db
                 .ToArray();
         }
 
+        // 创建update语句的set部分，形式: col1=@col1,col2=@col2......
         private static string CreateUpdateSegment(string[] columns)
         {
             return string.Join(",", columns.Select(col => col + "=@" + col));
         }
 
-
+        // 缓存创建的insert语句
         private static ConcurrentDictionary<Type, string> insertStatementMapper = new ConcurrentDictionary<Type, string>();
 
+        // 获取实体类型对应的insert语句
         internal static string GetInsertStatement(Type entityType)
         {
             string insertStatement;
@@ -175,6 +182,7 @@ namespace HelperLibrary.Core.Db
             return insertStatement;
         }
 
+        // 获取类型映射的数据库表名称
         private static string GetTableName(Type entityType)
         {
             string name = entityType.Name;
