@@ -2,17 +2,35 @@
 using System.Data;
 using MySql.Data.MySqlClient;
 
-namespace HelperLibrary.Core.Db.MySql
+namespace HelperLibrary.Core.Db
 {
     public class MySqlDbConnectionFactory : IDbConnectionFactory
     {
-        public MySqlDbConnectionFactory()
+        private string connectionString;
+
+        public MySqlDbConnectionFactory(string connectionString)
         {
+            if (connectionString == null)
+                throw new ArgumentNullException(nameof(connectionString));
+
+            this.connectionString = connectionString;
         }
 
-        public IDbConnection CreateConnection(string connString)
+        public string ConnectionString
         {
-            return new MySqlConnection(connString);
+            get { return connectionString; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                connectionString = value;
+            }
+        }
+
+        public IDbConnection CreateConnection()
+        {
+            return new MySqlConnection(connectionString);
         }
 
         public IDbDataAdapter CreateDataAdapter()

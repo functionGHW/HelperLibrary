@@ -7,7 +7,7 @@
     <ProjectGuid>{7C6B6D91-376A-422D-8744-B408B47497E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HelperLibrary.Core.Db.MySql</RootNamespace>
+    <RootNamespace>HelperLibrary.Core.Db</RootNamespace>
     <AssemblyName>HelperLibrary.Core.Db.MySql</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

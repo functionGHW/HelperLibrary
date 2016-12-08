@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace HelperLibrary.Core.Db
 {
@@ -73,6 +74,65 @@ namespace HelperLibrary.Core.Db
                 cmd.AddParameters((parameters));
             }
             return cmd;
+        }
+
+        /// <summary>
+        /// 映射数据表中的所有数据行 到<typeparamref name="TEntity"/>集合中。仅支持public属性，
+        /// 支持通过<see cref="ColumnAttribute"/>修改映射的列名和<see cref="NotMappedAttribute"/>跳过属性。
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <typeparam name="TEntity">实体类型</typeparam>
+        /// <returns>包含全部实体对象的集合。如果数据表不包含任何行，该方法返回一个空集合而不是null</returns>
+        public static IEnumerable<TEntity> ToEntities<TEntity>(this DataTable dt)
+            where TEntity : class, new()
+        {
+            if (dt == null)
+                throw new ArgumentNullException("dt");
+
+            var propertyMapper = InternalUtility.GetEntityMapper(typeof(TEntity));
+            var columnNames = dt.Columns.OfType<DataColumn>()
+                .Select(item => item.ColumnName)
+                .ToArray();
+
+            columnNames = propertyMapper.Keys.Intersect(columnNames).ToArray();
+            var list = new List<TEntity>();
+            foreach (var row in dt.AsEnumerable())
+            {
+                TEntity entity = new TEntity();
+                foreach (var name in columnNames)
+                {
+                    var setterDelegate = propertyMapper[name];
+                    setterDelegate.Invoke(entity, row[name]);
+                }
+                list.Add(entity);
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// 映射一个数据行 到 一个<typeparamref name="TEntity"/>对象中。仅支持public属性，
+        /// 支持通过<see cref="ColumnAttribute"/>修改映射的列名和<see cref="NotMappedAttribute"/>跳过属性。
+        /// </summary>
+        /// <typeparam name="TEntity">实体类型</typeparam>
+        /// <param name="row"></param>
+        /// <returns>映射成功后的实体对象</returns>
+        public static TEntity ToEntity<TEntity>(this DataRow row) where TEntity : class, new()
+        {
+            if (row == null)
+                throw new ArgumentNullException("row");
+
+            var propertyMapper = InternalUtility.GetEntityMapper(typeof(TEntity));
+            var columnNames = row.Table.Columns.OfType<DataColumn>()
+                .Select(item => item.ColumnName)
+                .ToArray();
+
+            TEntity entity = new TEntity();
+            foreach (var name in columnNames)
+            {
+                var setterDelegate = propertyMapper[name];
+                setterDelegate.Invoke(entity, row[name]);
+            }
+            return entity;
         }
     }
 }
