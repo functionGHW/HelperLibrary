@@ -159,7 +159,7 @@ namespace HelperLibrary.WCF.Server
             if (s == null)
                 return;
 
-            OnServiceOpened(new ServiceEventArgs(s.Name));
+            OnServiceOpening(new ServiceEventArgs(s.Name));
         }
 
         private void AnyServiceClosed(object sender, EventArgs e)
@@ -177,7 +177,7 @@ namespace HelperLibrary.WCF.Server
             if (s == null)
                 return;
 
-            OnServiceClosed(new ServiceEventArgs(s.Name));
+            OnServiceClosing(new ServiceEventArgs(s.Name));
         }
 
         private void AnyServiceFaulted(object sender, EventArgs e)

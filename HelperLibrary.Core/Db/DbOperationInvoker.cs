@@ -13,6 +13,9 @@ using System.Transactions;
 
 namespace HelperLibrary.Core.Db
 {
+    /// <summary>
+    /// 数据库操作执行器，封装简化对数据库的访问代码。
+    /// </summary>
     public class DbOperationInvoker
     {
         private IDbConnectionFactory connectionFactory;
@@ -25,11 +28,18 @@ namespace HelperLibrary.Core.Db
             this.connectionFactory = connectionFactory;
         }
 
+        /// <summary>
+        /// 获取当前使用的数据库连接工厂对象
+        /// </summary>
         public IDbConnectionFactory ConnectionFactory
         {
             get { return connectionFactory; }
         }
 
+        /// <summary>
+        /// 设置新的数据库连接工厂对象
+        /// </summary>
+        /// <param name="factory"></param>
         public void ChangeConnectionFactory(IDbConnectionFactory factory)
         {
             if (factory == null)
@@ -38,6 +48,13 @@ namespace HelperLibrary.Core.Db
             connectionFactory = factory;
         }
 
+        /// <summary>
+        /// 执行查询命令,参数化查询的参数通过parameters传递。
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <param name="cmdType"></param>
+        /// <returns></returns>
         public DataSet ExecuteQuery(string sql, IDictionary<string, object> parameters = null,
             CommandType cmdType = CommandType.Text)
         {
@@ -54,6 +71,14 @@ namespace HelperLibrary.Core.Db
             }
         }
 
+        /// <summary>
+        /// 执行标量查询命令,参数化查询的参数通过parameters传递。
+        /// </summary>
+        /// <typeparam name="T">返回结果值的类型，必须使用和查询结果匹配的类型。</typeparam>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <param name="cmdType"></param>
+        /// <returns></returns>
         public T ExecuteScalar<T>(string sql, IDictionary<string, object> parameters = null,
             CommandType cmdType = CommandType.Text)
         {
@@ -69,6 +94,14 @@ namespace HelperLibrary.Core.Db
             }
         }
 
+        /// <summary>
+        /// 执行非查询命令,参数化查询的参数通过parameters传递。
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <param name="useTransaction"></param>
+        /// <param name="cmdType"></param>
+        /// <returns>受影响的行数</returns>
         public int ExecuteNonQuery(string sql, IDictionary<string, object> parameters = null,
             bool useTransaction = true, CommandType cmdType = CommandType.Text)
         {

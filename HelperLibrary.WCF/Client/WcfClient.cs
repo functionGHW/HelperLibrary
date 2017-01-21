@@ -17,7 +17,7 @@ namespace HelperLibrary.WCF.Client
 {
     public static class WcfClient
     {
-        public static WcfClient<TService> Create<TService>(string endpointName, object callbackObject = null)
+        public static WcfClient<TService> Create<TService>(string endpointName = null, object callbackObject = null)
             where TService : class
         {
             var proxyBuilder = new ProxyBuilder(endpointName, callbackObject);
