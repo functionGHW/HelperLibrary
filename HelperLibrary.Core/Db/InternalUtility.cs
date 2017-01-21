@@ -1,9 +1,11 @@
 ﻿/* 
  * FileName:    InternalUtility.cs
- * Author:      gaohongwei<gaohongwei@bjdaxiang.cn>
- * CreateTime:  2016/5/22 22:16:54
+ * Author:      functionghw<functionghw@hotmail.com>
+ * CreateTime:  4/27/2016 5:16:01 PM
+ * Version:     v1.0
  * Description:
  * */
+
 
 using HelperLibrary.Core.Annotation;
 using System;

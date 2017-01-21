@@ -1,19 +1,13 @@
 ﻿/*----------------------------------------------------------------
 // Copyright (C) 年份 北京大象科技有限公司
 // 版权所有。 	
-//
-// 文件名：DbOperationInvokerExtension.cs
-// 文件功能描述：
-//
-//
-// 创建标识：gaohongwei 2016/10/16 18:55:08
-//
-// 修改标识：
-// 修改描述：
-//
-// 修改标识：
-// 修改描述：
-//----------------------------------------------------------------*/
+/* 
+ * FileName:    DbOperationInvokerExtension.cs
+ * Author:      functionghw<functionghw@hotmail.com>
+ * CreateTime:  4/27/2016 5:16:01 PM
+ * Version:     v1.0
+ * Description:
+ * */
 
 using System;
 using System.Collections.Generic;
