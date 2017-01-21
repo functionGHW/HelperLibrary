@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DoNothingLocalizationManager.cs" />
+    <Compile Include="EmptyLocalizationDictionaryManager.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="ILocalizationDictionary.cs" />
     <Compile Include="ILocalizationDictionaryFactory.cs" />
     <Compile Include="ILocalizationDictionaryManager.cs" />
@@ -48,8 +50,12 @@
     <Compile Include="LocalizationDictionaryManager.cs" />
     <Compile Include="LocalizationItem.cs" />
     <Compile Include="LocalizationUtility.cs" />
+    <Compile Include="Annotations\LocalizedDisplayAttribute.cs" />
+    <Compile Include="Annotations\LocalizedRequiredAttribute.cs" />
+    <Compile Include="Annotations\LocalizedValidationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

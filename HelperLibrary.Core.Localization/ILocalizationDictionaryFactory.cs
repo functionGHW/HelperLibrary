@@ -23,7 +23,7 @@ namespace HelperLibrary.Core.Localization
         /// 创建指定的语言文化的本地化字典对象。
         /// </summary>
         /// <param name="cultureName">指定的语言文化名称，例如zh-CN</param>
-        /// <returns></returns>
+        /// <returns>返回指本地化字典对象，如果指定语言文化的不存在则返回null</returns>
         ILocalizationDictionary CreateLocalizationDictionary(string cultureName);
     }
 }

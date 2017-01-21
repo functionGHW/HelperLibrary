@@ -1,5 +1,5 @@
 ﻿/* 
- * FileName:    DoNothingLocalizationManager.cs
+ * FileName:    EmptyLocalizationDictionaryManager.cs
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  1/21/2017 8:50:31 PM
  * Version:     v1.1
@@ -17,27 +17,25 @@ namespace HelperLibrary.Core.Localization
     /// <summary>
     /// Null-Object模式，该类型用于避免null检查
     /// </summary>
-    public sealed class DoNothingLocalizationManager : ILocalizationDictionaryManager
+    public sealed class EmptyLocalizationDictionaryManager : ILocalizationDictionaryManager
     {
         /// <summary>
         /// 获取DoNothingLocalizationManager的唯一实例
         /// </summary>
-        public static readonly DoNothingLocalizationManager Instance = new DoNothingLocalizationManager();
+        public static readonly EmptyLocalizationDictionaryManager Instance = new EmptyLocalizationDictionaryManager();
 
-        private DoNothingLocalizationManager()
+        private EmptyLocalizationDictionaryManager()
         {
         }
-
+        
         /// <summary>
-        /// 什么都不做，直接返回key。
+        /// 
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="scope"></param>
         /// <param name="cultureName"></param>
         /// <returns></returns>
-        public string GetString(string key, string scope, string cultureName)
+        public ILocalizationDictionary Get(string cultureName)
         {
-            return key;
+            return null;
         }
 
         /// <summary>

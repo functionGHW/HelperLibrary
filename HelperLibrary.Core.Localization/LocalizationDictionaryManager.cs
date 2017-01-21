@@ -15,13 +15,32 @@ using System.Threading.Tasks;
 namespace HelperLibrary.Core.Localization
 {
     /// <summary>
-    /// 
+    /// 实现ILocalizationDictionaryManager
     /// </summary>
     public class LocalizationDictionaryManager : ILocalizationDictionaryManager
     {
         // 按cultureName对应存储的本地化文本字典
         private readonly Dictionary<string, ILocalizationDictionary> dictionaries =
             new Dictionary<string, ILocalizationDictionary>();
+
+
+        /// <summary>
+        /// 获取指定语言文化的本地化词典。
+        /// </summary>
+        /// <param name="cultureName">语言文化名称</param>
+        /// <returns>如果对应的语言文化字典存在则返回该字典，否则返回null</returns>
+        public ILocalizationDictionary Get(string cultureName)
+        {
+            if (cultureName == null)
+                throw new ArgumentNullException(nameof(cultureName));
+
+            ILocalizationDictionary result = null;
+            if (dictionaries.TryGetValue(cultureName, out result))
+            {
+                return result;
+            }
+            return null;
+        }
 
 
         /// <summary>
@@ -62,28 +81,6 @@ namespace HelperLibrary.Core.Localization
                 throw new ArgumentNullException("cultureName");
 
             dictionaries.Remove(cultureName);
-        }
-
-        /// <summary>
-        /// 根据指定的参数，获取key对应的本地化文本。
-        /// </summary>
-        /// <param name="key">本地化文本的key</param>
-        /// <param name="scope">用于区分词条的限定域参数</param>
-        /// <param name="cultureName">语言文化名称，例如zh-CN,en-US</param>
-        /// <returns>如果存在对应的本地化文本则返回其值，其他情况返回key</returns>
-        public string GetString(string key, string scope, string cultureName)
-        {
-            if (cultureName == null)
-                throw new ArgumentNullException("cultureName");
-
-            ILocalizationDictionary dict = null;
-            if (dictionaries.TryGetValue(cultureName, out dict))
-            {
-                return dict.Get(key, scope);
-            }
-
-            // 未找到对应语言文化的本地化字典，直接返回key。
-            return key;
         }
     }
 }

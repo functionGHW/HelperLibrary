@@ -6,7 +6,7 @@
  * Description:
  * */
 
-namespace HelperLibrary.Core.Annotation
+namespace HelperLibrary.Core.Localization.Annotations
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -21,11 +21,9 @@ namespace HelperLibrary.Core.Annotation
     /// </summary>
     public abstract class LocalizedValidationAttribute : ValidationAttribute
     {
-        private readonly ILocalizedStringManager lclStrMng;
-
         // fields for getting localized string
         private readonly string scope;
-        private readonly CultureInfo culture;
+        private readonly string cultureName;
 
         /// <summary>
         /// Initialize LocalizedValidationAttribute
@@ -36,36 +34,14 @@ namespace HelperLibrary.Core.Annotation
         /// <exception cref="ArgumentNullException">the scope is null or empty string.</exception>
         /// <exception cref="CultureNotFoundException">the cultureName is not right</exception>
         protected LocalizedValidationAttribute(string scope, string cultureName = null)
-            : this(scope, LocalizedStringManager.Default, cultureName)
-        {
-        }
-
-        /// <summary>
-        /// Initialize LocalizedValidationAttribute
-        /// </summary>
-        /// <param name="scope">the scope.Usaully a assembly name</param>
-        /// <param name="lclStrMng">the localized string manager</param>
-        /// <param name="cultureName">a culture for localization, for example "en-US".
-        ///     If not given, use current UI culture as default</param>
-        /// <exception cref="ArgumentNullException">the scope is null or empty string, 
-        /// or lclStrMng is null.</exception>
-        /// <exception cref="CultureNotFoundException">the cultureName is not right</exception>
-        protected LocalizedValidationAttribute(string scope, ILocalizedStringManager lclStrMng,
-            string cultureName = null)
         {
             if (string.IsNullOrEmpty(scope))
                 throw new ArgumentNullException(nameof(scope));
-
-            if (lclStrMng == null)
-                throw new ArgumentNullException(nameof(lclStrMng));
-
-            this.lclStrMng = lclStrMng;
+            
             this.scope = scope;
-            this.culture = cultureName != null
-                ? CultureInfo.GetCultureInfo(cultureName)
-                : CultureInfo.CurrentUICulture;
+            this.cultureName = cultureName;
         }
-
+        
         /// <summary>
         /// get the localized format message string.
         /// </summary>
@@ -74,7 +50,7 @@ namespace HelperLibrary.Core.Annotation
         public override string FormatErrorMessage(string name)
         {
             //Contract.Assert(lclStrMng != null);
-            Contract.Assert(this.culture != null);
+            Contract.Assert(this.cultureName != null);
 
             /* the ErrorMessageString usually equals ErrorMessage property 
              * which you can specify when using this Attribute.
@@ -86,10 +62,10 @@ namespace HelperLibrary.Core.Annotation
              * which you can specify when using this Attribute. The parameter name usually 
              * come from DisplayAttribute or the name of property to be validated by default.
              */
-            string localizedMessage = this.lclStrMng.GetLocalizedString(this.scope, this.ErrorMessage, this.culture.Name);
-            string localizedName = this.lclStrMng.GetLocalizedString(this.scope, name, this.culture.Name);
+            string localizedMessage = LocalizationUtility.GetString(this.scope, this.ErrorMessage, this.cultureName);
+            string localizedName = LocalizationUtility.GetString(this.scope, name, this.cultureName);
 
-            return string.Format(this.culture, localizedMessage, localizedName);
+            return string.Format(this.cultureName, localizedMessage, localizedName);
         }
     }
 }

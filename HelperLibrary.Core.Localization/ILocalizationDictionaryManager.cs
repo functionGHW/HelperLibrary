@@ -26,14 +26,15 @@ namespace HelperLibrary.Core.Localization
         /// <param name="scope">用于区分词条的限定域参数</param>
         /// <param name="cultureName">语言文化名称，例如zh-CN,en-US</param>
         /// <returns>如果存在对应的本地化文本则返回其值，其他情况返回key</returns>
-        string GetString(string key, string scope, string cultureName);
-        
+        //string GetString(string key, string scope, string cultureName);
+
         /// <summary>
-        /// 添加新的本地化字典，若对应的语言文化字典已存在则抛出异常。
+        /// 获取指定语言文化的本地化词典。
         /// </summary>
-        /// <param name="dictionary">新的本地化字典</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        void Add(ILocalizationDictionary dictionary);
+        /// <param name="cultureName">语言文化名称</param>
+        /// <returns>如果对应的语言文化字典存在则返回该字典，否则返回null</returns>
+        ILocalizationDictionary Get(string cultureName);
+
 
         /// <summary>
         /// 确定是否已存在指定语言文化的本地化字典，
@@ -42,6 +43,13 @@ namespace HelperLibrary.Core.Localization
         /// <exception cref="ArgumentNullException"></exception>
         /// <returns>如果存在则返回true，否则返回false</returns>
         bool Contains(string cultureName);
+
+        /// <summary>
+        /// 添加新的本地化字典，若对应的语言文化字典已存在则抛出异常。
+        /// </summary>
+        /// <param name="dictionary">新的本地化字典</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        void Add(ILocalizationDictionary dictionary);
 
         /// <summary>
         /// 移除指定语言文化的本地化字典，如果不存在则直接返回。

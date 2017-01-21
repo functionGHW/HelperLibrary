@@ -21,7 +21,7 @@ namespace HelperLibrary.Core.Localization
     public static class LocalizationUtility
     {
         // 当前使用的本地化字典管理器
-        private static ILocalizationDictionaryManager currentLocalMngr = DoNothingLocalizationManager.Instance;
+        private static ILocalizationDictionaryManager currentLocalMngr = EmptyLocalizationDictionaryManager.Instance;
 
         /// <summary>
         /// 设置新的本地化字典管理器以供后续使用。

@@ -6,7 +6,7 @@
  * Description:
  * */
 
-namespace HelperLibrary.Core.Annotation
+namespace HelperLibrary.Core.Localization.Annotations
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -32,20 +32,7 @@ namespace HelperLibrary.Core.Annotation
         {
         }
 
-        /// <summary>
-        /// Initialize LocalizedRequiredAttribute
-        /// </summary>
-        /// <param name="scope">the scope.Usaully a assembly name</param>
-        /// <param name="lclStrMng">the localized string manager</param>
-        /// <param name="cultureName">a culture for localization, for example "en-US".
-        /// If not given, use current UI culture as default</param>
-        /// <exception cref="ArgumentNullException">the scope is null or empty string.</exception>
-        /// <exception cref="CultureNotFoundException">the cultureName is not right</exception>
-        public LocalizedRequiredAttribute(string scope, ILocalizedStringManager lclStrMng, string cultureName = null)
-            : base(scope, lclStrMng, cultureName)
-        {
-        }
-
+        
         public bool AllowEmptyStrings { get; set; }
 
         /// <summary>
