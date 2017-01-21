@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Description: This file contains localization items.
+    
+    Designer: gaohongwei<gaohongwei@bjdaxiang.cn>
+    
+    Example:
+            a).Common template:
+                <?xml version="1.0" encoding="utf-8" ?>
+                <LocalizedStrings>
+                    <Scope Name="Your scope name">
+                        <StringItem Key="the key">
+                            <Value>the localization value</Value>
+                        </StringItem>
+                        <StringItem Key="the key 2">
+                            <Value>the localization value 2</Value>
+                        </StringItem>
+                        ......
+                    </Scope>
+                    <Scope Name="Your another scope name">
+                        <StringItem Key="the key">
+                            <Value>the localization value</Value>
+                        </StringItem>
+                        <StringItem Key="the key 2">
+                            <Value>the localization value 2</Value>
+                        </StringItem>
+                        ......
+                    </Scope>
+                    ......
+                </LocalizedStrings>
+                
+                
+            b).For "Key" and "Value", the following formats are supported:
+                1.Using attributes:
+                    <StringItem Key="the key" Value="the value"/>
+                
+                2.Using tags (either Key or Value, or both):
+                    <StringItem Key="using attribute">
+                        <Value>using tag</Value>
+                    </StringItem>
+                
+                
+            c).For special character like "&", "<", ">", '"' etc, using CDATA format:
+                <StringItem>
+                    <Key>the key</Key>
+                    <Value>if (num <![CDATA[<>]]> 0 <![CDATA[&&]]> val == "value")</Value>
+                </StringItem>
+-->
+<LocalizationResource>
+    <LocalizationDictionary CultureName="zh-CN">
+        <Scope Name="Examples.Localization.XmlImplementation">
+            <Item Key="hello" >
+                <Value>你好!</Value>
+            </Item>
+            <Item Key="the time is {0}">
+                <Value>现在时间是{0}。</Value>
+            </Item>
+        </Scope>
+    </LocalizationDictionary>
+    <LocalizationDictionary CultureName="en-US">
+        <Scope Name="Examples.Localization.XmlImplementation">
+            <Item Key="hello" >
+                <Value>Hello!</Value>
+            </Item>
+            <Item Key="the time is {0}">
+                <Value>The time now is {0}.</Value>
+            </Item>
+        </Scope>
+    </LocalizationDictionary>
+
+</LocalizationResource>
