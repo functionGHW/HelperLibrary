@@ -1,0 +1,15 @@
+﻿<Window x:Class="Examples.WPF.LocalizationExtension.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Examples.WPF.LocalizationExtension"
+        xmlns:l="clr-namespace:HelperLibrary.WPF.LocalizationExtension;assembly=HelperLibrary.WPF.LocalizationExtension"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid>
+            <TextBlock Text="{l:Localization hello}"></TextBlock>
+        </Grid>
+    </Grid>
+</Window>

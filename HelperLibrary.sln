@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.WPF.Localizat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples.Localization.XmlImplementation", "Examples\Examples.Localization.XmlImplementation\Examples.Localization.XmlImplementation.csproj", "{9B19A950-173E-417F-B920-F7486C8CD1B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples.WPF.LocalizationExtension", "Examples\Examples.WPF.LocalizationExtension\Examples.WPF.LocalizationExtension.csproj", "{4908ED3F-0497-44EC-96C9-A5F739672BF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{9B19A950-173E-417F-B920-F7486C8CD1B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B19A950-173E-417F-B920-F7486C8CD1B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B19A950-173E-417F-B920-F7486C8CD1B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4908ED3F-0497-44EC-96C9-A5F739672BF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4908ED3F-0497-44EC-96C9-A5F739672BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4908ED3F-0497-44EC-96C9-A5F739672BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4908ED3F-0497-44EC-96C9-A5F739672BF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,5 +114,6 @@ Global
 		{DDF93938-5EE6-4555-B5F7-2671725C1A61} = {19A243AB-7578-43F3-BC2F-65C4E3CAEBE5}
 		{175AC4D3-3595-4F9E-A830-9D751B1C9C3C} = {19A243AB-7578-43F3-BC2F-65C4E3CAEBE5}
 		{9B19A950-173E-417F-B920-F7486C8CD1B7} = {9AC1B0C8-743F-4E26-B33E-BD754B84474F}
+		{4908ED3F-0497-44EC-96C9-A5F739672BF4} = {9AC1B0C8-743F-4E26-B33E-BD754B84474F}
 	EndGlobalSection
 EndGlobal

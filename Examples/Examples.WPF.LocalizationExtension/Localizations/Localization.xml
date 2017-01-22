@@ -46,22 +46,22 @@
 -->
 <LocalizationResource>
     <LocalizationDictionary CultureName="zh-CN">
-        <Scope Name="Examples.Localization.XmlImplementation">
+        <Scope Name="Examples.WPF.LocalizationExtension">
             <Item Key="hello" >
                 <Value>你好!</Value>
             </Item>
-            <Item Key="the time is {0}">
-                <Value>现在时间是{0}。</Value>
+            <Item Key="title">
+                <Value>WPF本地化演示程序</Value>
             </Item>
         </Scope>
     </LocalizationDictionary>
     <LocalizationDictionary CultureName="en-US">
-        <Scope Name="Examples.Localization.XmlImplementation">
+        <Scope Name="Examples.WPF.LocalizationExtension">
             <Item Key="hello" >
                 <Value>Hello!</Value>
             </Item>
-            <Item Key="the time is {0}">
-                <Value>The time now is {0}.</Value>
+            <Item Key="title">
+                <Value>Wpf localization demo</Value>
             </Item>
         </Scope>
     </LocalizationDictionary>
