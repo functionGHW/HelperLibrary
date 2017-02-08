@@ -6,7 +6,7 @@
  * Description:
  * */
 
-namespace HelperLibrary.WPF.Commands
+namespace HelperLibrary.WPF
 {
     using System;
     using System.Windows.Input;
