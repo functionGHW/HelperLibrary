@@ -16,6 +16,15 @@ using System.Threading.Tasks;
 
 namespace HelperLibrary.Core.Localization
 {
+    /*
+     * This implementatin of ILocalizationDictionaryFactory use Excel file to provide localization data.
+     * Format of file content:
+     *      1.each sheet contains all localization data with same scope
+     *      2.The scope name must be in cell A1 of the sheet.
+     *      3.The second row contains all column names for program to identify 'Key' value and its localized value.
+     *      4.The other rows contains localization datas.
+     */
+
     /// <summary>
     /// 
     /// </summary>
@@ -72,37 +81,41 @@ namespace HelperLibrary.Core.Localization
             {
                 var sheet = (ISheet)enumerator.Current;
                 var rows = ReadSheet(sheet);
-                if (!rows.Any())
+                if (rows.Count < 2)
                 {
                     // sheet is empty
                     continue;
                 }
-                var firstLine = rows.First();
+                string scope = rows.FirstOrDefault()?.FirstOrDefault();
+                if (scope == null)
+                    throw new InvalidDataException("The cell A1 must contains value of Scope");
 
-                Tuple<int, int> dataIndexes = GetIndexes(firstLine, cultureName);
+                var headerRow = rows[1];
+                Tuple<int, int> dataIndexes = GetIndexes(headerRow, cultureName);
                 int keyCol = dataIndexes.Item1;
                 int cultureCol = dataIndexes.Item2;
-                rows.Remove(firstLine);
+                rows.RemoveAt(0);
+                rows.RemoveAt(0);
                 foreach (var row in rows)
                 {
                     string key = row[keyCol];
                     string value = row[cultureCol];
 
-                    var item = new LocalizationItem(sheet.SheetName, key, value);
+                    var item = new LocalizationItem(scope, key, value);
                     items.Add(item);
                 }
             }
             return items;
         }
 
-        private Tuple<int, int> GetIndexes(string[] firstLine, string cultureName)
+        private Tuple<int, int> GetIndexes(string[] headerRow, string cultureName)
         {
             int keyColumn = -1;
             int cultureColumn = -1;
 
-            for (int i = 0; i < firstLine.Length; i++)
+            for (int i = 0; i < headerRow.Length; i++)
             {
-                var columnInfo = new ColumnInfo(i, firstLine[i]);
+                var columnInfo = new ColumnInfo(i, headerRow[i]);
 
                 if (keyColumn < 0 && columnSelector.IsKeyColumn(columnInfo))
                     keyColumn = i;
