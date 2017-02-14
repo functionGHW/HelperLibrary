@@ -24,6 +24,8 @@ namespace HelperLibrary.Core.Localization
         private readonly string filePath;
         private readonly ILocalizationColumnSelector columnSelector;
 
+        private DataFormatter formatter = new DataFormatter();
+
         /// <summary>
         /// 
         /// </summary>
@@ -70,18 +72,18 @@ namespace HelperLibrary.Core.Localization
             {
                 var sheet = (ISheet)enumerator.Current;
                 var rows = ReadSheet(sheet);
-                if (!rows.ContainsKey(1))
+                if (!rows.Any())
                 {
                     // sheet is empty
                     continue;
                 }
-                List<string> firstLine = rows[1];
+                var firstLine = rows.First();
 
                 Tuple<int, int> dataIndexes = GetIndexes(firstLine, cultureName);
                 int keyCol = dataIndexes.Item1;
                 int cultureCol = dataIndexes.Item2;
-                rows.Remove(1);
-                foreach (var row in rows.Values)
+                rows.Remove(firstLine);
+                foreach (var row in rows)
                 {
                     string key = row[keyCol];
                     string value = row[cultureCol];
@@ -89,33 +91,24 @@ namespace HelperLibrary.Core.Localization
                     var item = new LocalizationItem(sheet.SheetName, key, value);
                     items.Add(item);
                 }
-
             }
             return items;
         }
 
-        private Tuple<int, int> GetIndexes(List<string> firstLine, string cultureName)
+        private Tuple<int, int> GetIndexes(string[] firstLine, string cultureName)
         {
             int keyColumn = -1;
             int cultureColumn = -1;
 
-            for (int i = 0; i < firstLine.Count; i++)
+            for (int i = 0; i < firstLine.Length; i++)
             {
                 var columnInfo = new ColumnInfo(i, firstLine[i]);
-                if (keyColumn < 0)
-                {
-                    if (columnSelector.IsKeyColumn(columnInfo))
-                    {
-                        keyColumn = i;
-                    }
-                }
-                if (cultureColumn < 0)
-                {
-                    if (columnSelector.IsCultureColumn(cultureName, columnInfo))
-                    {
-                        cultureColumn = i;
-                    }
-                }
+
+                if (keyColumn < 0 && columnSelector.IsKeyColumn(columnInfo))
+                    keyColumn = i;
+
+                if (cultureColumn < 0 && columnSelector.IsCultureColumn(cultureName, columnInfo))
+                    cultureColumn = i;
             }
             if (keyColumn < 0)
             {
@@ -128,16 +121,16 @@ namespace HelperLibrary.Core.Localization
             return Tuple.Create(keyColumn, cultureColumn);
         }
 
-        private Dictionary<ushort, List<string>> ReadSheet(ISheet sheet)
+        private List<string[]> ReadSheet(ISheet sheet)
         {
-            var dict = new Dictionary<ushort, List<string>>();
+            var dict = new List<string[]>();
             var rowEnumerator = sheet.GetRowEnumerator();
-            var formatter = new DataFormatter();
+            
             while (rowEnumerator.MoveNext())
             {
                 var row = (IRow)rowEnumerator.Current;
-                var rowContents = row.Cells.Select(c => formatter.FormatCellValue(c)).ToList();
-                dict.Add((ushort)(row.RowNum + 1), rowContents);
+                var rowContents = row.Cells.Select(c => formatter.FormatCellValue(c)).ToArray();
+                dict.Add(rowContents);
             }
             return dict;
         }

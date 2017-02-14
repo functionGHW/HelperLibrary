@@ -36,7 +36,10 @@ namespace HelperLibrary.Core.Localization
         /// <returns>true for yes, otherwise false</returns>
         public bool IsKeyColumn(ColumnInfo arg)
         {
-            return arg.Name.Equals("key", System.StringComparison.InvariantCultureIgnoreCase);
+            if (arg == null)
+                throw new ArgumentNullException(nameof(arg));
+
+            return "key".Equals(arg.Name, StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
@@ -48,7 +51,12 @@ namespace HelperLibrary.Core.Localization
         /// <returns>true for yes, otherwise false</returns>
         public bool IsCultureColumn(string cultureName, ColumnInfo arg)
         {
-            return arg.Name.Equals(cultureName, System.StringComparison.InvariantCultureIgnoreCase);
+            if (cultureName == null)
+                throw new ArgumentNullException(nameof(cultureName));
+            if (arg == null)
+                throw new ArgumentNullException(nameof(arg));
+
+            return cultureName.Equals(arg.Name, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
