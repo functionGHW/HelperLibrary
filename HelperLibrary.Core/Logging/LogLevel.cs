@@ -1,7 +1,8 @@
 ﻿/* 
- * FileName:    ILogger.cs
+ * FileName:    LogLevel.cs
  * Author:      functionghw<functionghw@hotmail.com>
- * CreateTime:  3/1/2016 8:00:36 PM
+ * CreateTime:  2017/2/20 16:29:11
+ * Version:     v1.0
  * Description:
  * */
 
@@ -13,9 +14,12 @@ using System.Threading.Tasks;
 
 namespace HelperLibrary.Core.Logging
 {
-    public interface ILogger
+    public enum LogLevel
     {
-
-        void Log(LogLevel level, string message);
+        Info,
+        Debug,
+        Warn,
+        Error,
+        Fatal
     }
 }

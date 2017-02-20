@@ -18,23 +18,8 @@ namespace HelperLibrary.Core.Logging
     /// </summary>
     public class EmptyLogger : ILogger
     {
-        public void Info(string message)
-        {
-        }
-
-        public void Debug(string message)
-        {
-        }
-
-        public void Warn(string message)
-        {
-        }
-
-        public void Error(string message)
-        {
-        }
-
-        public void Fatal(string message)
+        
+        public void Log(LogLevel level, string message)
         {
         }
     }

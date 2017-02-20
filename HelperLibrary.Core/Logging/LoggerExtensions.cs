@@ -15,49 +15,39 @@ namespace HelperLibrary.Core.Logging
 {
     public static class LoggerExtensions
     {
-        public static void Info(this ILogger logger, string format, params object[] args)
+        public static void Log(this ILogger logger, LogLevel level, string format, params object[] args)
         {
+
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             string message = string.Format(format, args);
-            logger.Info(message);
+            logger.Log(level, message);
+        }
+        
+        public static void Info(this ILogger logger, string format, params object[] args)
+        {
+            Log(logger, LogLevel.Info, format, args);
         }
 
         public static void Debug(this ILogger logger, string format, params object[] args)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
-            string message = string.Format(format, args);
-            logger.Debug(message);
+            Log(logger, LogLevel.Debug, format, args);
         }
 
         public static void Warn(this ILogger logger, string format, params object[] args)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
-            string message = string.Format(format, args);
-            logger.Warn(message);
+            Log(logger, LogLevel.Warn, format, args);
         }
 
         public static void Error(this ILogger logger, string format, params object[] args)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
-            string message = string.Format(format, args);
-            logger.Error(message);
+            Log(logger, LogLevel.Error, format, args);
         }
 
         public static void Fatal(this ILogger logger, string format, params object[] args)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
-            string message = string.Format(format, args);
-            logger.Fatal(message);
+            Log(logger, LogLevel.Fatal, format, args);
         }
     }
 }
