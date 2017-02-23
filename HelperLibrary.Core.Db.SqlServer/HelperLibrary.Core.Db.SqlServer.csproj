@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B6195346-D923-4969-A3BA-70119C7AEED3}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{9ADA942C-9046-4E29-AB47-A43F96398B62}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Examples.Core.Db</RootNamespace>
-    <AssemblyName>Examples.Core.Db</AssemblyName>
+    <RootNamespace>HelperLibrary.Core.Db</RootNamespace>
+    <AssemblyName>HelperLibrary.Core.Db.SqlServer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,8 +31,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,23 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Person.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServerDbConnectionFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\HelperLibrary.Core.Db.MySql\HelperLibrary.Core.Db.MySql.csproj">
-      <Project>{7c6b6d91-376a-422d-8744-b408b47497e4}</Project>
-      <Name>HelperLibrary.Core.Db.MySql</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\HelperLibrary.Core.Db.SqlServer\HelperLibrary.Core.Db.SqlServer.csproj">
-      <Project>{9ada942c-9046-4e29-ab47-a43f96398b62}</Project>
-      <Name>HelperLibrary.Core.Db.SqlServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\HelperLibrary.Core\HelperLibrary.Core.csproj">
+    <ProjectReference Include="..\HelperLibrary.Core\HelperLibrary.Core.csproj">
       <Project>{4898e407-b7aa-4346-8714-e5b0663cdef1}</Project>
       <Name>HelperLibrary.Core</Name>
     </ProjectReference>

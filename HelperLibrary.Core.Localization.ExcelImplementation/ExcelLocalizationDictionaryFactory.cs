@@ -20,7 +20,7 @@ namespace HelperLibrary.Core.Localization
      * This implementatin of ILocalizationDictionaryFactory use Excel file to provide localization data.
      * Format of file content:
      *      1.each sheet contains all localization data with same scope
-     *      2.The scope name must be in cell A1 of the sheet.
+     *      2.The scope name must be declared in cell A1 of the sheet.
      *      3.The second row contains all column names for program to identify 'Key' value and its localized value.
      *      4.The other rows contains localization datas.
      */

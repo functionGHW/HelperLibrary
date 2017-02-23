@@ -10,24 +10,42 @@ namespace Examples.Core.Db
 {   
     public class Program
     {
+        private static Dictionary<string, string> tableCreation = new Dictionary<string, string>()
+        {
+            ["MySql"]       = @"CREATE TABLE users (
+                                    id INT NOT NULL AUTO_INCREMENT,
+                                    Name VARCHAR(50) NOT NULL DEFAULT '0',
+                                    Age INT NOT NULL DEFAULT '0',
+                                    PRIMARY KEY(id)
+                                );",
+            ["SqlServer"]   = @"CREATE TABLE users (
+                                    id INT NOT NULL IDENTITY(1, 1),
+                                    Name VARCHAR(50) NOT NULL DEFAULT '0',
+                                    Age INT NOT NULL DEFAULT '0',
+                                    PRIMARY KEY(id)
+                                );",
+        };
+
+
         private static void Main(string[] args)
         {
             /* 此示例代码需要连接一个MySql数据库，请自行搭建一个并创建好数据库实例。
              * 然后修改配置文件中的连接字符串)。
              */
-            IDbConnectionFactory connectionFactory = GetConnectionFactory("MySql");
+            const string dbName = "SqlServer";
+            IDbConnectionFactory connectionFactory = GetConnectionFactory(dbName);
 
             Console.WriteLine("连接字符串:{0}", connectionFactory.ConnectionString);
 
             var dbInvoker = new DbOperationInvoker(connectionFactory);
             
             string sql = @"select table_name from INFORMATION_SCHEMA.TABLES 
-                            where table_schema='mytestdb' and table_type='base table' and table_name='users'";
+                            where table_type='base table' and table_name='users'";
 
             if (dbInvoker.ExecuteScalar<string>(sql) != null)
             {
                 // 如果已经存在，则先删除数据表
-                sql = "DROP TABLE `users`;";
+                sql = "DROP TABLE users;";
                 try
                 {
                     dbInvoker.ExecuteNonQuery(sql);
@@ -40,12 +58,7 @@ namespace Examples.Core.Db
             }
 
             // 创建数据表
-            sql = @"CREATE TABLE users (
-                            id INT NOT NULL AUTO_INCREMENT,
-                            Name VARCHAR(50) NOT NULL DEFAULT '0',
-                            Age INT NOT NULL DEFAULT '0',
-                            PRIMARY KEY (id)
-                          );";
+            sql = tableCreation[dbName];
             try
             {
 
@@ -55,6 +68,7 @@ namespace Examples.Core.Db
             catch (Exception)
             {
                 Console.WriteLine("创建表users失败");
+                Console.ReadLine();
                 return;
             }
 
@@ -206,7 +220,12 @@ namespace Examples.Core.Db
                 string connString = ConfigurationManager.ConnectionStrings["MySql"].ConnectionString;
                 return new MySqlDbConnectionFactory(connString);
             }
-            
+            if (databaseName == "SqlServer")
+            {
+                string connString = ConfigurationManager.ConnectionStrings["SqlServer"].ConnectionString;
+                return new SqlServerDbConnectionFactory(connString);
+            }
+
             // 将来也可以实现其他的数据库，例如SQL Server， Oracle DB等
             throw new NotSupportedException("尚不支持此类型:" + databaseName);
         }
