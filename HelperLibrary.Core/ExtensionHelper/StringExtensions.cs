@@ -32,9 +32,9 @@ namespace HelperLibrary.Core.ExtensionHelper
             }
             char[] chs = str.ToCharArray();
 
-            ObjectExtensions.InternalReverseArray(chs, 0, chs.Length);
+            CollectionTypeExtensions.InternalReverseArray(chs, 0, chs.Length);
 
-            return new String(chs);
+            return new string(chs);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace HelperLibrary.Core.ExtensionHelper
                 {
                     char[] chs = str.ToCharArray();
                     chs[indexOfChar] = char.ToUpper(chs[indexOfChar]);
-                    return new String(chs);
+                    return new string(chs);
                 }
             }
             else
@@ -151,7 +151,7 @@ namespace HelperLibrary.Core.ExtensionHelper
                 {
                     char[] chs = str.ToCharArray();
                     chs[indexOfChar] = char.ToLower(chs[indexOfChar]);
-                    return new String(chs);
+                    return new string(chs);
                 }
             }
         }
