@@ -20,8 +20,8 @@ namespace HelperLibrary.WCF.Client
         public static WcfClient<TService> Create<TService>(string endpointName = null, object callbackObject = null)
             where TService : class
         {
-            var proxyBuilder = new ProxyBuilder(endpointName, callbackObject);
-            return new WcfClient<TService>(proxyBuilder);
+            var factory = ChannelFactoryMananger.Instance.GetFactory<TService>(callbackObject: callbackObject);
+            return new WcfClient<TService>(factory, factory.Endpoint.Address);
         }
 
         public static void RequestService<TService>(Action<TService> action, object callbackObject = null)
@@ -51,19 +51,27 @@ namespace HelperLibrary.WCF.Client
 
     public class WcfClient<TService> where TService : class
     {
-        private readonly IProxyBuilder proxyBuilder;
-        
+        private IChannelFactory<TService> factory;
+        private EndpointAddress address;
+        private Uri via;
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="proxyBuilder"></param>
+        /// <param name="factory"></param>
+        /// <param name="address"></param>
+        /// <param name="via"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public WcfClient(IProxyBuilder proxyBuilder)
+        public WcfClient(IChannelFactory<TService> factory, EndpointAddress address, Uri via = null)
         {
-            if (proxyBuilder == null)
-                throw new ArgumentNullException(nameof(proxyBuilder));
+            if (factory == null)
+                throw new ArgumentNullException(nameof(factory));
+            if (address == null)
+                throw new ArgumentNullException(nameof(address));
 
-            this.proxyBuilder = proxyBuilder;
+            this.factory = factory;
+            this.address = address;
+            this.via = via;
         }
 
         /// <summary>
@@ -76,7 +84,6 @@ namespace HelperLibrary.WCF.Client
                 throw new ArgumentNullException(nameof(action));
 
             TService service = GetProxy();
-
             using (service as IDisposable)
             {
                 action(service);
@@ -94,7 +101,6 @@ namespace HelperLibrary.WCF.Client
                 throw new ArgumentNullException(nameof(action));
 
             TService service = GetProxy();
-
             using (service as IDisposable)
             {
                 return action(service);
@@ -104,7 +110,7 @@ namespace HelperLibrary.WCF.Client
 
         private TService GetProxy()
         {
-            return proxyBuilder.GetProxy<TService>();
+            return via == null ? factory.CreateChannel(address) : factory.CreateChannel(address, via);
         }
     }
 }

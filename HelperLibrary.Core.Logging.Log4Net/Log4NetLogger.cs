@@ -21,8 +21,7 @@ namespace HelperLibrary.Core.Logging
         private readonly ILog warnLogger;
         private readonly ILog errorLogger;
         private readonly ILog fatalLogger;
-
-
+        
         public Log4NetLogger(ILog logger) : this(logger, logger, logger, logger, logger)
         {
         }
@@ -46,30 +45,27 @@ namespace HelperLibrary.Core.Logging
             this.errorLogger = errorLogger;
             this.fatalLogger = fatalLogger;
         }
-
-        public void Info(string message)
+        
+        public void Log(LogLevel level, string message)
         {
-            infoLogger.Info(message);
-        }
-
-        public void Debug(string message)
-        {
-            debugLogger.Debug(message);
-        }
-
-        public void Warn(string message)
-        {
-            warnLogger.Warn(message);
-        }
-
-        public void Error(string message)
-        {
-            errorLogger.Error(message);
-        }
-
-        public void Fatal(string message)
-        {
-            fatalLogger.Fatal(message);
+            switch(level)
+            {
+                case LogLevel.Info:
+                    infoLogger.Info(message);
+                    break;
+                case LogLevel.Debug:
+                    infoLogger.Debug(message);
+                    break;
+                case LogLevel.Warn:
+                    infoLogger.Warn(message);
+                    break;
+                case LogLevel.Error:
+                    infoLogger.Error(message);
+                    break;
+                case LogLevel.Fatal:
+                    infoLogger.Fatal(message);
+                    break;
+            }
         }
     }
 }
