@@ -5,15 +5,13 @@ namespace HelperLibrary.Core.EventAggregator
 {
     public class TopicEventAggregator : ITopicEventAggregator
     {
-        private ConcurrentDictionary<string, ITopicEvent> dict = new ConcurrentDictionary<string, ITopicEvent>();
+        private ConcurrentDictionary<Type, ITopicEvent> dict = new ConcurrentDictionary<Type, ITopicEvent>();
 
-        public ITopicEvent GetTopicEvent(string topic)
+        public TEvent GetTopicEvent<TEvent>() where TEvent : class, ITopicEvent, new()
         {
-            if (topic == null)
-                throw new ArgumentNullException(nameof(topic));
-
-            var tmp = dict.GetOrAdd(topic, t => new TopicEvent());
-            return tmp;
+            var eventType = typeof(TEvent);
+            var tmp = dict.GetOrAdd(eventType, t => new TEvent());
+            return tmp as TEvent;
         }
     }
 }

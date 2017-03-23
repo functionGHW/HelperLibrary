@@ -1,46 +1,32 @@
-﻿using System;
+﻿/* 
+ * FileName:    TopicEvent.cs
+ * Author:      functionghw<functionghw@hotmail.com>
+ * CreateTime:  3/23/2017 11:15:49 PM
+ * Description:
+ * */
+
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace HelperLibrary.Core.EventAggregator
 {
-    public class TopicEvent : ITopicEvent
+    public class TopicEvent<TArg> : ITopicEvent
     {
-        private readonly HashSet<Action<object>> subscribers = new HashSet<Action<object>>();
+        private readonly HashSet<Action<TArg>> subscribers = new HashSet<Action<TArg>>();
+        private readonly object syncObj = new object();
 
-        public ISubscriptionObject Subscribe(Action<object> action)
+        public void Publish(TArg arg, bool multithread = false)
         {
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            lock (subscribers)
+            Action<TArg>[] ary;
+            lock (syncObj)
             {
-                subscribers.Add(action);
-            }
-            return new SubscriptionObject(action, this);
-        }
-
-        public void Unsubscribe(Action<object> action)
-        {
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            lock (subscribers)
-            {
-                subscribers.Remove(action);
-            }
-        }
-
-        public void Publish(object arg, bool multithread = false)
-        {
-            Action<object>[] ary;
-            lock (subscribers)
-            {
-                if (subscribers.Count == 0)
-                    return;
-
                 ary = subscribers.ToArray();
             }
+
             if (multithread)
             {
                 foreach (var item in ary)
@@ -57,17 +43,38 @@ namespace HelperLibrary.Core.EventAggregator
             }
         }
 
-
-        private sealed class SubscriptionObject : ISubscriptionObject
+        public ISubscriptionObject Subscribe(Action<TArg> action)
         {
-            private readonly Action<object> action;
-            private readonly TopicEvent topicEvent;
-            private bool unsubscribed;
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
 
-            public SubscriptionObject(Action<object> action, TopicEvent topicEvent)
+            lock (syncObj)
             {
-                this.action = action;
+                subscribers.Add(action);
+            }
+            return new SubscriptionObject(this, action);
+        }
+
+        public void Unsubscribe(Action<TArg> action)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            lock (syncObj)
+            {
+                subscribers.Remove(action);
+            }
+        }
+
+        private class SubscriptionObject : ISubscriptionObject
+        {
+            private TopicEvent<TArg> topicEvent;
+            private Action<TArg> action;
+
+            public SubscriptionObject(TopicEvent<TArg> topicEvent, Action<TArg> action)
+            {
                 this.topicEvent = topicEvent;
+                this.action = action;
             }
 
             public void Dispose()
@@ -77,18 +84,9 @@ namespace HelperLibrary.Core.EventAggregator
 
             public void Unsubscribe()
             {
-                if (unsubscribed)
-                    return;
-
-                lock (this.topicEvent.subscribers)
-                {
-                    if (unsubscribed)
-                        return;
-
-                    this.topicEvent.subscribers.Remove(action);
-                    unsubscribed = true;
-                }
+                topicEvent.Unsubscribe(action);
             }
         }
+
     }
 }

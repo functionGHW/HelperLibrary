@@ -2,6 +2,6 @@
 {
     public interface ITopicEventAggregator
     {
-        ITopicEvent GetTopicEvent(string topic);
+        TEvent GetTopicEvent<TEvent>() where TEvent : class, ITopicEvent, new();
     }
 }
