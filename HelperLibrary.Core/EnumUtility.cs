@@ -36,7 +36,6 @@ namespace HelperLibrary.Core
         /// <summary>
         /// Get all value-name tuples of a Enum type.
         /// </summary>
-        /// <typeparam name="TEnum">Enum type</typeparam>
         /// <returns>an array of Tuple</returns>
         public static Tuple<TEnum, string>[] GetEnumTuples()
         {

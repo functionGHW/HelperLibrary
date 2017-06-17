@@ -1,23 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Linq;
 
 namespace HelperLibrary.Core.Db
 {
+    /// <summary>
+    /// Some extension methods for db operation.
+    /// </summary>
     public static class ExtensionMethods
     {
+        /// <summary>
+        /// Add many parameters for a DbCommand
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="parameters"></param>
         public static void AddParameters(this IDbCommand command,
             IDictionary<string, object> parameters)
         {
             if (parameters == null)
                 throw new ArgumentNullException(nameof(parameters));
+
             foreach (var param in parameters)
             {
                 AddParameter(command, param.Key, param.Value);
             }
         }
 
+        /// <summary>
+        /// Add one parameter for a DbCommand
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="paramName"></param>
+        /// <param name="value"></param>
         public static void AddParameter(this IDbCommand command, string paramName, object value)
         {
             if (command == null)
@@ -29,6 +45,11 @@ namespace HelperLibrary.Core.Db
             command.Parameters.Add(param);
         }
 
+        /// <summary>
+        /// update many parameters of DbCommand
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="parameters"></param>
         public static void UpdateParameters(this IDbCommand command,
             IDictionary<string, object> parameters)
         {
@@ -41,6 +62,12 @@ namespace HelperLibrary.Core.Db
             }
         }
 
+        /// <summary>
+        /// Update one parameter of DbCommand
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="paramName"></param>
+        /// <param name="value"></param>
         public static void UpdateParameter(this IDbCommand command, string paramName, object value)
         {
             if (command == null)
@@ -49,6 +76,12 @@ namespace HelperLibrary.Core.Db
             command.Parameters[paramName] = value;
         }
 
+        /// <summary>
+        /// Execute a DbCommand with a DbDataAdapter,and return the data using DataSet
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="adapter"></param>
+        /// <returns></returns>
         public static DataSet ExecuteDataSet(this IDbCommand command, IDbDataAdapter adapter)
         {
             if (command == null)
@@ -62,6 +95,14 @@ namespace HelperLibrary.Core.Db
             return dataSet;
         }
 
+        /// <summary>
+        /// Create DbCommand
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="sql"></param>
+        /// <param name="cmdType"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public static IDbCommand CreateCommand(this IDbConnection connection, string sql, CommandType cmdType = CommandType.Text,
             IDictionary<string, object> parameters = null)
         {

@@ -20,15 +20,6 @@ namespace HelperLibrary.Core.Localization
     public interface ILocalizationDictionaryManager
     {
         /// <summary>
-        /// 根据指定的参数，获取key对应的本地化文本。
-        /// </summary>
-        /// <param name="key">本地化文本的key</param>
-        /// <param name="scope">用于区分词条的限定域参数</param>
-        /// <param name="cultureName">语言文化名称，例如zh-CN,en-US</param>
-        /// <returns>如果存在对应的本地化文本则返回其值，其他情况返回key</returns>
-        //string GetString(string key, string scope, string cultureName);
-
-        /// <summary>
         /// 获取指定语言文化的本地化词典。
         /// </summary>
         /// <param name="cultureName">语言文化名称</param>

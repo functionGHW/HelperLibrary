@@ -21,6 +21,9 @@ namespace HelperLibrary.Core.Configurations
     {
         private readonly Configuration cfgFile;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public LocalAppSettings()
         {
             this.cfgFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);

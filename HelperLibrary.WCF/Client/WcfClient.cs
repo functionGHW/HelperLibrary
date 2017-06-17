@@ -15,8 +15,18 @@ using System.Threading.Tasks;
 
 namespace HelperLibrary.WCF.Client
 {
+    /// <summary>
+    /// Util for requesting WCF service
+    /// </summary>
     public static class WcfClient
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <param name="endpointName"></param>
+        /// <param name="callbackObject"></param>
+        /// <returns></returns>
         public static WcfClient<TService> Create<TService>(string endpointName = null, object callbackObject = null)
             where TService : class
         {
@@ -24,6 +34,12 @@ namespace HelperLibrary.WCF.Client
             return new WcfClient<TService>(factory, factory.Endpoint.Address);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <param name="action"></param>
+        /// <param name="callbackObject"></param>
         public static void RequestService<TService>(Action<TService> action, object callbackObject = null)
             where TService : class
         {
@@ -35,6 +51,14 @@ namespace HelperLibrary.WCF.Client
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="action"></param>
+        /// <param name="callbackObject"></param>
+        /// <returns></returns>
         public static TResult RequestService<TService, TResult>(Func<TService, TResult> action,
             object callbackObject = null)
             where TService : class
@@ -49,6 +73,10 @@ namespace HelperLibrary.WCF.Client
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TService"></typeparam>
     public class WcfClient<TService> where TService : class
     {
         private IChannelFactory<TService> factory;
@@ -77,7 +105,7 @@ namespace HelperLibrary.WCF.Client
         /// <summary>
         /// 调用无返回值的WCF服务
         /// </summary>
-        /// <typeparam name="TService">WCF契约的类型</typeparam>
+        /// <param name="action"></param>
         public void RequestService(Action<TService> action)
         {
             if (action == null)
@@ -93,7 +121,6 @@ namespace HelperLibrary.WCF.Client
         /// <summary>
         /// 调用有返回值的WCF服务
         /// </summary>
-        /// <typeparam name="TService">WCF契约的类型</typeparam>
         /// <typeparam name="TResult">操作的返回值类型</typeparam>
         public TResult RequestService<TResult>(Func<TService, TResult> action)
         {

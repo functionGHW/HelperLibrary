@@ -26,10 +26,10 @@ namespace HelperLibrary.Core.Configurations
 
         /* define tags and attributes using in XML file.
          */
-        public static readonly string RootElementName = "configurations";
-        public static readonly string ItemElementName = "setting";
-        public static readonly string NameAttributeName = "name";
-        public static readonly string ValueAttributeName = "value";
+        private static readonly string RootElementName = "configurations";
+        private static readonly string ItemElementName = "setting";
+        private static readonly string NameAttributeName = "name";
+        private static readonly string ValueAttributeName = "value";
 
         #endregion
 

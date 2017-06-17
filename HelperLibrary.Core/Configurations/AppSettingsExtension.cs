@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace HelperLibrary.Core.Configurations
 {
+    /// <summary>
+    /// Extension methods for IAppSettings
+    /// </summary>
     public static class AppSettingsExtension
     {
         /// <summary>

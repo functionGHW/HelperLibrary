@@ -53,8 +53,16 @@ namespace HelperLibrary.WPF
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Action<string, string> ShowMessgeDelegate;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="title"></param>
         protected void ShowMessage(string message, string title = "")
         {
             ShowMessgeDelegate?.Invoke(message, title);

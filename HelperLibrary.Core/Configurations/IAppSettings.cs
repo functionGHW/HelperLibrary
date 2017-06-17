@@ -18,14 +18,38 @@ namespace HelperLibrary.Core.Configurations
     /// </summary>
     public interface IAppSettings
     {
+        /// <summary>
+        /// Get value by name
+        /// </summary>
+        /// <param name="name">the config name</param>
+        /// <returns></returns>
         string this[string name] { get;}
 
+        /// <summary>
+        /// Get value by name
+        /// </summary>
+        /// <param name="name">the config name</param>
+        /// <returns></returns>
         string Get(string name);
 
+        /// <summary>
+        /// Add new config
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         void Add(string name, string value);
 
+        /// <summary>
+        /// update value of config, throw exception when the config is not exist.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="newValue"></param>
         void Set(string name, string newValue);
 
+        /// <summary>
+        /// Remove a config.
+        /// </summary>
+        /// <param name="name"></param>
         void Remove(string name);
     }
 }
