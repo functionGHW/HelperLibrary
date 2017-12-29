@@ -56,7 +56,7 @@ namespace HelperLibrary.WPF
         /// <summary>
         /// 
         /// </summary>
-        public Action<string, string> ShowMessgeDelegate;
+        public Func<ShowMessageContext, bool?> ShowMessageDelegate;
 
         /// <summary>
         /// 
@@ -65,7 +65,24 @@ namespace HelperLibrary.WPF
         /// <param name="title"></param>
         protected void ShowMessage(string message, string title = "")
         {
-            ShowMessgeDelegate?.Invoke(message, title);
+            ShowMessage(new ShowMessageContext()
+            {
+                Title = title,
+                Message = message
+            });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected bool? ShowMessage(ShowMessageContext context)
+        {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            return ShowMessageDelegate?.Invoke(context);
         }
     }
 }

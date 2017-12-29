@@ -25,9 +25,10 @@ namespace Examples.WPF
             InitializeComponent();
 
             var viewModel = new MainWindowViewModel();
-            viewModel.ShowMessgeDelegate = (message, title) =>
+            viewModel.ShowMessageDelegate = (context) =>
              {
-                 MessageBox.Show(message, title);
+                 MessageBox.Show(context.Message, context.Title);
+                 return null;
              };
 
             this.DataContext = viewModel;

@@ -91,6 +91,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ShowMessageContext.cs" />
     <Compile Include="SimpleCommand.cs" />
     <Compile Include="InternalUtility.cs" />
     <Compile Include="NotifyPropertyChangedBase.cs" />
