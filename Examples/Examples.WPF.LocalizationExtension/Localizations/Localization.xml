@@ -53,6 +53,8 @@
             <Item Key="title">
                 <Value>WPF本地化演示程序</Value>
             </Item>
+          <Item Key="Chinese" Value="中文" />
+          <Item Key="English" Value="英语" />
         </Scope>
     </LocalizationDictionary>
     <LocalizationDictionary CultureName="en-US">
@@ -63,6 +65,8 @@
             <Item Key="title">
                 <Value>Wpf localization demo</Value>
             </Item>
+          <Item Key="Chinese" Value="Chinese" />
+          <Item Key="English" Value="English" />
         </Scope>
     </LocalizationDictionary>
 

@@ -5,11 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Examples.WPF.LocalizationExtension"
         xmlns:l="clr-namespace:HelperLibrary.WPF.LocalizationExtension;assembly=HelperLibrary.WPF.LocalizationExtension"
-        mc:Ignorable="d"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Grid>
-            <TextBlock Text="{l:Localization hello}"></TextBlock>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Height="25">
+                    <Button Width="60" Height="20" 
+                            Content="{l:Localization Chinese}" 
+                            Margin="5,0" 
+                            Click="Button_Click"
+                            Tag="zh-CN"/>
+                    <Button Width="60" Height="20" 
+                            Content="{l:Localization English}" 
+                            Margin="5,0" 
+                            Click="Button_Click"
+                            Tag="en-US"/>
+                </StackPanel>
+                <TextBlock Text="{l:Localization hello}"></TextBlock>
+                <TextBlock Text="{l:Localization title}"></TextBlock>
+                <TextBlock Text="{l:Localization hello}"></TextBlock>
+                <TextBlock Text="{l:Localization title}"></TextBlock>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

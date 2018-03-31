@@ -5,13 +5,8 @@
  * Description:
  * */
 
-using HelperLibrary.Core.Localization;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Markup;
 using System.Xaml;
 
@@ -22,19 +17,6 @@ namespace HelperLibrary.WPF.LocalizationExtension
     /// </summary>
     public class LocalizationExtension : MarkupExtension
     {
-        private static ILocalizationDictionaryManager locDictMngr = EmptyLocalizationDictionaryManager.Instance;
-
-        /// <summary>
-        /// 设置使用的本地化字典管理器，初始默认的实例为DoNothingLocalizationManager.Instance
-        /// </summary>
-        /// <param name="localizationDictionaryManager">本地化管理实例</param>
-        public static void SetLocalizationDictionaryManager(ILocalizationDictionaryManager localizationDictionaryManager)
-        {
-            if (localizationDictionaryManager == null)
-                throw new ArgumentNullException("localizationDictionaryManager");
-            locDictMngr = localizationDictionaryManager;
-        }
-
         /// <summary>
         /// 默认构造器
         /// </summary>
@@ -81,12 +63,9 @@ namespace HelperLibrary.WPF.LocalizationExtension
                     Scope = rootObjProvider.RootObject.GetType().Assembly.GetName().Name;
                 }
             }
-            if (Culture == null)
-            {
-                Culture = CultureInfo.CurrentUICulture;
-            }
 
-            return locDictMngr.GetString(Key, Scope, Culture.Name);
+            var binding = LocalizationHelper.CreateLocalizationBinding(Key, Scope, Culture);
+            return binding.ProvideValue(serviceProvider);
         }
     }
 }

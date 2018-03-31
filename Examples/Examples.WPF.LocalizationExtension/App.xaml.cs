@@ -53,7 +53,7 @@ namespace Examples.WPF.LocalizationExtension
             // 设置本地化wpf扩展标记使用的字典管理器，此设置仅作用于wpf界面，通常和上面的保持一致。
 
             HelperLibrary.WPF.LocalizationExtension
-                .LocalizationExtension.SetLocalizationDictionaryManager(mngr);
+                .LocalizationHelper.SetLocalizationDictionaryManager(mngr);
         }
     }
 }
