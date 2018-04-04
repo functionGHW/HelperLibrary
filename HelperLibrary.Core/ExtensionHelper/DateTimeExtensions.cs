@@ -34,5 +34,15 @@ namespace HelperLibrary.Core.ExtensionHelper
 
             return dt.ToLocalTime().Ticks == another.ToLocalTime().Ticks;
         }
+
+        /// <summary>
+        /// Convert a DateTime to Unix timestamp.
+        /// </summary>
+        /// <param name="dt">DateTime object to convert</param>
+        /// <returns>Unix timestamp</returns>
+        public static long ToUnixTimeSeconds(this DateTime dt)
+        {
+            return (long)(dt - new DateTime(1970, 1, 1)).TotalSeconds;
+        }
     }
 }
