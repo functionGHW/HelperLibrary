@@ -108,7 +108,59 @@ namespace HelperLibrary.Core.Db
                 methodCall, instanceParameter, parametersParameter);
 
             Action<object, object[]> execute = lambda.Compile();
-            return (instance, value) => { execute(instance, new[] { value }); };
+            return (instance, value) =>
+            {
+                value = ConvertData(value, prop.PropertyType);
+                execute(instance, new[] { value });
+            };
+        }
+
+        private static object ConvertData(object value, Type targetType)
+        {
+            /*
+             * 仅支持比较基础的值类型(以及对应的Nullable类型)和string类型，使用Convert类进行转换。
+             */
+            var underType = Nullable.GetUnderlyingType(targetType);
+            if (underType != null && value == null)
+            {
+                return null;
+            }
+            var typeCode = Type.GetTypeCode(underType ?? targetType);
+
+            switch (typeCode)
+            {
+                case TypeCode.Int16:
+                    return Convert.ToInt16(value);
+                case TypeCode.Int32:
+                    return Convert.ToInt32(value);
+                case TypeCode.Int64:
+                    return Convert.ToInt64(value);
+                case TypeCode.Byte:
+                    return Convert.ToByte(value);
+                case TypeCode.UInt16:
+                    return Convert.ToUInt16(value);
+                case TypeCode.UInt32:
+                    return Convert.ToUInt32(value);
+                case TypeCode.UInt64:
+                    return Convert.ToUInt64(value);
+                case TypeCode.SByte:
+                    return Convert.ToSByte(value);
+                case TypeCode.Single:
+                    return Convert.ToSingle(value);
+                case TypeCode.Double:
+                    return Convert.ToDouble(value);
+                case TypeCode.Decimal:
+                    return Convert.ToDecimal(value);
+                case TypeCode.Boolean:
+                    return Convert.ToBoolean(value);
+                case TypeCode.DateTime:
+                    return Convert.ToDateTime(value);
+                case TypeCode.String:
+                    return Convert.ToString(value);
+                case TypeCode.Char:
+                    return Convert.ToChar(value);
+            }
+            return value;
         }
 
         // 动态创建实体对象对应的update语句

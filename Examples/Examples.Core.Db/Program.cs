@@ -24,6 +24,11 @@ namespace Examples.Core.Db
                                     Age INT NOT NULL DEFAULT '0',
                                     PRIMARY KEY(id)
                                 );",
+            ["SQLite"] = @"CREATE TABLE `users` (
+                                    `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                    `Name` Text NOT NULL,
+                                    `Age` INTEGER NOT NULL
+                                );",
         };
 
 
@@ -32,15 +37,20 @@ namespace Examples.Core.Db
             /* 此示例代码需要连接一个MySql数据库，请自行搭建一个并创建好数据库实例。
              * 然后修改配置文件中的连接字符串)。
              */
-            const string dbName = "SqlServer";
+            const string dbName = "SQLite";
             IDbConnectionFactory connectionFactory = GetConnectionFactory(dbName);
 
             Console.WriteLine("连接字符串:{0}", connectionFactory.ConnectionString);
 
             var dbInvoker = new DbOperationInvoker(connectionFactory);
-            
-            string sql = @"select table_name from INFORMATION_SCHEMA.TABLES 
-                            where table_type='base table' and table_name='users'";
+
+            //string sql = @"select table_name from INFORMATION_SCHEMA.TABLES 
+            //                where table_type='base table' and table_name='users'";
+
+            //dbInvoker.ExecuteNonQuery("create database mydb");
+
+            string sql = @"select name from sqlite_master 
+                            where type='table' and name='users'";
 
             if (dbInvoker.ExecuteScalar<string>(sql) != null)
             {
@@ -225,7 +235,11 @@ namespace Examples.Core.Db
                 string connString = ConfigurationManager.ConnectionStrings["SqlServer"].ConnectionString;
                 return new SqlServerDbConnectionFactory(connString);
             }
-
+            if (databaseName == "SQLite")
+            {
+                string connString = ConfigurationManager.ConnectionStrings["SQLite"].ConnectionString;
+                return new SqliteDbConnectionFactory(connString);
+            }
             // 将来也可以实现其他的数据库，例如SQL Server， Oracle DB等
             throw new NotSupportedException("尚不支持此类型:" + databaseName);
         }

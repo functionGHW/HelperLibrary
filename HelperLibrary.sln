@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.Core", "HelperLibrary.Core\HelperLibrary.Core.csproj", "{4898E407-B7AA-4346-8714-E5B0663CDEF1}"
 EndProject
@@ -46,6 +46,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples.Core.Logging", "Examples\Examples.Core.Logging\Examples.Core.Logging.csproj", "{11759417-B36C-4EFA-A0D2-6E2D9D3A872D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.Core.Db.SqlServer", "HelperLibrary.Core.Db.SqlServer\HelperLibrary.Core.Db.SqlServer.csproj", "{9ADA942C-9046-4E29-AB47-A43F96398B62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperLibrary.Core.Db.Sqlite", "HelperLibrary.Core.Db.Sqlite\HelperLibrary.Core.Db.Sqlite.csproj", "{4DC34098-15B6-490C-AE28-669FBD81AAFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +135,10 @@ Global
 		{9ADA942C-9046-4E29-AB47-A43F96398B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9ADA942C-9046-4E29-AB47-A43F96398B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9ADA942C-9046-4E29-AB47-A43F96398B62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DC34098-15B6-490C-AE28-669FBD81AAFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DC34098-15B6-490C-AE28-669FBD81AAFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DC34098-15B6-490C-AE28-669FBD81AAFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DC34098-15B6-490C-AE28-669FBD81AAFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,5 +154,8 @@ Global
 		{04E48FAC-79AC-40B7-B91D-B8FD1816B829} = {9AC1B0C8-743F-4E26-B33E-BD754B84474F}
 		{4F28592D-85A2-42B2-826A-3A822B7FFC62} = {9AC1B0C8-743F-4E26-B33E-BD754B84474F}
 		{11759417-B36C-4EFA-A0D2-6E2D9D3A872D} = {9AC1B0C8-743F-4E26-B33E-BD754B84474F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {04907EEA-A8CA-4446-AF39-28007315F74C}
 	EndGlobalSection
 EndGlobal
