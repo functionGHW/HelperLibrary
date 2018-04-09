@@ -123,7 +123,22 @@ namespace Examples.Core.Db
                 Console.WriteLine("写入数据失败");
             }
 
-            Console.WriteLine("=====不使用SQL直接把对象插入到数据库中（新增功能）=====");
+            Console.WriteLine("\n======查询全部数据====");
+            sql = @"SELECT id, Name, Age FROM users;";
+            var dataSet = dbInvoker.ExecuteQuery(sql);
+            var dt = dataSet.Tables[0];
+            // 映射数据表为对象集合
+            List<Person> list = dt.ToEntities<Person>().ToList();
+
+            Console.WriteLine("===============");
+            Console.WriteLine("id\tName\tAge");
+            foreach (var entity in list)
+            {
+                Console.WriteLine("{0}\t{1}\t{2}", entity.Id, entity.Name, entity.Age);
+            }
+            Console.WriteLine("===============\n");
+            
+            Console.WriteLine("=====不使用SQL直接把对象插入到数据库中（）=====");
 
             var dave = new Person()
             {
@@ -140,23 +155,6 @@ namespace Examples.Core.Db
                 Console.WriteLine("写入数据失败");
             }
 
-            Console.WriteLine("===============\n");
-
-            Console.WriteLine("\n======查询全部数据====");
-            sql = @"SELECT id, Name, Age FROM users;";
-            var dataSet = dbInvoker.ExecuteQuery(sql);
-            var dt = dataSet.Tables[0];
-            // 映射数据表为对象集合
-            List<Person> list = dt.ToEntities<Person>().ToList();
-
-            // 也可以像下面这样使用ORM风格的扩展方法
-            // list = dbInvoker.QueryMany<Person>(sql).ToList();
-            Console.WriteLine("===============");
-            Console.WriteLine("id\tName\tAge");
-            foreach (var entity in list)
-            {
-                Console.WriteLine("{0}\t{1}\t{2}", entity.Id, entity.Name, entity.Age);
-            }
             Console.WriteLine("===============\n");
 
             int index = 1;
@@ -203,12 +201,9 @@ namespace Examples.Core.Db
                 Console.WriteLine("删除失败");
             }
 
-            Console.WriteLine("\n======查询全部数据====");
-            sql = @"SELECT id, Name, Age FROM users;";
-            dataSet = dbInvoker.ExecuteQuery(sql);
-            dt = dataSet.Tables[0];
+            Console.WriteLine("\n======查询全部数据 ORM ====");
             // 映射数据表为对象集合
-            list = dt.ToEntities<Person>().ToList();
+            list = dbInvoker.QueryAll<Person>().ToList();
 
             Console.WriteLine("===============");
             Console.WriteLine("id\tName\tAge");

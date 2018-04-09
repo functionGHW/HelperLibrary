@@ -99,6 +99,7 @@
     <Compile Include="Configurations\XmlConfigurationFile.cs" />
     <Compile Include="Db\DbOperationInvoker.cs" />
     <Compile Include="Db\DbOperationInvokerExtension.cs" />
+    <Compile Include="Db\DelegateDbConnectionFactory.cs" />
     <Compile Include="Db\ExtensionMethods.cs" />
     <Compile Include="Db\IDbConnectionFactory.cs" />
     <Compile Include="Db\IDbContext.cs" />

@@ -24,6 +24,22 @@ namespace HelperLibrary.Core.Db
     public static class DbOperationInvokerExtension
     {
         /// <summary>
+        /// 查询全部结果并以实体集合的形式返回结果
+        /// </summary>
+        /// <param name="invoker"></param>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
+        public static IEnumerable<TEntity> QueryAll<TEntity>(this DbOperationInvoker invoker)
+            where TEntity : class, new()
+        {
+            if (invoker == null)
+                throw new ArgumentNullException(nameof(invoker));
+
+            string sql = InternalUtility.GetSelectAllStatement(typeof(TEntity));
+            return QueryMany<TEntity>(invoker, sql);
+        }
+
+        /// <summary>
         /// 执行sql查询并以实体集合的形式返回结果
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
@@ -32,7 +48,7 @@ namespace HelperLibrary.Core.Db
         /// <param name="cmdType">指定如何解释命令字符串</param>
         /// <param name="parameters">sql语句命名参数列表</param>
         /// <returns></returns>
-        public static IEnumerable<TEntity> QueryMany<TEntity>(this DbOperationInvoker invoker, 
+        public static IEnumerable<TEntity> QueryMany<TEntity>(this DbOperationInvoker invoker,
             string sql,
             IDictionary<string, object> parameters = null,
             CommandType cmdType = CommandType.Text) where TEntity : class, new()
@@ -55,7 +71,7 @@ namespace HelperLibrary.Core.Db
         /// <param name="parameters">sql语句命名参数列表</param>
         /// <param name="cmdType">指定如何解释命令字符串</param>
         /// <returns></returns>
-        public static IEnumerable<TResult> QueryAndMap<TResult>(this DbOperationInvoker invoker, 
+        public static IEnumerable<TResult> QueryAndMap<TResult>(this DbOperationInvoker invoker,
             string sql,
             Func<DataRow, TResult> mapper,
             IDictionary<string, object> parameters = null,

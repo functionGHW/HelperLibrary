@@ -163,6 +163,41 @@ namespace HelperLibrary.Core.Db
             return value;
         }
 
+
+        private static ConcurrentDictionary<Type, string[]> columnNamesForSelectAllMapper =
+            new ConcurrentDictionary<Type, string[]>();
+
+        private static string[] GetColumnNamesForSelectAll(Type entityType)
+        {
+            string[] names;
+            if (!columnNamesForSelectAllMapper.TryGetValue(entityType, out names))
+            {
+                var list = new List<string>();
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.GetCustomAttributes(typeof(NotMappedAttribute), true).Any())
+                        continue;
+                    
+                    var colName = GetColumnName(property);
+                    list.Add(colName);
+                }
+                names = list.ToArray();
+                columnNamesForSelectAllMapper.TryAdd(entityType, names);
+            }
+            return names;
+        }
+
+
+        internal static string GetSelectAllStatement(Type entityType)
+        {
+            string tableName = GetTableName(entityType);
+            var columnNames = GetColumnNamesForSelectAll(entityType);
+            string columnStr = string.Join(",", columnNames);
+
+            string selectStatement = string.Format("SELECT {0} from {1};", columnStr, tableName);
+            return selectStatement;
+        }
+
         // 动态创建实体对象对应的update语句
         internal static string GetUpdateStatement(Type entityType, string[] columns)
         {
@@ -249,15 +284,15 @@ namespace HelperLibrary.Core.Db
             return name;
         }
 
-        private static ConcurrentDictionary<Type, List<string>> columnNamesForInsertMapper =
-            new ConcurrentDictionary<Type, List<string>>();
+        private static ConcurrentDictionary<Type, string[]> columnNamesForInsertMapper =
+            new ConcurrentDictionary<Type, string[]>();
 
         internal static string[] GetColumnNames(Type entityType)
         {
-            List<string> list;
-            if (!columnNamesForInsertMapper.TryGetValue(entityType, out list))
+            string[] names;
+            if (!columnNamesForInsertMapper.TryGetValue(entityType, out names))
             {
-                list = new List<string>();
+                var list = new List<string>();
                 foreach (var property in entityType.GetProperties())
                 {
                     if (property.GetCustomAttributes(typeof(NotMappedAttribute), true).Any())
@@ -267,12 +302,12 @@ namespace HelperLibrary.Core.Db
                         continue;
 
                     var colName = GetColumnName(property);
-
                     list.Add(colName);
                 }
-                columnNamesForInsertMapper.TryAdd(entityType, list);
+                names = list.ToArray();
+                columnNamesForInsertMapper.TryAdd(entityType, names);
             }
-            return list.ToArray();
+            return names;
         }
 
         private static string GetColumnName(PropertyInfo property)

@@ -136,7 +136,6 @@ namespace HelperLibrary.Core.Db
                 .ToArray();
 
             columnNames = propertyMapper.Keys.Intersect(columnNames).ToArray();
-            var list = new List<TEntity>();
             foreach (var row in dt.AsEnumerable())
             {
                 TEntity entity = new TEntity();
@@ -145,9 +144,9 @@ namespace HelperLibrary.Core.Db
                     var setterDelegate = propertyMapper[name];
                     setterDelegate.Invoke(entity, row[name]);
                 }
-                list.Add(entity);
+
+                yield return entity;
             }
-            return list;
         }
 
         /// <summary>
