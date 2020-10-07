@@ -1,7 +1,4 @@
-﻿/*----------------------------------------------------------------
-// Copyright (C) 年份 北京大象科技有限公司
-// 版权所有。 	
-/* 
+﻿/* 
  * FileName:    DbOperationInvokerExtension.cs
  * Author:      functionghw<functionghw@hotmail.com>
  * CreateTime:  4/27/2016 5:16:01 PM
@@ -160,12 +157,17 @@ namespace HelperLibrary.Core.Db
                 throw new ArgumentNullException("entity");
 
             Type entityType = typeof(TEntity);
-            string[] columnsToUpdate = propsForUpdate;
+            string[] columnsToUpdate = null;
             if (propsForUpdate == null || propsForUpdate.Length == 0)
             {
                 columnsToUpdate = InternalUtility.GetColumnNames(entityType);
             }
-            string updateStatement = InternalUtility.GetUpdateStatement(entityType, propsForUpdate);
+            else
+            {
+                columnsToUpdate = propsForUpdate
+                    .Select(p => InternalUtility.GetColumnName(entityType, p)).ToArray();
+            }
+            string updateStatement = InternalUtility.GetUpdateStatement(entityType, columnsToUpdate);
             var keyNames = InternalUtility.GetKeyNames(entityType);
             var parameters = InternalUtility.CreateUpdateParameters(entity, columnsToUpdate, keyNames);
 

@@ -177,7 +177,7 @@ namespace HelperLibrary.Core.Db
                 {
                     if (property.GetCustomAttributes(typeof(NotMappedAttribute), true).Any())
                         continue;
-                    
+
                     var colName = GetColumnName(property);
                     list.Add(colName);
                 }
@@ -308,6 +308,22 @@ namespace HelperLibrary.Core.Db
                 columnNamesForInsertMapper.TryAdd(entityType, names);
             }
             return names;
+        }
+
+        public static string GetColumnName(Type entityType, string propName)
+        {
+            var property = entityType.GetProperty(propName);
+            if (property == null)
+                throw new ArgumentException(string.Format("The property named {0} not found in type {1}", propName, entityType));
+
+            var colName = property.Name;
+            var columnAttr =
+                property.GetCustomAttributes(typeof(ColumnAttribute), true)
+                    .FirstOrDefault() as ColumnAttribute;
+            if (columnAttr != null && !string.IsNullOrEmpty(columnAttr.Name))
+                colName = columnAttr.Name;
+
+            return colName;
         }
 
         private static string GetColumnName(PropertyInfo property)
