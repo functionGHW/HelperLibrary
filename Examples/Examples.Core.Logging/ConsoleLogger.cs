@@ -17,28 +17,23 @@ namespace Examples.Core.Logging
 {
     public class ConsoleLogger : ILogger
     {
+
+        private static readonly Dictionary<LogLevel, ConsoleColor> messageColors = new Dictionary<LogLevel, ConsoleColor>
+        {
+            {LogLevel.Debug, ConsoleColor.Gray },
+            {LogLevel.Info, ConsoleColor.White },
+            {LogLevel.Warn, ConsoleColor.DarkYellow },
+            {LogLevel.Error, ConsoleColor.DarkRed },
+            {LogLevel.Fatal, ConsoleColor.Red },
+        };
+
         public void Log(LogLevel level, string message)
         {
             var oldColor = Console.ForegroundColor;
-            switch (level)
+            if (messageColors.TryGetValue(level, out var color))
             {
-                case LogLevel.Info:
-                    Console.ForegroundColor = ConsoleColor.White;
-                    break;
-                case LogLevel.Debug:
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    break;
-                case LogLevel.Warn:
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    break;
-                case LogLevel.Error:
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    break;
-                case LogLevel.Fatal:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    break;
+                Console.ForegroundColor = color;
             }
-
             Console.WriteLine("[{0}] [{1}] {2}", DateTime.Now.ToString("HH:mm:ss"), level, message);
             Console.ForegroundColor = oldColor;
         }

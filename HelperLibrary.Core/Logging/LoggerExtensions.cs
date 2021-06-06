@@ -21,7 +21,7 @@ namespace HelperLibrary.Core.Logging
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
-            string message = string.Format(format, args);
+            string message = args.Length == 0 ? format : string.Format(format, args);
             logger.Log(level, message);
         }
         

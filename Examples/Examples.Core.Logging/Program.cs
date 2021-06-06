@@ -12,15 +12,24 @@ namespace Examples.Core.Logging
         static void Main(string[] args)
         {
 
-            // nothing happend
-            LogTest();
+            
+            
+            try
+            {
+                //no logger setted, nothing happend
+                LogTest();
 
-            // use ConsoleLogger
-            ILogger logger = new ConsoleLogger();
-            EnvironmentContext.SetLogger(logger);
+                // log to Console
+                // use ConsoleLogger
+                ILogger logger = new ConsoleLogger();
+                EnvironmentContext.SetLogger(logger);
 
-            // log to Console
-            LogTest();
+                LogTest();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             //// use log4net
             //logger = new Log4NetLogger(null);
@@ -42,6 +51,13 @@ namespace Examples.Core.Logging
             logger.Warn("log warn message");
             logger.Error("log error message");
             logger.Fatal("log fatal message");
+
+            // test logging with format
+            logger.Info("log info, time is {0}", DateTime.Now);
+
+            // if no format args, logging the format string as a normal message.
+            // so the char '{' and '}' are allowed.
+            logger.Info("test char { and }");
         }
     }
 }
