@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelperLibrary.WPF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,12 +25,10 @@ namespace Examples.WPF
         {
             InitializeComponent();
 
-            var viewModel = new MainWindowViewModel();
-            viewModel.ShowMessageDelegate = (context) =>
-             {
-                 MessageBox.Show(context.Message, context.Title);
-                 return null;
-             };
+            var viewModel = new MainWindowViewModel
+            {
+                ShowMessageDelegate = DefaultShowMessageImplement.UseMessageBox
+            };
 
             this.DataContext = viewModel;
         }

@@ -9,7 +9,11 @@
     <Grid>
         <StackPanel>
             <TextBlock Text="{Binding CurrentTime, StringFormat='HH:mm:ss'}"/>
-            <Button Width="100" Height="40" Content="Click" Command="{Binding ClickCommand}"/>
+            <Button Width="100" Height="40" Content="Show message" 
+                    Command="{Binding ClickCommand}"/>
+            <TextBlock Text="{Binding Message}"/>
+            <Button Width="100" Height="40" Content="Show confirm" 
+                    Command="{Binding ConfirmCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

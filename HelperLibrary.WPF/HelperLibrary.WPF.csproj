@@ -91,6 +91,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessageBoxDelegate.cs" />
     <Compile Include="ObservableWrapper.cs" />
     <Compile Include="ShowMessageContext.cs" />
     <Compile Include="SimpleCommand.cs" />

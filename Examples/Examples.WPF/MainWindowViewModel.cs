@@ -20,10 +20,12 @@ namespace Examples.WPF
     {
         private Timer timer;
         private DateTime currentTime;
+        private string message;
 
         public MainWindowViewModel()
         {
             ClickCommand = new SimpleCommand(ClickCommandAction);
+            ConfirmCommand = new SimpleCommand(ConfirmCommandAction);
 
             timer = new Timer(TimeChanged, null, 0, 1000);
         }
@@ -40,11 +42,35 @@ namespace Examples.WPF
             set { SetProperty(ref currentTime, value); }
         }
 
+        public string Message
+        {
+            get { return message; }
+            set { SetProperty(ref message, value); }
+        }
+
         public ICommand ClickCommand { get; set; }
+
+        public ICommand ConfirmCommand { get; set; }
 
         private void ClickCommandAction()
         {
             ShowMessage("Current Second:" + DateTime.Now.Second);
         }
+
+        private void ConfirmCommandAction()
+        {
+            var context = new ShowMessageContext
+            {
+                Title = "confirm dialog",
+                Message = "are you sure to ...?",
+                NeedConfirm = true,
+                ShowCancel = true,
+            };
+            var result = ShowMessage(context);
+
+            string selection = result.HasValue ? (result.Value ? "Yes" : "No") : "Cancel";
+            Message = $"Your selection is {selection}.";
+        }
+
     }
 }
